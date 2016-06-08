@@ -8,7 +8,7 @@ Script d'alertes email leboncoin.fr via Google Docs / Drive
 **Prérequis :** *vous devez avoir un compte Google et y être connecté.*
 
 ### Installation en 4 étapes
-1. Créer une copie de cette feuille de calcul : https://docs.google.com/spreadsheet/ccc?key=0Atof5tNmg-CYdC1hVTkybGxOYkFhM0Qxd0tIYldneVE&newcopy  
+1. Créez une copie de cette feuille de calcul : https://docs.google.com/spreadsheet/ccc?key=0Atof5tNmg-CYdC1hVTkybGxOYkFhM0Qxd0tIYldneVE&newcopy  
  
 2. Renseignez votre adresse email dans l'onglet *Variables* en bas du document
 
@@ -24,6 +24,7 @@ v1.0 par http://justdocsit.blogspot.fr
 v4.0 par [mlb](http://www.maximelebreton.com)  
 
 Qu'apporte cette version 4.0 ?
-* refonte totale du code basé
-* intégration de cheerio (jquery côté serveur)
-* mise à jour automatique (si mode développement activé)
+* refonte totale du code
+* intégration de [cheerio](https://github.com/cheeriojs/cheerio) (jquery, mais côté serveur)
+* **mise à jour automatique du code**
+
