@@ -1,33 +1,19 @@
-/*var artoo = artoogasify.require('artoo-js');artoo.bootstrap(cheerio);*/
 var cheerio = cheeriogasify.require('cheerio');
 var $ = cheerio;
-
-
-//Logger = BetterLog.useSpreadsheet('1grFO-wMrpEoABENS5HERKaPYjzm1mfalT2Tvm5YBl90');
-
 
 var params = {
   names: {
     sheet: {
-      data: 'data',
-      variables: 'variables'
+      data: 'Alertes',
+      variables: 'Variables'
     },
     range: {
       label: 'labelRange',
       url: 'urlRange',
       adId: 'adIdRange',
-      recipientEmail: 'recipientEmail'
-    },
-    menu: {
-      main: 'alertes-leconboin'
+      recipientEmail: 'emailRange'
     }
-  },
-  menuEntries: [
-    {
-      name: 'Lancer manuellement',
-      functionName: "init"
-    }
-  ]
+  }
 };
 
 var globals = {
@@ -49,10 +35,11 @@ var globals = {
 function createMenu() {
   var ui = SpreadsheetApp.getUi();
 
-  ui.createMenu('Alertes leboncoin.fr')
-      .addItem('Lancer manuellement', 'start')
+  ui.createMenu('Alertes LeBonCoin')
+      .addItem('Lancer manuellement', 'alertesLeBonCoin')
       .addToUi();
 }
+
 
 /**
 * TO DO: merge user params with default params
@@ -61,13 +48,13 @@ function init(userParams) {
   createMenu();
 }
 
+
 /**
 * TO DO: return params
 */
 function getParams() {
   
 }
-
 
 
 /**
@@ -516,22 +503,3 @@ String.prototype.hashCode = function() {
   }
   return ret;
 };
-
-/*
-function fetchAndCacheUrl(url) {
-  
-  var cacheName = url.split("/").pop().hashCode().toString();
-    
-  var cache = CacheService.getPublicCache();
-  var cached = cache.get( cacheName );
-  if (cached != null) {
-    return cached;
-  }
-  var result = UrlFetchApp.fetch(url); //takes 20 seconds to get
-  var contents = result.getContentText("iso-8859-15");
-  cache.put( cacheName , contents, 1500); // cache for 25 minutes
-  return contents;
-}
-
-
-*/
