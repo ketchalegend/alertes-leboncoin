@@ -27,4 +27,5 @@ Qu'apporte cette version 4.0 ?
 * refonte totale du code
 * intégration de [cheerio](https://github.com/cheeriojs/cheerio) (jquery, mais côté serveur)
 * **mise à jour automatique du code**
+* ajout d'une mini carte pour localiser rapidement l'annonce
 
