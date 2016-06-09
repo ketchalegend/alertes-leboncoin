@@ -1,37 +1,74 @@
 var cheerio = cheeriogasify.require('cheerio');
 var $ = cheerio;
 
-var params = {
+
+var sendMail = true;
+//var fake = true;
+
+/**
+  * Default Params
+*/
+var defaultParams = {
+  showMap: true,
+  limitResults: false,
+  useCache: true,
+  cacheTime: 1500,
   names: {
     sheet: {
       data: 'Alertes',
-      variables: 'Variables'
+      variables: 'Variables',
+      test: 'Alertes de test'
     },
     range: {
       label: 'labelRange',
       url: 'urlRange',
       adId: 'adIdRange',
       recipientEmail: 'emailRange'
+    },
+    mail: {
+      researchTitle : 'Votre recherche :',
+      summaryTitle: 'Accès rapide :',
+      anchorPrefix: 'part-'
     }
+  },
+  messages: {
+    noEmail: "Merci d'indiquer votre email dans la feuille intitulée 'variables' en bas"
+  },
+  selectors: {
+    adItem: '.mainList ul > li',
+    adsContext: '#listingAds'
   }
 };
+var params;
 
+
+/**
+  * Globals
+*/
 var globals = {
   
   ads: [],
   mail: {
     ads : [],
     labels: [],
-    urls: [],
-    anchorPrefix: 'part-'
-  },
-  message: {
-    noEmail: "Merci d'indiquer votre email dans la feuille intitulée 'variables' en bas"
+    urls: []
   }
   
 };
 
 
+/**
+* TO DO: merge user params with default params
+*/
+function init(userParams) {
+
+  createMenu();
+}
+
+
+/**
+  * Create menu
+*/
 function createMenu() {
   var ui = SpreadsheetApp.getUi();
 
@@ -42,64 +79,33 @@ function createMenu() {
 
 
 /**
-* TO DO: merge user params with default params
-*/
-function init(userParams) {
-  createMenu();
-}
-
-
-/**
-* TO DO: return params
-*/
-function getParams() {
-  
-}
-
-
-/**
   * Start, everything start from here
 */
-function start(userParams) {
-
-  var sendMail = true;
+function start() {
+  
+  params = defaultParams; // To do : extend with userParams
   
   // For each value in the url range sheet
   browseRangeName( params.names.range.url, function(key, value) {
     
     var url = value;
-    
-    var cachedUrlContent = getCachedContent(url);
-    
-    if (cachedUrlContent) {
-      
-      var listingAds = JSON.parse(cachedUrlContent);   
-    } else {
-      
-      var html = getUrlContent( url );
-      var $listingAds = getListingAds( html );
-      var listingAds = getListingAdsData( $listingAds );  
-      setCache( url, JSON.stringify(listingAds) );
-    }
 
-    if (listingAds.length) {
+    var ads = getUrlAds(url);
+
+    if (ads.length && sendMail) {
       
-      //globals.ads.push( listingAds );
+      //globals.ads.push( ads );
+      var storedAdId = Number(getValuesByRangeName( params.names.range.adId )[key]); // Number to prevent strict equality checks
+      var firstAdId = ads[0].id;
       
-      if ( sendMail ) {
-              
-        var storedAdId = Number(getValuesByRangeName( params.names.range.adId )[key]); // Number to prevent strict equality checks
-        var firstAdId = listingAds[0].id;
+      if(firstAdId !== storedAdId) {
         
-        if(firstAdId !== storedAdId) {
-          
-          var latestAds = getDataBeforeId(listingAds, storedAdId);
-          var label = getValuesByRangeName( params.names.range.label )[key];
-          
-          buildMailData(latestAds, label, url);
-          
-          setAdIdValue( key+1, firstAdId );
-        }
+        var latestAds = getDataBeforeId(ads, storedAdId);
+        var label = getValuesByRangeName( params.names.range.label )[key];
+        
+        setMailGlobals(latestAds, label, url);
+        
+        setAdIdValue( key+1, firstAdId );
       }
     } else {
       
@@ -110,217 +116,11 @@ function start(userParams) {
   
   if ( globals.mail.ads.length && sendMail ) {
     var recipientEmail = getRecipientEmail();
-    sendMailAdsTo( recipientEmail );
+    var data = globals.mail;
+    
+    sendDataTo( data, recipientEmail );
   }
   
-}
-
-
-/**
-  * Set Ad id value
-*/
-function setAdIdValue(row, value) {
-  getSheetContext().getRange( row, getColumnByName( params.names.range.adId ) ).setValue( value );
-}
-
-
-/**
-  * Get spreadsheet context
-*/
-function getSpreadsheetContext() {
-  var ss = SpreadsheetApp.getActiveSpreadsheet();
-  
-  return ss;
-}
-
-
-/**
-  * Get sheet context
-*/
-function getSheetContext() {
-  var sheet = getSpreadsheetContext().getSheetByName( params.names.sheet.data );
-  
-  return sheet;
-}
-
-
-/**
-  * Get column by name
-*/
-function getColumnByName( rangeName ) {
-      
-  return getSpreadsheetContext().getRangeByName( rangeName ).getColumn();
-}
-
-
-/**
-  * Get full range name
-*/
-function getFullRangeName( rangeName ) {
-  
-  return names.sheet.data + '!' + rangeName;
-}
-
-
-/**
-  * Build mail data
-*/
-function buildMailData(ads, label, url) {
-  
-  globals.mail.ads.push( ads );
-  globals.mail.labels.push( label );
-  globals.mail.urls.push( url );
-  
-}
-
-
-/**
-  * Send mail Ads to
-*/
-function sendMailAdsTo( email ) {
-  
-  var mailTitle =  getMailTitle( globals.mail.ads.length );
-  var mailHtml = getMailHtml( globals.mail );
-    
-  MailApp.sendEmail(
-    email,
-    mailTitle,
-    'corps',
-    { 
-      htmlBody: mailHtml 
-    }
-  );
-}
-
-
-/**
-  * Get mail title
-*/
-function getMailTitle( length ) {
-  
-  return "Alertes leboncoin.fr : " + length + " nouveau" + (length > 1 ? "x" : "") + " résultat" + (length > 1 ? "s" : "");
-}
-
-
-/**
-  * Get mail html
-*/
-function getMailHtml( data ) {
-  
-  var html = "";
- 
-  html += "<body>";
-  if (data.ads.length > 1) {
-    html += getMailSummaryHtml( data )
-  }
-  html += getMailListingHtml( data )
-  html += "</body>";
-  
-  return html;
-}
-
-
-/**
-  * Get mail summary html
-*/
-function getMailSummaryHtml( data ) {
-    
-  var html = "";
-  
-  html += "<p style='display:block;clear:both;padding-top:20px;font-size:14px;'>Accès rapide :</p>";
-  
-  html += "<ul>";
-  for (var i = 0; i < data.ads.length; i++ ) {
-    if (data.ads[i].length) {
-      html += [
-        "<li>",
-        "  <a href='#"+ data.anchorPrefix+i + "'>"+ data.labels[i] +"</a> (" + data.ads[i].length + ")",
-        "</li>"
-      ].join("\n");
-    }
-  }
-  html += "</ul>";
-  
-  return html;
-}
-
-
-/**
-  * Get mail listing html
-*/
-function getMailListingHtml( data ) {
-  
-  var html = "";
-  
-  for (var i = 0; i < data.ads.length; i++ ) {
-    if (data.ads[i].length) {
-      html += [
-        "<p style='display:block;clear:both;padding-top:20px;font-size:14px;'>",
-        "  Votre recherche : ",
-        "  <a name='"+ data.anchorPrefix+i + "' href='"+ data.urls[i] + "'>"+ data.labels[i] +"</a> (" + data.ads[i].length + ")",
-        "</p>",
-        "<ul>"
-      ].join("\n");
-      
-      html += getMailAdsHtml( data.ads[i] );
-      
-      html += "</ul>";
-    }
-  }
-  
-  return html;
-}
-
-
-/**
-  * Get mail ads html
-*/
-function getMailAdsHtml( ads ) {
-  
-  var html = "";
-  
-  for (var i = 0; i < ads.length; i++) {
-    
-    var ad = ads[i];
-    
-    html += [
-      "<li style='list-style:none;margin-bottom:20px;clear:both;background:#EAEBF0;border-top:1px solid #ccc;'>",
-      "  <div style='float:left;width:auto;padding:20px 0;'>",
-      "    <img style='float:right; padding-left:10px;' src='https://maps.googleapis.com/maps/api/staticmap?markers=" + encodeData(ad.place) + "&zoom=7&size=120x120&sensor=false&language=fr&sensor=false' />",
-      "    <a href='" + ad.url + "'>",
-      "      <img src='" + ad.img_src + "' />",
-      "    </a>",
-      "    <div style='float:left;width:400px;padding:10px 0;'>",
-      "      <a style='font-size:14px;font-weight:bold;color:#369;text-decoration:none;' href='" + ad.url + "'>",
-      "        " + ad.title,
-      "      </a>",
-      "      <div>",
-      "        " + ad.place,
-      "      </div>",
-      "      <div>",
-      "        " + ad.date,
-      "      </div>",
-      "      <div style='line-height:18px;font-size:14px;font-weight:bold;'>",
-      "        " + ad.price,
-      "      </div>",
-      "  </div>",
-      "</li>"
-    ].join("\n");
-    
-  }
-    
-  return html; 
-}
-
-
-/**
-  * Get data before Id
-*/
-function getDataBeforeId(data, stopId) {
-  
-  var stopIndex = data.map(function(x) {return x.id; }).indexOf(stopId);
-
-  return data.slice( 0, stopIndex-1 );
 }
 
 
@@ -364,42 +164,110 @@ function getValuesByRangeName(rangeName, asString) {
 
 
 /**
-  * Get recipient email
+  * Get column by name
 */
-function getRecipientEmail() {
-   
-  var recipientEmail = getValuesByRangeName( params.names.range.recipientEmail )[1];
+function getColumnByName( rangeName ) {
+      
+  return getSpreadsheetContext().getRangeByName( rangeName ).getColumn();
+}
+
+
+/**
+  * Get spreadsheet context
+*/
+function getSpreadsheetContext() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
   
-  if (!recipientEmail) {
+  return ss;
+}
+
+
+/**
+  * Get sheet context
+*/
+function getSheetContext() {
+  var sheet = getSpreadsheetContext().getSheetByName( params.names.sheet.data );
+  
+  return sheet;
+}
+
+
+/**
+  * Get url ads
+*/
+function getUrlAds(url) {
+  
+  var listingAds;
+  
+  /*var cachedUrlContent = getCachedContent(url);
+  if (cachedUrlContent) {
     
-    prompt(globals.message.noEmail);
+    listingAds = JSON.parse(cachedUrlContent);   
+  } else {
     
-    return;
+    var html = getUrlContent( url );
+    listingAds = getListingAdsFromHtml( html );
     
+    setCache( url, JSON.stringify(listingAds) );
+  }*/
+  
+  var html = getUrlContent( url );
+  listingAds = getListingAdsFromHtml( html );
+  
+  return listingAds;
+}
+
+
+/**
+  * Get cached content
+*/
+function getCachedContent(url) {
+  
+  var cache = CacheService.getPublicCache();
+  var cached = cache.get( getUrlHashcode(url) );
+  
+  if (cached != null) {
+    return cached;
+  } else {
+    return false;
   }
-   
-  return recipientEmail;
 }
 
 
 /**
-  * Notify user by a popup
+  * Set cache
 */
-var prompt = function(message) {
-  
-  Browser.msgBox( message );
+function setCache(url, content) {
+  var cache = CacheService.getPublicCache();
+  cache.put( getUrlHashcode(url), content, params.cacheTime);
 }
 
 
 /**
-  * Get listing Ads
-  * @returns {Object} Returns a cheerio object of the listing ads
+  * Get url hashcode
 */
-function getListingAds(html) {
-    
-  var $listingAds = $('.mainList ul > li', '#listingAds', html);
-  
-  return $listingAds;
+function getUrlHashcode( url ) {
+  return url.toString().split("/").pop().hashCode().toString();
+}
+
+
+/**
+  * Hashcode function
+*/
+String.prototype.hashCode = function() {
+  for(var ret = 0, i = 0, len = this.length; i < len; i++) {
+    ret = (31 * ret + this.charCodeAt(i)) << 0;
+  }
+  return ret;
+};
+
+
+/**
+  * Get url content
+*/
+function getUrlContent(url) {
+
+  return UrlFetchApp.fetch(url).getContentText("iso-8859-15");
 }
 
 
@@ -407,17 +275,20 @@ function getListingAds(html) {
   * Get listing ads data
   * @returns {Object} Returns data of the listing ads
 */
-function getListingAdsData( $listingAds ) {  
+function getListingAdsFromHtml( html ) {  
   
   var data = [];
   var protocol = 'https:';
         
   // liste des annonces
-  $listingAds.each(function(i, element){
+  $(params.selectors.adItem, params.selectors.adContext, html)
+  .each(function(i, element) {
     
     // limiter le nombre de résultats
-    /*if (i >= 10) {
-      return;
+    /*if (params.limitResults) {
+      if (i >= params.limitResults) {
+        return;
+      }
     }*/
     
     var $this = $(this);
@@ -455,11 +326,211 @@ function getListingAdsData( $listingAds ) {
 
 
 /**
-  * Get url content
+  * Get data before Id
 */
-function getUrlContent(url) {
+function getDataBeforeId(data, stopId) {
+  
+  var stopIndex = data.map(function(x) {return x.id; }).indexOf(stopId);
 
-  return UrlFetchApp.fetch(url).getContentText("iso-8859-15");
+  return data.slice( 0, stopIndex-1 );
+}
+
+
+/**
+  * Build mail data
+*/
+function setMailGlobals(ads, label, url) {
+  
+  globals.mail.ads.push( ads );
+  globals.mail.labels.push( label );
+  globals.mail.urls.push( url );
+  
+}
+
+
+/**
+  * Set Ad id value
+*/
+function setAdIdValue(row, value) {
+  getSheetContext().getRange( row, getColumnByName( params.names.range.adId ) ).setValue( value );
+}
+
+
+/**
+  * Get recipient email
+*/
+function getRecipientEmail() {
+   
+  var recipientEmail = getValuesByRangeName( params.names.range.recipientEmail )[1];
+  
+  if (!recipientEmail) {
+    
+    prompt(params.messages.noEmail);
+    
+    return;
+    
+  }
+   
+  return recipientEmail;
+}
+
+
+/**
+  * Send mail Ads to
+*/
+function sendDataTo( data, email ) {
+   
+  var mailTitle =  getMailTitle( getAdsTotalLength( data.ads ) );
+  var mailHtml = getMailHtml( data );
+    
+  MailApp.sendEmail(
+    email,
+    mailTitle,
+    'corps',
+    { 
+      htmlBody: mailHtml 
+    }
+  );
+}
+
+
+/**
+  * Get ads length
+*/
+function getAdsTotalLength( ads ) {
+  var length = 0;
+  for (var i = 0; i < ads.length; i++ ) {
+    length += ads[i].length;
+  }
+  return length;
+}
+
+
+/**
+  * Get mail title
+*/
+function getMailTitle( length ) {
+  
+  return "Alertes leboncoin.fr : " + length + " nouveau" + (length > 1 ? "x" : "") + " résultat" + (length > 1 ? "s" : "");
+}
+
+
+/**
+  * Get mail html
+*/
+function getMailHtml( data ) {
+  
+  var html = "";
+ 
+  html += "<body>";
+  html += getMailSummaryHtml( data )
+  html += getMailListingHtml( data )
+  html += "</body>";
+  
+  return html;
+}
+
+
+/**
+  * Get mail summary html
+*/
+function getMailSummaryHtml( data ) {
+    
+  var html = "";
+  
+  var adsTotalLength = getAdsTotalLength(data.ads);
+  
+  if (adsTotalLength && adsTotalLength > 2) {
+  
+    html += "<p style='display:block;clear:both;padding-top:20px;font-size:14px;'>"+ params.names.mail.summaryTitle +"</p>";
+    
+    html += "<ul>";
+    for (var i = 0; i < data.ads.length; i++ ) {
+      if (data.ads[i].length) {
+        html += [
+          "<li>",
+          "  <a href='#"+ params.names.mail.anchorPrefix+i + "'>"+ data.labels[i] +"</a> (" + data.ads[i].length + ")",
+            "</li>"
+            ].join("\n");
+      }
+    }
+    html += "</ul>";
+    
+  }
+  
+  return html;
+}
+
+
+/**
+  * Get mail listing html
+*/
+function getMailListingHtml( data ) {
+  
+  var html = "";
+  
+  for (var i = 0; i < data.ads.length; i++ ) {
+    if (data.ads[i].length) {
+      html += [
+        "<p style='display:block;clear:both;padding-top:20px;font-size:14px;'>",
+        "  " + params.names.mail.researchTitle + " ",
+        "  <a name='"+ params.names.mail.anchorPrefix+i + "' href='"+ data.urls[i] + "'>"+ data.labels[i] +"</a> (" + data.ads[i].length + ")",
+        "</p>",
+        "<ul>"
+      ].join("\n");
+      
+      html += getMailAdsHtml( data.ads[i] );
+      
+      html += "</ul>";
+    }
+  }
+  
+  return html;
+}
+
+
+/**
+  * Get mail ads html
+*/
+function getMailAdsHtml( ads ) {
+  
+  var html = "";
+  
+  for (var i = 0; i < ads.length; i++) {
+    
+    var ad = ads[i];
+    
+    if (params.showMap) {
+     var map =  "<img style='float:right; padding-left:10px;' src='https://maps.googleapis.com/maps/api/staticmap?markers=" + encodeData(ad.place) + "&zoom=7&size=120x120&sensor=false&language=fr&sensor=false' />";
+    }
+    
+    html += [
+      "<li style='list-style:none;margin-bottom:20px;clear:both;background:#EAEBF0;border-top:1px solid #ccc;'>",
+      "  <div style='float:left;width:auto;padding:20px 0;'>",
+      "    "+map,
+      "    <a href='" + ad.url + "'>",
+      "      <img src='" + ad.img_src + "' />",
+      "    </a>",
+      "    <div style='float:left;width:400px;padding:10px 0;'>",
+      "      <a style='font-size:14px;font-weight:bold;color:#369;text-decoration:none;' href='" + ad.url + "'>",
+      "        " + ad.title,
+      "      </a>",
+      "      <div>",
+      "        " + ad.place,
+      "      </div>",
+      "      <div>",
+      "        " + ad.date,
+      "      </div>",
+      "      <div style='line-height:18px;font-size:14px;font-weight:bold;'>",
+      "        " + ad.price,
+      "      </div>",
+      "  </div>",
+      "</li>"
+    ].join("\n");
+    
+  }
+    
+  return html; 
 }
 
 
@@ -474,32 +545,19 @@ function encodeData(s) {
 }
 
 
-function getUrlHashcode( url ) {
-  return url.toString().split("/").pop().hashCode().toString() + "aaa";
-}
-
-function getCachedContent(url) {
-    var cache = CacheService.getPublicCache();
-    var cached = cache.get( getUrlHashcode(url) );
-
-  Logger.log(cached);
+/**
+  * Notify user by a popup
+*/
+var prompt = function(message) {
   
-    if (cached != null) {
-      return cached;
-    } else {
-     return false;
-    }
-    
+  Browser.msgBox( message );
 }
 
-function setCache(url, content) {
-  var cache = CacheService.getPublicCache();
-  cache.put( getUrlHashcode(url), content, 1500);
-}
 
-String.prototype.hashCode = function() {
-  for(var ret = 0, i = 0, len = this.length; i < len; i++) {
-    ret = (31 * ret + this.charCodeAt(i)) << 0;
-  }
-  return ret;
-};
+/**
+  * Get full range name
+*/
+function getFullRangeName( rangeName ) {
+  
+  return names.sheet.data + '!' + rangeName;
+}
