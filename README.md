@@ -8,7 +8,7 @@ Script d'alertes email leboncoin.fr via Google Docs / Drive
 **Prérequis :** *vous devez avoir un compte Google et y être connecté.*
 
 ### Installation en 4 étapes
-1. Créez une copie de cette feuille de calcul : https://docs.google.com/spreadsheet/ccc?key=0Atof5tNmg-CYdC1hVTkybGxOYkFhM0Qxd0tIYldneVE&newcopy  
+1. Créez une copie de cette feuille de calcul : https://docs.google.com/spreadsheet/ccc?key=1oruKJqdbEjg0z28K83hsqIKbaL2weBMqmA8lG0gYIfw&newcopy  
  
 2. Renseignez votre adresse email dans l'onglet *Variables* en bas du document
 
