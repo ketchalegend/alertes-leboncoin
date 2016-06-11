@@ -1,7 +1,7 @@
 
 
-Alertes leboncoin.fr 4.0
-========================
+Alertes leboncoin.fr 4.0 beta
+=============================
 
 Script d'alertes email leboncoin.fr via Google Docs / Drive
 
