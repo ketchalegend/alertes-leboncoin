@@ -1,6 +1,6 @@
 
 
-Alertes leboncoin.fr 4.0 beta
+Alertes leboncoin.fr 4.1.2
 =============================
 
 Script d'alertes email leboncoin.fr via Google Docs / Drive
@@ -20,12 +20,32 @@ Il est conseillé de régler le trigger sur "toutes les 2 heures".
 
 5. Vous pouvez faire un test en cliquant sur Alertes LeBonCoin > Lancer manuellement. (à côté du menu outils)
 
-v1.0 par http://justdocsit.blogspot.fr  
-v4.0 par [mlb](http://www.maximelebreton.com)  
 
-Qu'apporte cette version 4.0 ?
+v1.x par http://justdocsit.blogspot.fr  
+v4.x par [mlb](http://www.maximelebreton.com)  
+
+Pourquoi ce fork ?
+-----------------
 * refonte totale du code
 * intégration de [cheerio](https://github.com/cheeriojs/cheerio) (jquery, mais côté serveur)
-* **mise à jour automatique du code**
-* ajout d'une mini carte pour localiser rapidement l'annonce
+* **mise à jour semi-automatique du code** (`Outils > Editeur de scripts`, puis `Ressources > Bibliothèques` pour choisir la version)
+* ajout de paramètres utilisateur
+* ajout d'une mini carte pour localiser rapidement l'annonce (`showMap`)
+* possibilité de choisir l'envoi des résultats en mails individuels ou en mail groupé (`groupedResults`)
 
+Paramètres utilisateurs
+----------------------
+Pour indiquer vos propres paramètres, utiliser par la variable `userParams` (dans la feuille de calcul : `Outils > Editeur de scripts`)
+exemple :
+```
+var userParams = {
+  showMap: true,
+  groupedResults: false
+}
+```
+vous pouvez retrouver les paramètres par défaut par ici : https://github.com/maximelebreton/alertes-leboncoin/blob/master/Code.gs#L9
+
+Changelog
+--------
+* **4.1.2** : Corrections de bugs, amélioration considérable des performances, données normalisées, et ajout de la possibilité de recevoir des mails individuels
+* **4.0** : version initiale du projet (bêta)
