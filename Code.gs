@@ -51,7 +51,7 @@ var normalizedData = {
 */
 function init(userParams) {
   
-  // params = extend({}, defaultParams, userParams);
+  // params = deepExtend({}, defaultParams, userParams);
   createMenu();
 }
 
@@ -59,13 +59,39 @@ function init(userParams) {
 /**
   * Mimic jquery Extend function
 */
-function extend(){
+function extend() {
   for(var i=1; i<arguments.length; i++)
     for(var key in arguments[i])
       if(arguments[i].hasOwnProperty(key))
         arguments[0][key] = arguments[i][key];
   return arguments[0];
 }
+
+
+/**
+  * Deep extend
+*/
+function deepExtend(out) {
+  out = out || {};
+
+  for (var i = 1; i < arguments.length; i++) {
+    var obj = arguments[i];
+
+    if (!obj)
+      continue;
+
+    for (var key in obj) {
+      if (obj.hasOwnProperty(key)) {
+        if (typeof obj[key] === 'object')
+          out[key] = deepExtend(out[key], obj[key]);
+        else
+          out[key] = obj[key];
+      }
+    }
+  }
+
+  return out;
+};
 
 
 /**
@@ -85,7 +111,7 @@ function createMenu() {
 */
 function start(userParams) {
   
-  params = extend({}, defaultParams, userParams);
+  params = deepExtend({}, defaultParams, userParams);
   log(params);
   
   // For each value in the url range sheet
