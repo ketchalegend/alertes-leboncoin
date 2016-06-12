@@ -1,6 +1,6 @@
 
 
-Alertes leboncoin.fr 4.1.2
+Alertes leboncoin.fr 4.1.3
 =============================
 
 Script d'alertes email leboncoin.fr via Google Docs / Drive
@@ -52,5 +52,6 @@ Comment obtenir la dernière mise à jour ?
 
 Changelog
 --------
+* **4.1.3** : Correction d'un bug lié aux paramètres utilisateurs qui n'étaient pas correctement étendus (extend VS deepExtend)
 * **4.1.2** : Corrections de bugs, amélioration considérable des performances, données normalisées, et ajout de la possibilité de recevoir des mails individuels
 * **4.0** : version initiale du projet (bêta)
