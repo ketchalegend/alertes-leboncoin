@@ -45,6 +45,11 @@ var userParams = {
 ```
 vous pouvez retrouver les paramètres par défaut par ici : https://github.com/maximelebreton/alertes-leboncoin/blob/master/Code.gs#L9
 
+Comment obtenir la dernière mise à jour ?
+--------------------------------------
+ Dans la feuille de calcul, aller dans `Outils > Editeur de scripts`, puis `Ressources > Bibliothèques`, choisissez la version la plus récente, puis **cliquez sur Enregistrer**.  
+![image](https://cloud.githubusercontent.com/assets/1072425/15991503/01a4fe2e-30b5-11e6-82e4-1da6155d48ae.png)
+
 Changelog
 --------
 * **4.1.2** : Corrections de bugs, amélioration considérable des performances, données normalisées, et ajout de la possibilité de recevoir des mails individuels
