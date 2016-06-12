@@ -1,23 +1,22 @@
 var cheerio = cheeriogasify.require('cheerio');
 var $ = cheerio;
 
-
 var sendMail = true;
-//var fake = true;
 
 /**
   * Default Params
 */
 var defaultParams = {
-  showMap: true,
+  showMap: false,
   limitResults: false,
-  useCache: true,
-  cacheTime: 1500,
+  groupedResults: true,
+  startIndex: 1,
   names: {
     sheet: {
       data: 'Alertes',
       variables: 'Variables',
-      test: 'Alertes de test'
+      test: 'Alertes de test',
+      debug: 'debug'
     },
     range: {
       label: 'labelRange',
@@ -41,28 +40,31 @@ var defaultParams = {
 };
 var params;
 
-
-/**
-  * Globals
-*/
-var globals = {
-  
-  ads: [],
-  mail: {
-    ads : [],
-    labels: [],
-    urls: []
-  }
-  
+var normalizedData = {
+  result: [],
+  entities: {}
 };
 
 
 /**
-* TO DO: merge user params with default params
+* Init
 */
 function init(userParams) {
-
+  
+  // params = extend({}, defaultParams, userParams);
   createMenu();
+}
+
+
+/**
+  * Mimic jquery Extend function
+*/
+function extend(){
+  for(var i=1; i<arguments.length; i++)
+    for(var key in arguments[i])
+      if(arguments[i].hasOwnProperty(key))
+        arguments[0][key] = arguments[i][key];
+  return arguments[0];
 }
 
 
@@ -81,45 +83,93 @@ function createMenu() {
 /**
   * Start, everything start from here
 */
-function start() {
+function start(userParams) {
   
-  params = defaultParams; // To do : extend with userParams
+  params = extend({}, defaultParams, userParams);
+  log(params);
   
   // For each value in the url range sheet
   browseRangeName( params.names.range.url, function(key, value) {
     
     var url = value;
-
     var ads = getUrlAds(url);
 
     if (ads.length && sendMail) {
       
-      //globals.ads.push( ads );
       var storedAdId = Number(getValuesByRangeName( params.names.range.adId )[key]); // Number to prevent strict equality checks
       var firstAdId = ads[0].id;
       
       if(firstAdId !== storedAdId) {
         
-        var latestAds = getDataBeforeId(ads, storedAdId);
+        var latestAds = (!storedAdId || storedAdId == 0) ? ads : getDataBeforeId(ads, storedAdId);
         var label = getValuesByRangeName( params.names.range.label )[key];
         
-        setMailGlobals(latestAds, label, url);
-        
-        setAdIdValue( key+1, firstAdId );
+        setNormalizedData(key, label, url, latestAds);
       }
-    } else {
-      
-      setAdIdValue( key+1, 0 );
     }
-    
   });
   
-  if ( globals.mail.ads.length && sendMail ) {
-    var recipientEmail = getRecipientEmail();
-    var data = globals.mail;
+  // If results, send email
+  if ( normalizedData.result.length && sendMail ) {
     
-    sendDataTo( data, recipientEmail );
+    var recipientEmail = getRecipientEmail();
+    var data = normalizedData;
+    
+    sendDataTo( data, recipientEmail, function(error, result) {
+
+      if (error && error.name == 'Exception') {
+        // TODO : manage erroror messages
+      } else {
+        setAdIdValues( result );
+      }
+      
+    });
   }
+  
+}
+
+
+/**
+  * Set normalized data (inspired by redux & normalizr principles)
+*/
+function setNormalizedData(key, label, url, latestAds) {
+ 
+  // Push new result
+  normalizedData.result.push( key );
+        
+  // Because GAS is not ecmascript 6, we need to use this method to set dynamic object names...
+  var obj = {}; obj[key] = {};
+  var labels = extend({}, obj);
+  var urls = extend({}, obj);
+  var ads = extend({}, obj);          
+  
+  // Extend Labels
+  labels[key] = {
+    id: key,
+    label: label 
+  }
+  labels = extend({}, normalizedData.entities.labels, labels);  
+  
+  // Extend urls
+  urls[key] = {
+    id: key,
+    url: url
+  }
+  urls = extend({}, normalizedData.entities.urls, urls);
+  
+  // Extend ads
+  ads[key] = {
+    id: key,
+    latest: latestAds
+  }
+  ads = extend({}, normalizedData.entities.ads, ads);
+  
+  // Extend entities
+  normalizedData.entities = extend({}, normalizedData.entities, {
+    labels: labels,
+    urls: urls,
+    ads: ads
+  });
   
 }
 
@@ -129,10 +179,9 @@ function start() {
 */
 function browseRangeName(rangeName, callback) {
   
-  var key = 1; // because 0 is the header
-  
+  var key = params.startIndex; // because 0 is the header
   var rangeArray = getValuesByRangeName(rangeName);
-  
+
   while( (value = rangeArray[key]) != "" ) {
     
     if (callback && typeof(callback) === "function") {
@@ -199,67 +248,11 @@ function getUrlAds(url) {
   
   var listingAds;
   
-  /*var cachedUrlContent = getCachedContent(url);
-  if (cachedUrlContent) {
-    
-    listingAds = JSON.parse(cachedUrlContent);   
-  } else {
-    
-    var html = getUrlContent( url );
-    listingAds = getListingAdsFromHtml( html );
-    
-    setCache( url, JSON.stringify(listingAds) );
-  }*/
-  
   var html = getUrlContent( url );
   listingAds = getListingAdsFromHtml( html );
   
   return listingAds;
 }
-
-
-/**
-  * Get cached content
-*/
-function getCachedContent(url) {
-  
-  var cache = CacheService.getPublicCache();
-  var cached = cache.get( getUrlHashcode(url) );
-  
-  if (cached != null) {
-    return cached;
-  } else {
-    return false;
-  }
-}
-
-
-/**
-  * Set cache
-*/
-function setCache(url, content) {
-  var cache = CacheService.getPublicCache();
-  cache.put( getUrlHashcode(url), content, params.cacheTime);
-}
-
-
-/**
-  * Get url hashcode
-*/
-function getUrlHashcode( url ) {
-  return url.toString().split("/").pop().hashCode().toString();
-}
-
-
-/**
-  * Hashcode function
-*/
-String.prototype.hashCode = function() {
-  for(var ret = 0, i = 0, len = this.length; i < len; i++) {
-    ret = (31 * ret + this.charCodeAt(i)) << 0;
-  }
-  return ret;
-};
 
 
 /**
@@ -279,10 +272,17 @@ function getListingAdsFromHtml( html ) {
   
   var data = [];
   var protocol = 'https:';
+  
+  var mainHtml = extractMainHtml(html); // get only the needed part, for cheerio performance
+  
+  /*var start1 = new Date().getTime();
+  var end1 = new Date().getTime();
+  log( start1 - end1 );*/
+  
+  var $selector = $(params.selectors.adItem, params.selectors.adContext, mainHtml);
         
   // liste des annonces
-  $(params.selectors.adItem, params.selectors.adContext, html)
-  .each(function(i, element) {
+  $selector.each(function(i, element) {
     
     // limiter le nombre de résultats
     /*if (params.limitResults) {
@@ -317,11 +317,25 @@ function getListingAdsFromHtml( html ) {
     data.push(item);
     
   });
-  
-  //Logger.log( data.length );
-  
-  return data;
     
+  return data;
+}
+
+
+/**
+  * Extract main html
+*/
+function extractMainHtml(html){
+  
+  var mainStartTag = '<main id="main"';
+  var mainEndTag = '</main>';
+  
+  var from = html.indexOf(mainStartTag) + mainStartTag.length;
+  var to = html.indexOf(mainEndTag, from)
+  
+  var mainHtml = html.substring( from, to );
+  
+  return mainHtml;
 }
 
 
@@ -332,27 +346,29 @@ function getDataBeforeId(data, stopId) {
   
   var stopIndex = data.map(function(x) {return x.id; }).indexOf(stopId);
 
-  return data.slice( 0, stopIndex-1 );
+  return data.slice( 0, stopIndex );
 }
+
 
 
 /**
-  * Build mail data
+  * Set ad id values
 */
-function setMailGlobals(ads, label, url) {
+function setAdIdValues( result ) {
   
-  globals.mail.ads.push( ads );
-  globals.mail.labels.push( label );
-  globals.mail.urls.push( url );
+  for (var i = 0; i < result.length; i++ ) {
+    var id = result[i];
+    var firstAdId = normalizedData.entities.ads[id].latest[0].id;
+    setAdIdValue( id, firstAdId );
+  }
   
 }
-
 
 /**
   * Set Ad id value
 */
-function setAdIdValue(row, value) {
-  getSheetContext().getRange( row, getColumnByName( params.names.range.adId ) ).setValue( value );
+function setAdIdValue(key, value) {
+  getSheetContext().getRange( key+params.startIndex , getColumnByName( params.names.range.adId ) ).setValue( value );
 }
 
 
@@ -366,9 +382,7 @@ function getRecipientEmail() {
   if (!recipientEmail) {
     
     prompt(params.messages.noEmail);
-    
-    return;
-    
+        
   }
    
   return recipientEmail;
@@ -378,29 +392,101 @@ function getRecipientEmail() {
 /**
   * Send mail Ads to
 */
-function sendDataTo( data, email ) {
-   
-  var mailTitle =  getMailTitle( getAdsTotalLength( data.ads ) );
-  var mailHtml = getMailHtml( data );
+function sendDataTo( data, email, callback ) {
+  
+  
+  if (params.groupedResults) {
     
-  MailApp.sendEmail(
-    email,
-    mailTitle,
-    'corps',
-    { 
-      htmlBody: mailHtml 
-    }
-  );
+    sendGroupedData(data, email, function(error, result) {
+      if (error) {
+        sendSeparatedData(data, email, callback);
+      } else {
+        
+        if (callback && typeof(callback) === "function") {
+          return callback(error, result);
+        } 
+      }
+    });
+    
+  } else {
+    
+    sendSeparatedData(data, email, callback);
+  }
+}
+
+
+/**
+  * Send grouped data
+*/
+function sendGroupedData( data, email, callback ) {
+    
+  var mailTitle =  getMailTitle( getAdsTotalLength( data.result, data.entities ) );
+  var mailHtml = getMailHtml( data.result, data.entities );
+  
+  sendEmail(email, mailTitle, mailHtml, data.result, callback);
+  
+}
+
+
+/**
+  * Send separated data
+*/
+function sendSeparatedData( data, email, callback ) {  
+  
+  for (var i = 0; i < data.result.length; i++ ) {
+    
+    var id = data.result[i];
+    var singleResult = [id];
+    
+    var mailTitle =  getMailTitle( data.entities.ads[id].latest.length );
+    var mailHtml = getMailHtml( singleResult, data.entities );
+    
+    sendEmail(email, mailTitle, mailHtml, singleResult, callback);
+    
+  }
+  
+}
+
+
+/**
+  * Send email
+*/
+function sendEmail(email, title, htmlBody, result, callback) {
+  
+  var error;
+  
+  try {
+
+    MailApp.sendEmail(
+      email,
+      title,
+      'corps',
+      { 
+        htmlBody: htmlBody 
+      }
+    );
+    
+  } catch(exception) {
+    
+    log( exception )
+    error = exception;
+  }
+  
+  if (callback && typeof(callback) === "function") {
+    return callback(error, result);
+  }
+  //{"message":"Limite dépassée : Taille du corps de l'e-mail.","name":"Exception","fileName":"Code","lineNumber":566,"stack":"\tat Code:566 (sendEmail)\n\tat Code:557 (sendGroupedData)\n\tat Code:530 (sendDataTo)\n\tat Code:256 (start)\n"}
 }
 
 
 /**
   * Get ads length
 */
-function getAdsTotalLength( ads ) {
+function getAdsTotalLength( result, entities ) {
   var length = 0;
-  for (var i = 0; i < ads.length; i++ ) {
-    length += ads[i].length;
+  for (var i = 0; i < result.length; i++ ) {
+    var id = result[i];
+    length += entities.ads[id].latest.length;
   }
   return length;
 }
@@ -418,13 +504,15 @@ function getMailTitle( length ) {
 /**
   * Get mail html
 */
-function getMailHtml( data ) {
+function getMailHtml( result, entities ) {
   
   var html = "";
  
   html += "<body>";
-  html += getMailSummaryHtml( data )
-  html += getMailListingHtml( data )
+  if (result.length && result.length > 1) {
+    html += getMailSummaryHtml( result, entities )
+  }
+  html += getMailListingHtml( result, entities )
   html += "</body>";
   
   return html;
@@ -434,29 +522,30 @@ function getMailHtml( data ) {
 /**
   * Get mail summary html
 */
-function getMailSummaryHtml( data ) {
+function getMailSummaryHtml( result, entities ) {
     
   var html = "";
   
-  var adsTotalLength = getAdsTotalLength(data.ads);
+  html += "<p style='display:block;clear:both;padding-top:20px;font-size:14px;'>"+ params.names.mail.summaryTitle +"</p>";
   
-  if (adsTotalLength && adsTotalLength > 2) {
-  
-    html += "<p style='display:block;clear:both;padding-top:20px;font-size:14px;'>"+ params.names.mail.summaryTitle +"</p>";
+  html += "<ul>";
+  for (var i = 0; i < result.length; i++ ) {
     
-    html += "<ul>";
-    for (var i = 0; i < data.ads.length; i++ ) {
-      if (data.ads[i].length) {
-        html += [
-          "<li>",
-          "  <a href='#"+ params.names.mail.anchorPrefix+i + "'>"+ data.labels[i] +"</a> (" + data.ads[i].length + ")",
-            "</li>"
-            ].join("\n");
-      }
+    var id = result[i];
+    var label = entities.labels[id].label;
+    var url = entities.urls[id].url;
+    var ads = entities.ads[id].latest;
+    
+    if (ads.length) {
+      html += [
+        "<li>",
+        "  <a href='#"+ params.names.mail.anchorPrefix+i + "'>"+ label +"</a> (" + ads.length + ")",
+        "</li>"
+      ].join("\n");
     }
-    html += "</ul>";
-    
   }
+  html += "</ul>";
+
   
   return html;
 }
@@ -465,24 +554,31 @@ function getMailSummaryHtml( data ) {
 /**
   * Get mail listing html
 */
-function getMailListingHtml( data ) {
+function getMailListingHtml( result, entities ) {
   
   var html = "";
   
-  for (var i = 0; i < data.ads.length; i++ ) {
-    if (data.ads[i].length) {
+  for (var i = 0; i < result.length; i++ ) {
+    
+    var id = result[i];
+    var label = entities.labels[id].label;
+    var url = entities.urls[id].url;
+    var ads = entities.ads[id].latest;
+    
+    if (ads.length) {
       html += [
         "<p style='display:block;clear:both;padding-top:20px;font-size:14px;'>",
         "  " + params.names.mail.researchTitle + " ",
-        "  <a name='"+ params.names.mail.anchorPrefix+i + "' href='"+ data.urls[i] + "'>"+ data.labels[i] +"</a> (" + data.ads[i].length + ")",
+        "  <a name='"+ params.names.mail.anchorPrefix+i + "' href='"+ url + "'>"+ label +"</a> (" + ads.length + ")",
         "</p>",
         "<ul>"
       ].join("\n");
       
-      html += getMailAdsHtml( data.ads[i] );
+      html += getMailAdsHtml( ads );
       
       html += "</ul>";
     }
+    
   }
   
   return html;
@@ -507,7 +603,7 @@ function getMailAdsHtml( ads ) {
     html += [
       "<li style='list-style:none;margin-bottom:20px;clear:both;background:#EAEBF0;border-top:1px solid #ccc;'>",
       "  <div style='float:left;width:auto;padding:20px 0;'>",
-      "    "+map,
+      map,
       "    <a href='" + ad.url + "'>",
       "      <img src='" + ad.img_src + "' />",
       "    </a>",
@@ -561,3 +657,97 @@ function getFullRangeName( rangeName ) {
   
   return names.sheet.data + '!' + rangeName;
 }
+
+
+/**
+  * Log
+*/
+function log(value, stringify) {
+  if (stringify == false) {
+    Logger.log ( value );
+  }
+  return Logger.log( JSON.stringify(value) ); 
+ 
+}
+
+
+
+
+/**
+  * CACHE CODE PARTS : since performance increase, cache is not necessary, but keeped here for potential future needs.
+*/
+
+/**
+  * Get url ads
+
+function getUrlAds(url) {
+  
+  var listingAds;
+  
+  if (params.useCache) {
+    
+    var cachedUrlContent = getCachedContent(url);
+    if (cachedUrlContent) {
+      
+      listingAds = JSON.parse(cachedUrlContent);   
+    }
+  }
+  if ( (params.useCache && !cachedUrlContent) || !params.useCache) {
+    
+    var html = getUrlContent( url );
+    listingAds = getListingAdsFromHtml( html );   
+  }
+  if ( params.useCache && cachedUrlContent ) {
+    
+    setCache( url, JSON.stringify(listingAds) );
+  }
+  
+  return listingAds;
+}
+
+/**
+  * Get cached content
+
+function getCachedContent(url) {
+  
+  var cache = CacheService.getPublicCache();
+  var cached = cache.get( getUrlHashcode(url) );
+  
+  if (cached != null) {
+    return cached;
+  } else {
+    return false;
+  }
+}
+
+
+/**
+  * Set cache
+
+function setCache(url, content) {
+  var cache = CacheService.getPublicCache();
+  cache.put( getUrlHashcode(url), content, params.cacheTime);
+}
+
+
+/**
+  * Get url hashcode
+
+function getUrlHashcode( url ) {
+  return url.toString().split("/").pop().hashCode().toString();
+}
+
+
+/**
+  * Hashcode function
+
+String.prototype.hashCode = function() {
+  for(var ret = 0, i = 0, len = this.length; i < len; i++) {
+    ret = (31 * ret + this.charCodeAt(i)) << 0;
+  }
+  return ret;
+};
+
+/**
+  * END CACHE CODE PARTS
+*/
