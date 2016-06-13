@@ -22,7 +22,7 @@ Installation en 4 étapes
 
 4. Pour chaque requête que vous souhaitez effectuer sur leboncoin.fr, **copiez/collez son url** dans la colonne `Url` (une url par ligne). 
 
-5. **Voilà !** Vous pouvez faire un test en cliquant sur `Alertes LeBonCoin > Lancer manuellement`. (à côté du menu outils, une autorisation vous sera demandée)  
+5. **Voilà !** Vous pouvez faire un test en cliquant sur `Alertes LeBonCoin > Lancer manuellement`. (une autorisation vous sera demandée lors du premier lancement)  
 
 
 Obtenir la dernière mise à jour
