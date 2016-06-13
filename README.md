@@ -30,15 +30,6 @@ Comment obtenir la dernière mise à jour ?
 ![image](https://cloud.githubusercontent.com/assets/1072425/15991503/01a4fe2e-30b5-11e6-82e4-1da6155d48ae.png)
 
 
-Pourquoi ce fork ?
------------------
-* refonte totale du code
-* intégration de [cheerio](https://github.com/cheeriojs/cheerio) (jquery, mais côté serveur)
-* **mise à jour semi-automatique du code** (`Outils > Editeur de scripts`, puis `Ressources > Bibliothèques` pour choisir la version)
-* ajout de paramètres utilisateur
-* ajout d'une mini carte pour localiser rapidement l'annonce (`showMap`)
-* possibilité de choisir l'envoi des résultats en mails individuels ou en mail groupé (`groupedResults`)
-
 Paramètres utilisateurs
 ----------------------
 Pour indiquer vos propres paramètres, utiliser par la variable `userParams` (dans la feuille de calcul : `Outils > Editeur de scripts`)
@@ -50,6 +41,16 @@ var userParams = {
 }
 ```
 vous pouvez retrouver les paramètres par défaut par ici : https://github.com/maximelebreton/alertes-leboncoin/blob/master/Code.gs#L9
+
+
+Pourquoi ce fork ?
+-----------------
+* refonte totale du code
+* intégration de [cheerio](https://github.com/cheeriojs/cheerio) (jquery, mais côté serveur)
+* **mise à jour semi-automatique du code** (`Outils > Editeur de scripts`, puis `Ressources > Bibliothèques` pour choisir la version)
+* ajout de paramètres utilisateur
+* ajout d'une mini carte pour localiser rapidement l'annonce (`showMap`)
+* possibilité de choisir l'envoi des résultats en mails individuels ou en mail groupé (`groupedResults`)
 
 
 Changelog
