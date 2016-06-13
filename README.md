@@ -10,7 +10,8 @@ _____________________________
 
 **Prérequis :** *vous devez avoir un compte Google et y être connecté.*
 
-### Installation en 4 étapes
+Installation en 4 étapes
+----------------------------------
 1. **Créez une copie** de cette feuille de calcul : https://docs.google.com/spreadsheet/ccc?key=1oruKJqdbEjg0z28K83hsqIKbaL2weBMqmA8lG0gYIfw&newcopy
  
 2. **Renseignez votre adresse email** dans l'onglet `Variables` en bas du document
@@ -21,10 +22,11 @@ _____________________________
 
 4. Pour chaque requête que vous souhaitez effectuer sur leboncoin.fr, **copiez/collez son url** dans la colonne `Url` (une url par ligne). 
 
-5. **Voilà !** Vous pouvez faire un test en cliquant sur `Alertes LeBonCoin > Lancer manuellement`. (à côté du menu outils, une autorisation vous sera demandée)
+5. **Voilà !** Vous pouvez faire un test en cliquant sur `Alertes LeBonCoin > Lancer manuellement`. (à côté du menu outils, une autorisation vous sera demandée)  
+
 
 Obtenir la dernière mise à jour
---------------------------------------
+----------------------------------
  Dans la feuille de calcul, aller dans `Outils > Editeur de scripts`, puis `Ressources > Bibliothèques`, choisissez la version la plus récente, puis **cliquez sur Enregistrer**.  
  
 ![image](https://cloud.githubusercontent.com/assets/1072425/15991503/01a4fe2e-30b5-11e6-82e4-1da6155d48ae.png)
