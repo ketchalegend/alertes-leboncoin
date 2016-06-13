@@ -48,7 +48,7 @@ Un problème ?
 --------------
 **Avant de vous inquiéter :**  
 1. vérifiez que votre **adresse email est bien renseignée** et qu'elle ne contient pas de caractères spéciaux (oui, même le +...)  
-2. vérifiez que votre **version est bien à jour** (et n'oubliez pas de cliquer sur enregistrer lors du changement)  
+2. vérifiez que votre **[version est bien à jour](#obtenir-la-dernière-mise-à-jour)** (et n'oubliez pas de cliquer sur enregistrer lors du changement)  
 3. si ça ne fonctionne toujours pas, et que vous ne savez pas pourquoi, tentez une **[réinstallation complète](#installation-en-4-étapes)**  
 4. si le problème n'est pas déjà signalé, je vous invite à **[créer une issue](https://github.com/maximelebreton/alertes-leboncoin/issues)**  
 
