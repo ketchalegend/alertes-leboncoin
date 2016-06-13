@@ -1,6 +1,7 @@
 var cheerio = cheeriogasify.require('cheerio');
 var $ = cheerio;
 
+var version = "4.1.5";
 var sendMail = true;
 
 /**
@@ -38,6 +39,7 @@ var defaultParams = {
     adsContext: '#listingAds'
   }
 };
+
 var params;
 
 var normalizedData = {
@@ -111,8 +113,9 @@ function createMenu() {
 */
 function start(userParams) {
   
+  log(userParams);
   params = deepExtend({}, defaultParams, userParams);
-  log(params);
+  
   
   // For each value in the url range sheet
   browseRangeName( params.names.range.url, function(key, value) {
@@ -446,7 +449,7 @@ function sendDataTo( data, email, callback ) {
 */
 function sendGroupedData( data, email, callback ) {
     
-  var mailTitle =  getMailTitle( getAdsTotalLength( data.result, data.entities ) );
+  var mailTitle =  getMailTitle( data.result, data.entities );
   var mailHtml = getMailHtml( data.result, data.entities );
   
   sendEmail(email, mailTitle, mailHtml, data.result, callback);
@@ -464,7 +467,7 @@ function sendSeparatedData( data, email, callback ) {
     var id = data.result[i];
     var singleResult = [id];
     
-    var mailTitle =  getMailTitle( data.entities.ads[id].latest.length );
+    var mailTitle =  getMailTitle( singleResult, data.entities );
     var mailHtml = getMailHtml( singleResult, data.entities );
     
     sendEmail(email, mailTitle, mailHtml, singleResult, callback);
@@ -521,9 +524,23 @@ function getAdsTotalLength( result, entities ) {
 /**
   * Get mail title
 */
-function getMailTitle( length ) {
+function getMailTitle( result, entities ) {
   
-  return "Alertes leboncoin.fr : " + length + " nouveau" + (length > 1 ? "x" : "") + " résultat" + (length > 1 ? "s" : "");
+  var length = getAdsTotalLength( result, entities );
+  
+  var prefixTitle = 'Alertes leboncoin.fr : ';
+  var suffixTitle = '';
+  
+  if (result.length == 1) {
+    suffixTitle = ' pour "' + entities.labels[result[0]].label + '"'
+  }
+  if (result.length > 1) {
+    suffixTitle = ' (groupés)'
+  }
+  
+  
+  return prefixTitle + length + " nouveau" + (length > 1 ? "x" : "") + " résultat" + (length > 1 ? "s" : "") + suffixTitle;  
+  
 }
 
 
@@ -535,10 +552,23 @@ function getMailHtml( result, entities ) {
   var html = "";
  
   html += "<body>";
-  if (result.length && result.length > 1) {
+  
+  if (result.length > 1) {
     html += getMailSummaryHtml( result, entities )
   }
   html += getMailListingHtml( result, entities )
+  
+  html += [
+    "<div style='border-top:1px solid #f7f7f7; text-align:center; margin-top:10px; padding-top:20px; clear:both; overflow:hidden;'>",
+    "  <small style='float:left;'>",
+    "    made with &#9829; by <a href='http://www.maximelebreton.com'>mlb</a>, inspired by <a href='http://justdocsit.blogspot.fr/2012/07/creer-une-alerte-sur-le-bon-coin.html'>Just docs it</a>",
+    "  </small>",
+    "  <small style='float:right;'>",
+    "    <a href='https://github.com/maximelebreton/alertes-leboncoin'>alertes-leboncoin</a> version&nbsp;" + version + "</small>",
+    "  </small>",
+    "</div>"
+  ].join("\n");
+  
   html += "</body>";
   
   return html;
@@ -597,7 +627,7 @@ function getMailListingHtml( result, entities ) {
         "  " + params.names.mail.researchTitle + " ",
         "  <a name='"+ params.names.mail.anchorPrefix+i + "' href='"+ url + "'>"+ label +"</a> (" + ads.length + ")",
         "</p>",
-        "<ul>"
+        "<ul style='padding-left:0px;'>"
       ].join("\n");
       
       html += getMailAdsHtml( ads );
@@ -627,8 +657,8 @@ function getMailAdsHtml( ads ) {
     }
     
     html += [
-      "<li style='list-style:none;margin-bottom:20px;clear:both;background:#EAEBF0;border-top:1px solid #ccc;'>",
-      "  <div style='float:left;width:auto;padding:20px 0;'>",
+      "<li style='list-style:none; margin-bottom:20px; margin-left:0px; clear:both; border-top:1px solid #eaeaea;'>",
+      "  <div style='float:left;width:auto;padding:20px 10px;'>",
       map,
       "    <a href='" + ad.url + "'>",
       "      <img src='" + ad.img_src + "' />",
