@@ -23,7 +23,7 @@ _____________________________
 
 5. **Voilà !** Vous pouvez faire un test en cliquant sur `Alertes LeBonCoin > Lancer manuellement`. (à côté du menu outils, une autorisation vous sera demandée)
 
-Comment obtenir la dernière mise à jour ?
+Obtenir la dernière mise à jour
 --------------------------------------
  Dans la feuille de calcul, aller dans `Outils > Editeur de scripts`, puis `Ressources > Bibliothèques`, choisissez la version la plus récente, puis **cliquez sur Enregistrer**.  
  
@@ -46,7 +46,7 @@ vous pouvez retrouver les paramètres par défaut par ici : https://github.com/m
 Pourquoi ce fork ?
 -----------------
 * refonte totale du code
-* intégration de [cheerio](https://github.com/cheeriojs/cheerio) (jquery, mais côté serveur)
+* intégration de [cheerio](https://github.com/3846masa/cheerio-gasify) (équivalent de jquery côté serveur)
 * **mise à jour semi-automatique du code** (`Outils > Editeur de scripts`, puis `Ressources > Bibliothèques` pour choisir la version)
 * ajout de paramètres utilisateur
 * ajout d'une mini carte pour localiser rapidement l'annonce (`showMap`)
