@@ -2,8 +2,9 @@
 
 Alertes leboncoin.fr 4.1.5
 =============================
+Recevez par email vos recherches leboncoin.fr (via Google Sheets / App Script)
 
-Script d'alertes email leboncoin.fr via Google Docs / Drive
+_____________________________
 
 **Prérequis :** *vous devez avoir un compte Google et y être connecté.*
 
