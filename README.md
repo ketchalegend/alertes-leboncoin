@@ -4,6 +4,7 @@ Alertes leboncoin.fr - 4.1.5
 =============================
 Recevez par email vos recherches leboncoin.fr (via Google Sheets / App Script)
 
+<div style="float:right;"><img src="https://raw.githubusercontent.com/maximelebreton/alertes-leboncoin/master/main.png"/></div>
 _____________________________
 
 
