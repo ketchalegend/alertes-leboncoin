@@ -13,13 +13,13 @@ _____________________________
  
 2. **Renseignez votre adresse email** dans l'onglet *Variables* en bas du document
 
-3. Pour que le script soit executé de manière automatique, vous devez **programmer un trigger** sur la fonction alertesLeBonCoin().  
-(Dans outils > editeur de scripts, puis Ressources > déclencheur du script actuel).  
-Il est conseillé de régler le trigger sur "toutes les 2 heures".
+3. Pour que le script soit executé de manière automatique, vous devez **programmer un trigger*** sur la fonction alertesLeBonCoin().  
+(Dans outils > editeur de scripts, puis `Ressources > Déclencheurs du script actuel`).  
+*il est vivement conseillé de ne pas aller en dessous de `toutes les 2 heures`.*
 
 4. Pour chaque requête que vous souhaitez effectuer sur leboncoin.fr, **copiez/collez son url** dans la colonne "url" (une url par ligne). 
 
-5. Vous pouvez faire un test en cliquant sur Alertes LeBonCoin > Lancer manuellement. (à côté du menu outils)
+5. **Voilà !** Vous pouvez faire un test en cliquant sur `Alertes LeBonCoin > Lancer manuellement`. (à côté du menu outils, une autorisation vous sera demandée)
 
 
 v1.x par http://justdocsit.blogspot.fr  
