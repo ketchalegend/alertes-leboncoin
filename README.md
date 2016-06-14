@@ -55,12 +55,17 @@ Un problème ?
 
 Pourquoi ce fork ?
 -----------------
+
+**TL DR;**
 * refonte totale du code
 * intégration de [cheerio](https://github.com/3846masa/cheerio-gasify) (équivalent de jquery côté serveur)
 * **mise à jour semi-automatique du code** (`Outils > Editeur de scripts`, puis `Ressources > Bibliothèques` pour choisir la version)
 * ajout de paramètres utilisateur
 * ajout d'une mini carte pour localiser rapidement l'annonce (`showMap`)
 * possibilité de choisir l'envoi des résultats en mails individuels ou en mail groupé (`groupedResults`)
+
+#### > [Vision et évolutions futures de la version 4.x ?](https://github.com/maximelebreton/alertes-leboncoin/issues/2)
+
 
 
 Changelog
@@ -73,6 +78,7 @@ Changelog
 
 
 _____________________________
+
 
 
 v1.x par http://justdocsit.blogspot.fr  
