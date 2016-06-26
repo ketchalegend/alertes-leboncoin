@@ -1,8 +1,10 @@
 var cheerio = cheeriogasify.require('cheerio');
 var $ = cheerio;
 
-var version = "4.1.5";
+var version = "4.1.6";
 var sendMail = true;
+
+// todo : sync with git
 
 /**
   * Default Params
@@ -133,7 +135,9 @@ function start(userParams) {
         var latestAds = (!storedAdId || storedAdId == 0) ? ads : getDataBeforeId(ads, storedAdId);
         var label = getValuesByRangeName( params.names.range.label )[key];
         
-        setNormalizedData(key, label, url, latestAds);
+        if (latestAds.length) {
+          setNormalizedData(key, label, url, latestAds);
+        }
       }
     }
   });
