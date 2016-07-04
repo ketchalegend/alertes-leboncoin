@@ -1,10 +1,8 @@
 var cheerio = cheeriogasify.require('cheerio');
 var $ = cheerio;
 
-var version = "4.1.6";
+var version = "4.2.0";
 var sendMail = true;
-
-// todo : sync with git
 
 /**
   * Default Params
@@ -13,7 +11,20 @@ var defaultParams = {
   showMap: false,
   limitResults: false,
   groupedResults: true,
-  startIndex: 1,
+  startIndex: 2,
+  dateFormat: {
+    human: 'd MMM, HH:mm',
+    iso: 'YYYY-MM-DDTHH:mm:ss.sssZ'
+  },
+  colors: {
+    background: {
+      working: '#ECEFF1',
+      success: '#DCEDC8'
+    },
+    border: {
+      working: '#B0BEC5'
+    }
+  },
   names: {
     sheet: {
       data: 'Alertes',
@@ -46,7 +57,8 @@ var params;
 
 var normalizedData = {
   result: [],
-  entities: {}
+  entities: {},
+  update: false
 };
 
 
@@ -120,45 +132,140 @@ function start(userParams) {
   
   
   // For each value in the url range sheet
-  browseRangeName( params.names.range.url, function(key, value) {
+  forEachValueInRange( params.names.range.url, function(key, value) {
+    
+    var index = key+params.startIndex-1; // because array keys & spreadsheet indexes aren't the same
+    
+    var cell = getCellByIndex(index, params.names.range.adId);   
+    var row = getRowByIndex(index, params.names.range.adId);
+    row.setBorder(true, true, true, true, false, false, params.colors.border.working, null);
+    row.setBackground( params.colors.background.working );
+    SpreadsheetApp.flush(); // see https://developers.google.com/apps-script/reference/spreadsheet/spreadsheet-app#flush
     
     var url = value;
     var ads = getUrlAds(url);
 
     if (ads.length && sendMail) {
       
-      var storedAdId = Number(getValuesByRangeName( params.names.range.adId )[key]); // Number to prevent strict equality checks
-      var firstAdId = ads[0].id;
+      var latestAdCellValue = getCellByIndex( index, params.names.range.adId ).getValue();
+      var latestAds = getLatestAds(ads, latestAdCellValue);
       
-      if(firstAdId !== storedAdId) {
+      if (latestAds.length) {
         
-        var latestAds = (!storedAdId || storedAdId == 0) ? ads : getDataBeforeId(ads, storedAdId);
-        var label = getValuesByRangeName( params.names.range.label )[key];
-        
-        if (latestAds.length) {
-          setNormalizedData(key, label, url, latestAds);
-        }
+        var label = getCellByIndex( index, params.names.range.label ).getValue();
+        setNormalizedData(index, label, url, latestAds);
       }
     }
+    
+    row.setBorder(false, false, false, false, false, false);
+    row.setBackground('');
+    SpreadsheetApp.flush();
+    
   });
   
+  
+  var update = checkForUpdates();
+  if ( update ) {
+    normalizedData.update = {
+      version: update.version,
+      description: update.changelog,
+      url: update.url
+    };
+  }
+  
+  
+  var data = normalizedData;
+  
   // If results, send email
-  if ( normalizedData.result.length && sendMail ) {
+  if ( data.result.length && sendMail ) {
     
     var recipientEmail = getRecipientEmail();
-    var data = normalizedData;
     
     sendDataTo( data, recipientEmail, function(error, result) {
 
       if (error && error.name == 'Exception') {
         // TODO : manage erroror messages
       } else {
-        setAdIdValues( result );
+        
+        forEachResult( result, data.entities, setLatestAdRangeValue );
+        
       }
       
     });
   }
+    
+}
+
+
+/**
+  * Get latest ads (based on stored value)
+*/
+function getLatestAds(ads, latestAdValue) {
   
+  var latestAds = [];
+   
+  var latestAdStoredTimestamp = null;
+  if (typeof latestAdValue.getTime === 'function') {
+    latestAdStoredTimestamp = latestAdValue.getTime();
+  }
+  
+  var latestAdTimestamp = ads[0].timestamp;
+  
+  if (latestAdTimestamp !== latestAdStoredTimestamp) {
+    
+    if (latestAdStoredTimestamp) {
+      
+      latestAds = getDataBeforeTime(ads, latestAdStoredTimestamp);
+      
+    } else if( Number(latestAdValue) !== 0 ) {
+      
+      latestAds = getDataBeforeId(ads, Number(latestAdValue) ); // deprecated, replaced by getDataBeforeTime
+      
+    } else {
+      
+      latestAds = ads;
+    }
+  }
+  
+  return latestAds;
+}
+
+
+/**
+  * Set latest Ad value
+*/
+function setLatestAdRangeValue(index, entities) {
+  
+  var latestAdDate = new Date( entities.ads[index].latest[0].timestamp );
+  var adIdRange = getSheetContext().getRange( index, getColumnByName( params.names.range.adId ) );
+  
+  adIdRange.setValue( latestAdDate );
+  adIdRange.setNumberFormat( params.dateFormat.human );
+  adIdRange.setBackground( params.colors.background.success );  
+}
+
+
+/**
+  * Check for updates
+*/
+function checkForUpdates() {
+  
+  var update = false;
+  var url = "https://raw.githubusercontent.com/maximelebreton/alertes-leboncoin/master/version.json";
+  
+  try {
+    var response = UrlFetchApp.fetch(url);
+    var data = JSON.parse(response.getContentText());
+
+    if ( versionCompare( data.version, version ) == 1) {
+      
+      update = data;
+    }
+  } catch(e) {
+    // handle error
+  }
+    
+  return update;
 }
 
 
@@ -210,9 +317,8 @@ function setNormalizedData(key, label, url, latestAds) {
 /**
   * Browse range name
 */
-function browseRangeName(rangeName, callback) {
-  
-  var key = params.startIndex; // because 0 is the header
+function forEachValueInRange(rangeName, callback) {
+  var key = params.startIndex-1; // because 1 is the header
   var rangeArray = getValuesByRangeName(rangeName);
 
   while( (value = rangeArray[key]) != "" ) {
@@ -220,7 +326,7 @@ function browseRangeName(rangeName, callback) {
     if (callback && typeof(callback) === "function") {
       callback(key, value);
     }
-    
+
     key++;
   }
 }
@@ -242,6 +348,31 @@ function getValuesByRangeName(rangeName, asString) {
     return range.getValues();
   }
   
+}
+
+/**
+  * Get row by index
+*/
+function getRowByIndex( index, rangeName ) {
+  
+  return getSheetContext().getRange(index, 1, 1, getColumnByName( rangeName ) );
+}
+
+/**
+  * Get cell by index
+*/
+function getCellByIndex( index, rangeName ) {
+  
+  return getSheetContext().getRange(index, getColumnByName( rangeName ) );
+}
+
+
+/**
+  * Get range by name
+*/
+function getRangeByName( rangeName ) {
+      
+  return getSpreadsheetContext().getRangeByName( rangeName );
 }
 
 
@@ -347,6 +478,9 @@ function getListingAdsFromHtml( html ) {
       
     };
     
+    // A real Date Object with milliseconds based on Ad Id to prevent conflicts
+    item.timestamp = getAdDateTime( item.date, item.id ).getTime();
+        
     data.push(item);
     
   });
@@ -382,26 +516,37 @@ function getDataBeforeId(data, stopId) {
   return data.slice( 0, stopIndex );
 }
 
-
-
 /**
-  * Set ad id values
+  * Get data before time
 */
-function setAdIdValues( result ) {
+function getDataBeforeTime(data, lastTime) {
   
-  for (var i = 0; i < result.length; i++ ) {
-    var id = result[i];
-    var firstAdId = normalizedData.entities.ads[id].latest[0].id;
-    setAdIdValue( id, firstAdId );
-  }
+  var reducedData = [];
   
+  data.map(function(item) {
+    
+    if (item.timestamp > lastTime) {
+      reducedData.push( item );
+    }
+  });
+
+  return reducedData;
 }
 
+
 /**
-  * Set Ad id value
+  * For each result
 */
-function setAdIdValue(key, value) {
-  getSheetContext().getRange( key+params.startIndex , getColumnByName( params.names.range.adId ) ).setValue( value );
+function forEachResult( result, entities, callback ) {
+  
+  for (var i = 0; i < result.length; i++ ) {
+    var index = result[i];
+    
+    if (callback && typeof(callback) === "function") {
+      callback(index, entities);
+    }
+    
+  }
 }
 
 
@@ -410,12 +555,11 @@ function setAdIdValue(key, value) {
 */
 function getRecipientEmail() {
    
-  var recipientEmail = getValuesByRangeName( params.names.range.recipientEmail )[1];
+  var recipientEmail = getValuesByRangeName( params.names.range.recipientEmail )[1][0];
   
-  if (!recipientEmail) {
-    
-    prompt(params.messages.noEmail);
-        
+  if (recipientEmail.length == 0) {
+    log(params.messages.noEmail);
+    //prompt(params.messages.noEmail);
   }
    
   return recipientEmail;
@@ -454,7 +598,7 @@ function sendDataTo( data, email, callback ) {
 function sendGroupedData( data, email, callback ) {
     
   var mailTitle =  getMailTitle( data.result, data.entities );
-  var mailHtml = getMailHtml( data.result, data.entities );
+  var mailHtml = getMailHtml( data.result, data.entities, data.update );
   
   sendEmail(email, mailTitle, mailHtml, data.result, callback);
   
@@ -472,7 +616,7 @@ function sendSeparatedData( data, email, callback ) {
     var singleResult = [id];
     
     var mailTitle =  getMailTitle( singleResult, data.entities );
-    var mailHtml = getMailHtml( singleResult, data.entities );
+    var mailHtml = getMailHtml( singleResult, data.entities, data.update );
     
     sendEmail(email, mailTitle, mailHtml, singleResult, callback);
     
@@ -551,7 +695,7 @@ function getMailTitle( result, entities ) {
 /**
   * Get mail html
 */
-function getMailHtml( result, entities ) {
+function getMailHtml( result, entities, update ) {
   
   var html = "";
  
@@ -561,6 +705,14 @@ function getMailHtml( result, entities ) {
     html += getMailSummaryHtml( result, entities )
   }
   html += getMailListingHtml( result, entities )
+  
+  if ( update ) {
+    html += [
+      "<div style='border:1px solid #FFECB3; background-color: #FFFDE7; text-align:center; margin-top:10px; margin-bottom:10px; padding:10px; clear:both; overflow:hidden;'>",
+      "  <small>Une nouvelle version est disponible : <a href='" + update.url + "' title='" + update.description + "'>" + update.version + "</a></small>",
+      "</div>"
+    ].join("\n");
+  }
   
   html += [
     "<div style='border-top:1px solid #f7f7f7; text-align:center; margin-top:10px; padding-top:20px; clear:both; overflow:hidden;'>",
@@ -704,7 +856,7 @@ function encodeData(s) {
 /**
   * Notify user by a popup
 */
-var prompt = function(message) {
+function prompt(message) {
   
   Browser.msgBox( message );
 }
@@ -720,6 +872,135 @@ function getFullRangeName( rangeName ) {
 
 
 /**
+  * Get Ad Date Time (with adId param to generate milliseconds)
+*/
+var getAdDateTime = function(adDateTime, adId) {
+  
+  // Date is now
+  var d = new Date();
+  // Reset seconds and milliseconds because of Ad Id magic trick
+  d.setSeconds(0);
+  d.setMilliseconds(0);
+  
+  var dateTimeSeparator = adDateTime.indexOf(',');
+  var dateString = adDateTime.substring(0, dateTimeSeparator).trim().toLowerCase();
+  var timeString = adDateTime.substring(dateTimeSeparator + 1).trim();
+  var timeSeparator = timeString.indexOf(":");
+  var dateSeparator = dateString.indexOf(" ");
+  
+  // Month, Day
+  var month;
+  var day;
+  switch( dateString ) {
+      case "aujourd'hui":
+          var today = d;
+          month = today.getMonth();
+          day = today.getDate();
+          break;
+      case "hier":
+          var yesterday = new Date( d.setDate(d.getDate() - 1) );
+          month = yesterday.getMonth();
+          day = yesterday.getDate();
+          break;
+      default:
+          var monthString = dateString.substring(dateSeparator + 1);
+          var dayString = dateString.substring(0, dateSeparator);
+          month = getMonthNumber( monthString );
+          day = Number( dayString );
+  }
+  
+  // Hours, minutes
+  var hours = Number(timeString.substring(0, timeSeparator));
+  var minutes = Number(timeString.substring(timeSeparator + 1));
+  
+  // Milliseconds based on Ad Id (magic trick)
+  var milliseconds = getMillisecondsByMagic( adId );
+  
+  d.setMonth( month );
+  d.setDate( day );
+  d.setHours( hours );
+  d.setMinutes( minutes );
+  d.setMilliseconds( milliseconds );
+  
+  var date;
+  
+  if ( typeof d.getMonth === 'function' ) {
+    date = d;
+  }
+  
+  //log(date);
+  return date;
+}
+
+
+/**
+  * Get month number
+*/
+function getMonthNumber(month) {
+    
+  var months = ["jan", "fév", "mars", "avr", "mai", "juin", "juil", "août", "sept", "oct", "nov", "déc"];
+  var fullMonths = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"];
+  
+  var monthNumber = months.indexOf( month );
+  var fullMonthNumber = fullMonths.indexOf( month );
+  
+  var number = (monthNumber >= 0) ? monthNumber : fullMonthNumber;
+      
+  return number;
+}
+
+
+/**
+  * Get last digits
+*/
+function getLastDigits(number, count) {
+  
+  var stringNumber = number.toString();
+  var length = stringNumber.length;
+  var lastDigits = Number( stringNumber.slice(length-count, length) );
+  
+  return lastDigits;
+}
+
+
+/**
+  * Get milliseconds by magic
+*/
+function getMillisecondsByMagic(id) {
+
+  var secondInMilliseconds = 60000-1;
+  var idInMilliseconds = getLastDigits(id,4); // fake, but that's the trick (needs 10000 consecutive ads with same dateTime to fail...)
+  var milliseconds = secondInMilliseconds - idInMilliseconds;
+  
+  return milliseconds;
+}
+
+
+/*
+ * Version compare
+ * @author Alexey Bass (albass)
+ */
+versionCompare = function(left, right) {
+    if (typeof left + typeof right != 'stringstring')
+        return false;
+    
+    var a = left.split('.')
+    ,   b = right.split('.')
+    ,   i = 0, len = Math.max(a.length, b.length);
+        
+    for (; i < len; i++) {
+        if ((a[i] && !b[i] && parseInt(a[i]) > 0) || (parseInt(a[i]) > parseInt(b[i]))) {
+            return 1;
+        } else if ((b[i] && !a[i] && parseInt(b[i]) > 0) || (parseInt(a[i]) < parseInt(b[i]))) {
+            return -1;
+        }
+    }
+    
+    return 0;
+}
+
+
+/**
   * Log
 */
 function log(value, stringify) {
@@ -729,85 +1010,3 @@ function log(value, stringify) {
   return Logger.log( JSON.stringify(value) ); 
  
 }
-
-
-
-
-/**
-  * CACHE CODE PARTS : since performance increase, cache is not necessary, but keeped here for potential future needs.
-*/
-
-/**
-  * Get url ads
-
-function getUrlAds(url) {
-  
-  var listingAds;
-  
-  if (params.useCache) {
-    
-    var cachedUrlContent = getCachedContent(url);
-    if (cachedUrlContent) {
-      
-      listingAds = JSON.parse(cachedUrlContent);   
-    }
-  }
-  if ( (params.useCache && !cachedUrlContent) || !params.useCache) {
-    
-    var html = getUrlContent( url );
-    listingAds = getListingAdsFromHtml( html );   
-  }
-  if ( params.useCache && cachedUrlContent ) {
-    
-    setCache( url, JSON.stringify(listingAds) );
-  }
-  
-  return listingAds;
-}
-
-/**
-  * Get cached content
-
-function getCachedContent(url) {
-  
-  var cache = CacheService.getPublicCache();
-  var cached = cache.get( getUrlHashcode(url) );
-  
-  if (cached != null) {
-    return cached;
-  } else {
-    return false;
-  }
-}
-
-
-/**
-  * Set cache
-
-function setCache(url, content) {
-  var cache = CacheService.getPublicCache();
-  cache.put( getUrlHashcode(url), content, params.cacheTime);
-}
-
-
-/**
-  * Get url hashcode
-
-function getUrlHashcode( url ) {
-  return url.toString().split("/").pop().hashCode().toString();
-}
-
-
-/**
-  * Hashcode function
-
-String.prototype.hashCode = function() {
-  for(var ret = 0, i = 0, len = this.length; i < len; i++) {
-    ret = (31 * ret + this.charCodeAt(i)) << 0;
-  }
-  return ret;
-};
-
-/**
-  * END CACHE CODE PARTS
-*/
