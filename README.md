@@ -34,7 +34,7 @@ Obtenir la dernière mise à jour
 
 Paramètres utilisateurs
 ----------------------
-Pour indiquer vos propres paramètres, utiliser par la variable `userParams` (dans la feuille de calcul : `Outils > Editeur de scripts`)
+Pour indiquer vos propres paramètres, utiliser la variable `userParams` (dans la feuille de calcul : `Outils > Editeur de scripts`)
 exemple :
 ```
 var userParams = {
@@ -70,7 +70,7 @@ Pourquoi ce fork ?
 
 Changelog
 --------
-* **4.2.0** : Changement de l'algorithme de détection des dernières annonces (maintenant basé sur un timestamp à la place d'un id), améliorations visuelles (la progression est maintenant visible), et notifications de mises à jour en bas de mail
+* **4.2.0** : Changement de l'algorithme de détection des dernières annonces (anciennement basé sur un id, et remplacé par un timestamp qui est la combinaison de la date et l'id), améliorations visuelles (la progression est maintenant visible), et ajout d'une notification de mise à jour en bas de mail
 * **4.1.5** : modification du titre des emails envoyés
 * **4.1.4** : ajout d'un footer
 * **4.1.3** : Correction d'un bug lié aux paramètres utilisateurs qui n'étaient pas correctement étendus (extend VS deepExtend)
