@@ -1,7 +1,7 @@
 var cheerio = cheeriogasify.require('cheerio');
 var $ = cheerio;
 
-var version = "4.2.0";
+var version = "4.2.1";
 var sendMail = true;
 
 /**
@@ -150,6 +150,9 @@ function start(userParams) {
       var latestAdCellValue = getCellByIndex( index, params.names.range.adId ).getValue();
       var latestAds = getLatestAds(ads, latestAdCellValue);
       
+      log('----');
+      log(latestAdCellValue);
+      
       if (latestAds.length) {
         
         var label = getCellByIndex( index, params.names.range.label ).getValue();
@@ -214,20 +217,38 @@ function getLatestAds(ads, latestAdValue) {
   if (latestAdTimestamp !== latestAdStoredTimestamp) {
     
     if (latestAdStoredTimestamp) {
-      
+      log('TIMESTAMP');
       latestAds = getDataBeforeTime(ads, latestAdStoredTimestamp);
       
     } else if( Number(latestAdValue) !== 0 ) {
-      
+      log('ID');
       latestAds = getDataBeforeId(ads, Number(latestAdValue) ); // deprecated, replaced by getDataBeforeTime
       
     } else {
-      
+      log('ALL');
       latestAds = ads;
     }
   }
   
-  return latestAds;
+  var latestAdsSorted = latestAds.sort( dynamicSort("-timestamp") );
+  
+  return latestAdsSorted;
+}
+
+
+/**
+  * Dynamic Sort
+*/
+function dynamicSort(property) {
+    var sortOrder = 1;
+    if(property[0] === "-") {
+        sortOrder = -1;
+        property = property.substr(1);
+    }
+    return function (a,b) {
+        var result = (a[property] < b[property]) ? -1 : (a[property] > b[property]) ? 1 : 0;
+        return result * sortOrder;
+    }
 }
 
 
@@ -807,15 +828,16 @@ function getMailAdsHtml( ads ) {
   for (var i = 0; i < ads.length; i++) {
     
     var ad = ads[i];
-    
+    var mapHtml = "";
+
     if (params.showMap) {
-     var map =  "<img style='float:right; padding-left:10px;' src='https://maps.googleapis.com/maps/api/staticmap?markers=" + encodeData(ad.place) + "&zoom=7&size=120x120&sensor=false&language=fr&sensor=false' />";
+     mapHtml =  "<img style='float:right; padding-left:10px;' src='http://maps.googleapis.com/maps/api/staticmap?markers=" + encodeData(ad.place) + "&zoom=7&size=120x120&sensor=false&language=fr&sensor=false' />";
     }
     
     html += [
       "<li style='list-style:none; margin-bottom:20px; margin-left:0px; clear:both; border-top:1px solid #eaeaea;'>",
       "  <div style='float:left;width:auto;padding:20px 10px;'>",
-      map,
+      mapHtml,
       "    <a href='" + ad.url + "'>",
       "      <img src='" + ad.img_src + "' />",
       "    </a>",
@@ -844,10 +866,11 @@ function getMailAdsHtml( ads ) {
 
 /**
   * Encode data
+  * TODO : refactor
 */
 function encodeData(s) {
   if (s) {
-  var s = s.trim().replace(/\s\s+/g, '+');
+  var s = s.trim().replace(/\s\s+/g, '+').replace(/[!'()*]/g, '+');
     return encodeURIComponent(s);
   }
 }
@@ -997,6 +1020,23 @@ versionCompare = function(left, right) {
     }
     
     return 0;
+}
+
+
+function sortObjectProperties(obj, sortValue, reverse){
+  
+  var keysSorted;
+  if (reverse) {
+    keysSorted = Object.keys(obj).sort(function(a,b){return obj[b][sortValue]-obj[a][sortValue]});
+  } else {
+    keysSorted = Object.keys(obj).sort(function(a,b){return obj[a][sortValue]-obj[b][sortValue]});
+  }
+  
+  var objSorted = {};
+  for(var i = 0; i < keysSorted.length; i++){
+    objSorted[keysSorted[i]] = obj[keysSorted[i]];
+  }
+  return objSorted;
 }
 
 
