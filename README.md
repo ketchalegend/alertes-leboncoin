@@ -70,7 +70,7 @@ Pourquoi ce fork ?
 
 Changelog
 --------
-* **4.2.0** : Changement d'algorithme pour connaitre les dernières annonces (maintenant basé sur un timestamp), améliorations visuelles (la progression est maintenant visible), et notifications de mises à jour en bas de mail
+* **4.2.0** : Changement de l'algorithme de détection des dernières annonces (maintenant basé sur un timestamp à la place d'un id), améliorations visuelles (la progression est maintenant visible), et notifications de mises à jour en bas de mail
 * **4.1.5** : modification du titre des emails envoyés
 * **4.1.4** : ajout d'un footer
 * **4.1.3** : Correction d'un bug lié aux paramètres utilisateurs qui n'étaient pas correctement étendus (extend VS deepExtend)
