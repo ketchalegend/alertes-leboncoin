@@ -1,6 +1,6 @@
 
 
-Alertes leboncoin.fr - 4.2.0
+Alertes leboncoin.fr - 4.2.1
 =============================
 Recevez par email vos recherches leboncoin.fr (via Google Sheets / App Script)
 
@@ -70,6 +70,9 @@ Pourquoi ce fork ?
 
 Changelog
 --------
+* **4.2.1** : 
+ * Correction d'un bug lié à l'affichage des cartes [#3](https://github.com/maximelebreton/alertes-leboncoin/issues/3)
+ * Ajout d'une fonction de tri pour que le mail envoyé ne contienne que les dernières annonces même lorsque l'on trie par prix.
 * **4.2.0** : 
  * Changement de l'algorithme de détection des dernières annonces (anciennement basé sur un id, et remplacé par un timestamp qui est la combinaison de la date et l'id)
  * Améliorations visuelles (la progression est maintenant visible)
