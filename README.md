@@ -17,8 +17,8 @@ Installation en 4 étapes
 2. **Renseignez votre adresse email** dans l'onglet `Variables` en bas du document   ![image](https://cloud.githubusercontent.com/assets/1072425/16684136/b324aec6-4503-11e6-861c-f403d3886f18.png)
 
 
-3. Pour que le script soit executé de manière automatique, vous devez **programmer un trigger*** sur la fonction **alertesLeBonCoin**.  
-(Dans `Outils > Éditeur de scripts`, puis `Ressources > Déclencheurs du script actuel`).  
+3. Pour que le script soit executé de manière automatique, vous devez **programmer un trigger*** sur la fonction **`alertesLeBonCoin`**.  
+<small>(Dans `Outils > Éditeur de scripts`, puis `Ressources > Déclencheurs du script actuel`).</small>
 <small>* *il est vivement conseillé de ne pas aller en dessous de `toutes les 2 heures`.*</small>
 
 4. Pour chaque requête que vous souhaitez effectuer sur leboncoin.fr, **copiez/collez son url** dans la colonne `Url` (une url par ligne). 
