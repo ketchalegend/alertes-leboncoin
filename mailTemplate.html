@@ -1,0 +1,26 @@
+<body>
+
+  <?!= getMailPreheaderTemplate( result, entities ) ?>
+
+  <? if (result.length > 1) { ?>
+    <?!= getMailSummaryTemplate( result, entities ) ?>
+  <? } ?>
+  <?!= getMailListingTemplate( result, entities ) ?>
+  
+  <? if ( update ) { ?>
+      <div style="border:1px solid #FFECB3; background-color: #FFFDE7; text-align:center; margin-top:10px; margin-bottom:10px; padding:10px; clear:both; overflow:hidden;">
+        <small>Une nouvelle version est disponible : <a href="<?= update.url ?>" title="<?= update.description ?>"><?= update.version ?></a></small>
+      </div>
+  <? } ?>
+  
+  
+  <div style="border-top:1px solid #f7f7f7; text-align:center; margin-top:10px; padding-top:20px; clear:both; overflow:hidden;">
+    <small style="float:left;">
+      made with &#9829; by <a href="http://www.maximelebreton.com">mlb</a>, inspired by <a href="http://justdocsit.blogspot.fr/2012/07/creer-une-alerte-sur-le-bon-coin.html">Just docs it</a>
+    </small>
+    <small style="float:right;">
+      <a href="https://github.com/maximelebreton/alertes-leboncoin">alertes-leboncoin</a> version&nbsp;<?= version ?></small>
+    </small>
+   </div>
+  
+</body>
