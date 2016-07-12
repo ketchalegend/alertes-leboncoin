@@ -1,15 +1,15 @@
 var cheerio = cheeriogasify.require('cheerio');
 var $ = cheerio;
 
-var version = "4.2.1";
+var version = "4.3.0";
 var sendMail = true;
 
 /**
   * Default Params
 */
 var defaultParams = {
+  debug: false,
   showMap: false,
-  limitResults: false,
   groupedResults: true,
   startIndex: 2,
   dateFormat: {
@@ -150,9 +150,6 @@ function start(userParams) {
       var latestAdCellValue = getCellByIndex( index, params.names.range.adId ).getValue();
       var latestAds = getLatestAds(ads, latestAdCellValue);
       
-      log('----');
-      log(latestAdCellValue);
-      
       if (latestAds.length) {
         
         var label = getCellByIndex( index, params.names.range.label ).getValue();
@@ -169,11 +166,7 @@ function start(userParams) {
   
   var update = checkForUpdates();
   if ( update ) {
-    normalizedData.update = {
-      version: update.version,
-      description: update.changelog,
-      url: update.url
-    };
+    normalizedData.update = update;
   }
   
   
@@ -190,7 +183,9 @@ function start(userParams) {
         // TODO : manage erroror messages
       } else {
         
-        forEachResult( result, data.entities, setLatestAdRangeValue );
+        if (params.debug == false) {
+          forEachResult( result, data.entities, setLatestAdRangeValue );  
+        } 
         
       }
       
@@ -485,9 +480,9 @@ function getListingAdsFromHtml( html ) {
     var $title = $this.find('.item_title');
     var $price = $this.find('.item_price');
     var $place = $item_supp.eq( 1 );
-    var $img = $this.find('.item_image');
+    var $img = $this.find('.item_image').find('.lazyload');    
     var $date = $item_supp.eq( 2 );
-    
+        
     var item = {
       id: Number($a.data( "info" ).ad_listid),
       title: $title.text(),
@@ -495,7 +490,9 @@ function getListingAdsFromHtml( html ) {
       place: $place.text(),
       date: $date.text(),
       url: protocol + $a.attr("href"),
-      img_src: protocol + $img.find('.lazyload').data("imgsrc")
+      img: {
+        src: addProtocol( $img.data("imgsrc") )
+      }
       
     };
     
@@ -507,6 +504,17 @@ function getListingAdsFromHtml( html ) {
   });
     
   return data;
+}
+
+
+/**
+  * Add protocol (https)
+*/
+function addProtocol(url) {
+   if ( url && !/^(f|ht)tps?:\/\//i.test(url) ) {
+      url = "https:" + url;
+   }
+   return url;
 }
 
 
@@ -619,7 +627,7 @@ function sendDataTo( data, email, callback ) {
 function sendGroupedData( data, email, callback ) {
     
   var mailTitle =  getMailTitle( data.result, data.entities );
-  var mailHtml = getMailHtml( data.result, data.entities, data.update );
+  var mailHtml = getMailTemplate( data.result, data.entities, data.update );
   
   sendEmail(email, mailTitle, mailHtml, data.result, callback);
   
@@ -637,7 +645,7 @@ function sendSeparatedData( data, email, callback ) {
     var singleResult = [id];
     
     var mailTitle =  getMailTitle( singleResult, data.entities );
-    var mailHtml = getMailHtml( singleResult, data.entities, data.update );
+    var mailHtml = getMailTemplate( singleResult, data.entities, data.update );
     
     sendEmail(email, mailTitle, mailHtml, singleResult, callback);
     
@@ -650,6 +658,10 @@ function sendSeparatedData( data, email, callback ) {
   * Send email
 */
 function sendEmail(email, title, htmlBody, result, callback) {
+  
+  if (params.debug == true) {
+    title = "[debug] " + title;
+  }
   
   var error;
   
@@ -708,159 +720,71 @@ function getMailTitle( result, entities ) {
   }
   
   
-  return prefixTitle + length + " nouveau" + (length > 1 ? "x" : "") + " résultat" + (length > 1 ? "s" : "") + suffixTitle;  
-  
+  return prefixTitle + length + " nouveau" + (length > 1 ? "x" : "") + " résultat" + (length > 1 ? "s" : "") + suffixTitle;   
 }
 
 
-/**
-  * Get mail html
+/*
+  * Get mail template
 */
-function getMailHtml( result, entities, update ) {
+function getMailTemplate(result, entities, update) {
   
-  var html = "";
- 
-  html += "<body>";
+  var template = HtmlService.createTemplateFromFile('mailTemplate');
+  template.result = result;
+  template.entities = entities;
+  template.update = update;
   
-  if (result.length > 1) {
-    html += getMailSummaryHtml( result, entities )
-  }
-  html += getMailListingHtml( result, entities )
-  
-  if ( update ) {
-    html += [
-      "<div style='border:1px solid #FFECB3; background-color: #FFFDE7; text-align:center; margin-top:10px; margin-bottom:10px; padding:10px; clear:both; overflow:hidden;'>",
-      "  <small>Une nouvelle version est disponible : <a href='" + update.url + "' title='" + update.description + "'>" + update.version + "</a></small>",
-      "</div>"
-    ].join("\n");
-  }
-  
-  html += [
-    "<div style='border-top:1px solid #f7f7f7; text-align:center; margin-top:10px; padding-top:20px; clear:both; overflow:hidden;'>",
-    "  <small style='float:left;'>",
-    "    made with &#9829; by <a href='http://www.maximelebreton.com'>mlb</a>, inspired by <a href='http://justdocsit.blogspot.fr/2012/07/creer-une-alerte-sur-le-bon-coin.html'>Just docs it</a>",
-    "  </small>",
-    "  <small style='float:right;'>",
-    "    <a href='https://github.com/maximelebreton/alertes-leboncoin'>alertes-leboncoin</a> version&nbsp;" + version + "</small>",
-    "  </small>",
-    "</div>"
-  ].join("\n");
-  
-  html += "</body>";
-  
-  return html;
+  return template.evaluate().getContent();
 }
 
 
-/**
-  * Get mail summary html
+/*
+  * Get mail preheader template
 */
-function getMailSummaryHtml( result, entities ) {
-    
-  var html = "";
+function getMailPreheaderTemplate(result, entities) {
   
-  html += "<p style='display:block;clear:both;padding-top:20px;font-size:14px;'>"+ params.names.mail.summaryTitle +"</p>";
+  var template = HtmlService.createTemplateFromFile('mailPreheaderTemplate');
+  template.result = result;
+  template.entities = entities;
   
-  html += "<ul>";
-  for (var i = 0; i < result.length; i++ ) {
-    
-    var id = result[i];
-    var label = entities.labels[id].label;
-    var url = entities.urls[id].url;
-    var ads = entities.ads[id].latest;
-    
-    if (ads.length) {
-      html += [
-        "<li>",
-        "  <a href='#"+ params.names.mail.anchorPrefix+i + "'>"+ label +"</a> (" + ads.length + ")",
-        "</li>"
-      ].join("\n");
-    }
-  }
-  html += "</ul>";
-
-  
-  return html;
+  return template.evaluate().getContent();
 }
 
 
-/**
-  * Get mail listing html
+/*
+  * Get mail summary template
 */
-function getMailListingHtml( result, entities ) {
+function getMailSummaryTemplate(result, entities) {
   
-  var html = "";
+  var template = HtmlService.createTemplateFromFile('mailSummaryTemplate');
+  template.result = result;
+  template.entities = entities;
   
-  for (var i = 0; i < result.length; i++ ) {
-    
-    var id = result[i];
-    var label = entities.labels[id].label;
-    var url = entities.urls[id].url;
-    var ads = entities.ads[id].latest;
-    
-    if (ads.length) {
-      html += [
-        "<p style='display:block;clear:both;padding-top:20px;font-size:14px;'>",
-        "  " + params.names.mail.researchTitle + " ",
-        "  <a name='"+ params.names.mail.anchorPrefix+i + "' href='"+ url + "'>"+ label +"</a> (" + ads.length + ")",
-        "</p>",
-        "<ul style='padding-left:0px;'>"
-      ].join("\n");
-      
-      html += getMailAdsHtml( ads );
-      
-      html += "</ul>";
-    }
-    
-  }
-  
-  return html;
+  return template.evaluate().getContent();
 }
 
 
-/**
-  * Get mail ads html
+/*
+  * Get mail listing template
 */
-function getMailAdsHtml( ads ) {
+function getMailListingTemplate( result, entities ) {
   
-  var html = "";
+  var template = HtmlService.createTemplateFromFile('mailListingTemplate');
+  template.result = result;
+  template.entities = entities;
   
-  for (var i = 0; i < ads.length; i++) {
-    
-    var ad = ads[i];
-    var mapHtml = "";
+  return template.evaluate().getContent();
+}
 
-    if (params.showMap) {
-     mapHtml =  "<img style='float:right; padding-left:10px;' src='http://maps.googleapis.com/maps/api/staticmap?markers=" + encodeData(ad.place) + "&zoom=7&size=120x120&sensor=false&language=fr&sensor=false' />";
-    }
-    
-    html += [
-      "<li style='list-style:none; margin-bottom:20px; margin-left:0px; clear:both; border-top:1px solid #eaeaea;'>",
-      "  <div style='float:left;width:auto;padding:20px 10px;'>",
-      mapHtml,
-      "    <a href='" + ad.url + "'>",
-      "      <img src='" + ad.img_src + "' />",
-      "    </a>",
-      "    <div style='float:left;width:400px;padding:10px 0;'>",
-      "      <a style='font-size:14px;font-weight:bold;color:#369;text-decoration:none;' href='" + ad.url + "'>",
-      "        " + ad.title,
-      "      </a>",
-      "      <div>",
-      "        " + ad.place,
-      "      </div>",
-      "      <div>",
-      "        " + ad.date,
-      "      </div>",
-      "      <div style='line-height:18px;font-size:14px;font-weight:bold;'>",
-      "        " + ad.price,
-      "      </div>",
-      "  </div>",
-      "</li>"
-    ].join("\n");
-    
-  }
-    
-  return html; 
+
+/*
+  * Get mail ads template
+*/
+function getMailAdsTemplate( ads ) {
+  
+  var template = HtmlService.createTemplateFromFile('mailAdsTemplate');
+  template.ads = ads;
+  return template.evaluate().getContent();
 }
 
 
@@ -868,10 +792,11 @@ function getMailAdsHtml( ads ) {
   * Encode data
   * TODO : refactor
 */
-function encodeData(s) {
+function encodeForStaticMapApi(s) {
   if (s) {
   var s = s.trim().replace(/\s\s+/g, '+').replace(/[!'()*]/g, '+');
-    return encodeURIComponent(s);
+    //return encodeURIComponent(s);
+    return s;
   }
 }
 
