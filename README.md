@@ -72,7 +72,7 @@ Pourquoi ce fork ?
 * ajout de paramètres utilisateur
 * ajout d'une mini carte pour localiser rapidement l'annonce (`showMap`)
 * possibilité de choisir l'envoi des résultats en mails individuels ou en mail groupé (`groupedResults`)
-* Markup HTML géré par [HTML service](https://developers.google.com/apps-script/guides/html/templates)
+* Markup HTML géré par le système de templates [HTML service](https://developers.google.com/apps-script/guides/html/templates)
 
 #### > [Vision et évolutions futures de la version 4.x ?](https://github.com/maximelebreton/alertes-leboncoin/issues/2)
 
