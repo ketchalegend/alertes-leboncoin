@@ -1,0 +1,17 @@
+  <p style="display:block;clear:both;padding-top:20px;font-size:14px;"><?= params.names.mail.summaryTitle ?></p>
+
+  <ul>
+  <? for (var i = 0; i < result.length; i++ ) {
+
+     var id = result[i];
+     var label = entities.labels[id].label;
+     var url = entities.urls[id].url;
+     var ads = entities.ads[id].latest;
+  ?>
+
+    <? if (ads.length) { ?>
+      <li><a href="#<?= params.names.mail.anchorPrefix+i ?>"><?= label ?></a> (<?= ads.length ?>)</li>
+    <? } ?>
+    
+  <? } ?>    
+  </ul>
