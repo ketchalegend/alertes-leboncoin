@@ -1,7 +1,7 @@
 var cheerio = cheeriogasify.require('cheerio');
 var $ = cheerio;
 
-var version = "4.3.0";
+var version = "4.3.1";
 var sendMail = true;
 
 /**
@@ -10,6 +10,7 @@ var sendMail = true;
 var defaultParams = {
   debug: false,
   showMap: false,
+  mapZoom: 7,
   groupedResults: true,
   startIndex: 2,
   dateFormat: {
@@ -485,7 +486,7 @@ function getListingAdsFromHtml( html ) {
         
     var item = {
       id: Number($a.data( "info" ).ad_listid),
-      title: $title.text(),
+      title: $title.text().trim(),
       price: $price.text(),
       place: $place.text(),
       date: $date.text(),
