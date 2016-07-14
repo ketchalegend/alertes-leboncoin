@@ -5,11 +5,10 @@
    var url = entities.urls[id].url;
    var ads = entities.ads[id].latest;
   ?>
-  
+
   <? if (ads.length) { ?>
-    <p style="display:block;clear:both;padding-top:20px;font-size:14px;">
-      <?= params.names.mail.researchTitle ?>
-      <a name="<?= params.names.mail.anchorPrefix+i ?>" href="<?= url ?>"><?= label ?></a> (<?= ads.length ?>)
+    <p style="display:block;clear:both;padding-top:20px;font-size:14px; color: #989898;">
+      <a name="<?= params.names.mail.anchorPrefix+i ?>" href="<?= url ?>" style="color: #989898; font-weight: bold; font-size: 15px; text-decoration: none;"><?= label ?></a> (<?= ads.length ?>)
     </p>
   
     <ul style="padding-left:0px;">
