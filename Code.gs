@@ -1,7 +1,7 @@
 var cheerio = cheeriogasify.require('cheerio');
 var $ = cheerio;
 
-var version = "4.3.1";
+var version = "4.3.2";
 var sendMail = true;
 
 /**
@@ -721,7 +721,7 @@ function getMailTitle( result, entities ) {
   }
   
   
-  return prefixTitle + length + " nouveau" + (length > 1 ? "x" : "") + " résultat" + (length > 1 ? "s" : "") + suffixTitle;   
+  return prefixTitle + length + "\xa0nouveau" + (length > 1 ? "x" : "") + " résultat" + (length > 1 ? "s" : "") + suffixTitle;   
 }
 
 
