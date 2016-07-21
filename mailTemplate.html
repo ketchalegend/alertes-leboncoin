@@ -1,4 +1,25 @@
+<html>
+<head>
+  <style>
+    * [lang="hover"]:hover { text-decoration: underline !important; }
+    * [lang="adImage"] img { max-width: 100% !important; }
+    
+    @media only screen and (max-width:600px) { 
+      * [lang="adText"] {  /*padding-top: 0px !important;*/ clear: both !important; }
+    }
+    @media only screen and (max-width:480px) { 
+      * [lang="footer"] { width: 100% !important; text-align: center !important; }
+      * [lang="footer"] small { float: none !important; }
+      * [lang="adMap"] { padding-left: 0 !important; }
+    }
+    @media only screen and (max-width:320px) { 
+      * [lang="adImage"] { padding-right: 0 !important; }
+    }
+  </style>
+</head>
+
 <body>
+
 
   <?!= getMailPreheaderTemplate( result, entities ) ?>
 
@@ -14,13 +35,14 @@
   <? } ?>
   
   
-  <div style="border-top:1px solid #f7f7f7; text-align:center; margin-top:10px; padding-top:20px; clear:both; overflow:hidden;">
+  <div lang="footer" style="border-top:1px solid #f7f7f7; text-align:center; margin-top:10px; padding-top:20px; clear:both; overflow:hidden;">
     <small style="float:left;">
       made with &#9829; by <a href="http://www.maximelebreton.com">mlb</a>, inspired by <a href="http://justdocsit.blogspot.fr/2012/07/creer-une-alerte-sur-le-bon-coin.html">Just docs it</a>
     </small>
     <small style="float:right;">
       <a href="https://github.com/maximelebreton/alertes-leboncoin">alertes-leboncoin</a> version&nbsp;<?= version ?></small>
     </small>
-   </div>
+  </div>
   
 </body>
+</html>
