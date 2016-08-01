@@ -1,6 +1,6 @@
 
 
-Alertes leboncoin.fr - 4.3.2
+Alertes leboncoin.fr - 5.0.0
 =============================
 Recevez par email vos recherches leboncoin.fr (via Google Sheets / App Script)
 
@@ -80,6 +80,8 @@ Pourquoi ce fork ?
 
 Changelog
 --------
+* **5.0.0** :
+ * Nombreuses améliorations (description à venir)
 * **4.3.2** : améliorations du comportement de l'email 
 * **4.3.1** : email responsive + modifications visuelles
 * **4.3.0** :
