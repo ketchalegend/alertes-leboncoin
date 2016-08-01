@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <base target="_top">
+    <link href="https://ssl.gstatic.com/docs/script/css/add-ons1.css" rel="stylesheet">
+    <script>
+    
+    function handleSave() {
+      var frequencyValue = document.getElementById('frequency').value;
+      google.script.run.withSuccessHandler(onSuccess).onSetMainTrigger(frequencyValue);
+      document.getElementById('save').disabled = true;
+    };
+
+    function onSuccess() {
+      var callback = eval( document.getElementById('save').getAttribute('data-callback') );
+      if (callback && typeof callback == 'function') {
+        callback()
+      }
+      google.script.host.close();
+    }
+    </script>
+    <title></title>
+</head>
+<body>
+    <div class="block form-group">
+        <label for="frequency">Recevoir les nouvelles annonces</label> <select id="frequency">
+            <option value="2">
+                Toutes les 2&nbsp;heures
+            </option>
+            <option value="4">
+                Toutes les 4&nbsp;heures
+            </option>
+            <option selected value="6">
+                Toutes les 6&nbsp;heures
+            </option>
+            <option value="8">
+                Toutes les 8&nbsp;heures
+            </option>
+            <option value="12">
+                Toutes les 12&nbsp;heures
+            </option>
+        </select>
+    </div>
+    <div class="block">
+        <div class="form-group">
+            <input class="action" id="save" onclick="handleSave()" type="button" value="Enregistrer" data-callback="<?= callbackString ?>"> <input onclick="google.script.host.close()" type="button" value="Annuler">
+        </div>
+    </div>
+    <div style="margin-top: 6px;">
+        <small class="gray">Pour les connaisseurs, cette action va créer un <a href="https://docs.google.com/presentation/d/1PT3mWcodsNtzXBkVLCUc4AnW_nWU90VcFZkIk1EVUvQ/embed?start=false&loop=false&delayms=10000&slide=id.p" target="_blank" title="Accessible via Outils &gt; Éditeur de scripts &gt; Ressources &gt; Déclencheurs du projet actuel">déclencheur</a></small>
+    </div>
+</body>
+</html>
