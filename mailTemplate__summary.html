@@ -1,0 +1,16 @@
+  <ul style="<?!= inlineStyles.summary; ?>">
+  <? for (var i = 0; i < result.length; i++ ) {
+
+     var id = result[i];
+     var label = entities.labels[id].label;
+     var url = entities.urls[id].url;
+     var ads = entities.ads[id].latest;
+     
+  ?>
+
+    <? if (ads.length) { ?>
+      <li style="<?!= inlineStyles.summaryItem; ?>"><a lang="underlineOnHover" style="<?!= inlineStyles.summaryItemLink; ?>" href="#<?= params.names.mail.anchorPrefix+i ?>"><?= label ?></a> (<?= ads.length ?>) —</li>
+    <? } ?>
+    
+  <? } ?>    
+  </ul>
