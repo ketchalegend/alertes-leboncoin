@@ -1,0 +1,59 @@
+<?
+      var showMap = options.hasOwnProperty("showMap") ? options.showMap : params.showMap;
+      var mapZoom = options.hasOwnProperty("mapZoom") ? options.mapZoom : params.mapZoom;
+      
+      var isMapAdLayoutImage = showMap ? inlineStyles.adLayoutImageWithMap : "";
+?>
+
+<? for (var i = 0; i < ads.length; i++) { ?>
+
+    <?
+      var ad = ads[i];
+    ?>
+
+    <li style="<?!= inlineStyles.listItem ?>">
+      <div style="<?!= inlineStyles.listItemContainer ?>">
+        
+        <div lang="adLayoutImage" style="<?!= inlineStyles.adLayoutImage + isMapAdLayoutImage ?>">
+          <a href="<?= ad.url ?>" style="<?!= inlineStyles.adImage ?>">
+            <? if (ad.img.src) {  ?>
+              <img style="<?!= inlineStyles.adImageImg ?>" src="<?= ad.img.src ?>" />
+            <? } else { ?>
+              <img src="https://www.leboncoin.fr/img/no-picture-adview.png" style="<?!= inlineStyles.adImagePlaceholder ?>" />
+            <? } ?>
+            <span style="<?!= inlineStyles.adImageAlignFix ?>"></span>
+          </a>
+        </div>
+        
+        <? if (showMap) { ?>
+        <div lang="adLayoutMap" style="<?!= inlineStyles.adLayoutMap ?>">
+          <div style="<?!= inlineStyles.adMap ?>">
+            <img style="" src="http://maps.googleapis.com/maps/api/staticmap?markers=<?= encodeForStaticMapApi(ad.place) ?>&zoom=<?= mapZoom ?>&size=120x120&sensor=false&language=fr&sensor=false" />
+          </div>
+        </div>
+        <? } ?>
+        
+        <div lang="adLayoutContent" style="<?!= inlineStyles.adLayoutContent ?>">
+          <div style="<?!= inlineStyles.adContentTitle ?>">
+            <a lang="underlineOnHover" style="<?!= inlineStyles.adContentTitleLink ?>" href="<?= ad.url ?>">
+              <?= ad.title ?>
+            </a>
+            <? if (ad.isPro) {  ?>
+              <span style="<?!= inlineStyles.label + inlineStyles.labelPrimary ?>">pro</span>
+            <? } ?> 
+          </div>
+          <div style="<?!= inlineStyles.adContentPlace ?>">
+            <?= ad.place ?>
+          </div>
+          <div style="<?!= inlineStyles.adContentDate ?>">
+            <?= ad.date ?>
+          </div>
+          <div style="<?!= inlineStyles.adContentPrice ?>">
+            <?= ad.price ?>
+          </div>
+        </div>
+        
+        
+      </div>
+    </li>
+<? } ?>
