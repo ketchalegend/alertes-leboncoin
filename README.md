@@ -1,30 +1,61 @@
 
 
-Alertes leboncoin.fr - 5.0.0
+Alertes leboncoin - 5.0.2
 =============================
 Recevez par email vos recherches leboncoin.fr (via Google Sheets / App Script)
 
 <div style="float:right;"><img src="https://raw.githubusercontent.com/maximelebreton/alertes-leboncoin/master/main.png"/></div>
 _____________________________
 
-
+Pour commencer
+------------------------------------------
 **Prérequis :** *vous devez avoir un compte Google et y être connecté.*
 
-Installation en 4 étapes
+###1. Créez [votre copie de la feuille de calcul *Alertes leboncoin*](https://docs.google.com/spreadsheet/ccc?key=1oruKJqdbEjg0z28K83hsqIKbaL2weBMqmA8lG0gYIfw&newcopy)  
+####2. Indiquez votre email dans les *Paramètres utilisateur*, et *lancez manuellement* votre première recherche via le menu *Alertes&nbsp;LeBonCoin*.
+####3. Pour être averti *automatiquement* des prochains résultats, réglez la *fréquence* à laquelle vous souhaitez être averti via le menu *Planification des alertes*
+
+Comment ça fonctionne ?
 ----------------------------------
-1. **Créez une copie** de cette feuille de calcul : https://docs.google.com/spreadsheet/ccc?key=1oruKJqdbEjg0z28K83hsqIKbaL2weBMqmA8lG0gYIfw&newcopy
- 
-2. **Renseignez votre adresse email** dans l'onglet `Variables` en bas du document   ![image](https://cloud.githubusercontent.com/assets/1072425/16684136/b324aec6-4503-11e6-861c-f403d3886f18.png)
+C'est très simple, **chaque ligne correspond à une recherche** :
+* Pour chaque recherche que vous souhaitez effectuer sur [leboncoin.fr](https://www.leboncoin.fr), il suffit simplement d'en **copier/coller le lien** dans la colonne prévue à cet effet.
 
+Les colonnes :
+ * `Lien` l'url de votre recherche [**obligatoire**]
+ * `Titre` le titre à votre recherche [**obligatoire**]
+ * `Dernière annonce` indique la date du dernier résultat qui vous a été envoyé par email [**automatique**]
+ * `Options avancées` est un champ qui s'adresse aux utilisateurs avancés [**facultatif**]
 
-3. Pour que le script soit executé de manière automatique, vous devez **programmer un trigger*** sur la fonction **`alertesLeBonCoin`**.  
-<small>(Dans `Outils > Éditeur de scripts`, puis `Ressources > Déclencheurs du script actuel`).</small>  
-<small>* *il est vivement conseillé de ne pas aller en dessous de `toutes les 2 heures`.*</small>
+Paramètres utilisateurs
+----------------------
+Dans la feuille intitulée `Paramètres utilisateurs`, acessible également via le menu *Alertes LeBonCoin*.
 
-4. Pour chaque requête que vous souhaitez effectuer sur leboncoin.fr, **copiez/collez son url** dans la colonne `Url` (une url par ligne). 
+* `email` l'adresse à laquelle sera envoyée les annonces (exemple : `mon@email.com`)
+* `showMap` affiche une mini carte (valeur : `=true` ou `=false`)
+* `mapZoom` règle le niveau de zoom de la carte (valeur : nombre de `=0` à `=17`)
+* `showTags` (beta) affiche les critères de recherche (valeur : `=true` ou `=false`)
+* `groupedResults` permet de grouper les résultats dans un seul mail (valeur : `=true` ou `=false`)
 
-5. **Voilà !** Vous pouvez faire un test en cliquant sur `Alertes LeBonCoin > Lancer manuellement`. (une autorisation vous sera demandée lors du premier lancement)  
+### Paramètres utilisateurs avancés
+Pour les utilisateurs avancés l'objet `userParams` permet de personnaliser la totalité des [variables de la librairie](https://github.com/maximelebreton/alertes-leboncoin/blob/master/Code.gs#L7) (dans la feuille de calcul : `Outils > Editeur de scripts`)
+exemple :
+```
+var userParams = {
+  startIndex: 2,
+  names: {
+    sheet: {
+      main: 'Vos alertes'
+    }
+  }
+}
+```
 
+### Options avancées
+Il est possible de spécifier les options `email`, `showMap` et `mapZoom` pour chaque recherche dans la colonne `Options avancées` en passant un `objet JSON` stringifié.
+Exemple : 
+```
+{"email":"autre@email.com","showMap":true,"mapZoom":9}
+```
 
 Obtenir la dernière mise à jour
 ----------------------------------
@@ -41,17 +72,6 @@ ______________
 
 
 
-Paramètres utilisateurs
-----------------------
-Pour indiquer vos propres paramètres, utiliser la variable `userParams` (dans la feuille de calcul : `Outils > Editeur de scripts`)
-exemple :
-```
-var userParams = {
-  showMap: true,
-  groupedResults: false
-}
-```
-vous pouvez retrouver les paramètres par défaut par ici : https://github.com/maximelebreton/alertes-leboncoin/blob/master/Code.gs#L9
 
 Un problème ?
 --------------
