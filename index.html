@@ -87,8 +87,8 @@
 <h3>
 <a id="paramètres-utilisateurs-avancés" class="anchor" href="#param%C3%A8tres-utilisateurs-avanc%C3%A9s" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Paramètres utilisateurs avancés</h3>
 
-<p>Pour les utilisateurs avancés l'objet <code>userParams</code> permet de personnaliser la totalité des <a href="https://github.com/maximelebreton/alertes-leboncoin/blob/master/Code.gs#L7">variables de la librairie</a> (dans la feuille de calcul : <code>Outils &gt; Editeur de scripts</code>)
-exemple :</p>
+<p>Pour les utilisateurs avancés, l'objet <code>userParams</code> permet de personnaliser la totalité des <a href="https://github.com/maximelebreton/alertes-leboncoin/blob/master/Code.gs#L7">variables de la librairie</a> (dans la feuille de calcul : <code>Outils &gt; Editeur de scripts</code>)<br>
+Exemple :</p>
 
 <pre><code>var userParams = {
   startIndex: 2,
@@ -103,7 +103,7 @@ exemple :</p>
 <h3>
 <a id="options-avancées" class="anchor" href="#options-avanc%C3%A9es" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Options avancées</h3>
 
-<p>Il est possible de spécifier les options <code>email</code>, <code>showMap</code> et <code>mapZoom</code> pour chaque recherche dans la colonne <code>Options avancées</code> en passant un <code>objet JSON</code> stringifié.
+<p>Il est possible de spécifier les options <code>email</code>, <code>showMap</code> et <code>mapZoom</code> pour chaque recherche dans la colonne <code>Options avancées</code> en passant un <code>objet JSON</code> stringifié.<br>
 Exemple : </p>
 
 <pre><code>{"email":"autre@email.com","showMap":true,"mapZoom":9}
@@ -163,10 +163,18 @@ Exemple : </p>
 
 <ul>
 <li>
+<strong>5.0.2</strong> Léger refactoring du code</li>
+<li>
 <strong>5.0.0</strong> :
 
 <ul>
-<li>Nombreuses améliorations (description à venir)</li>
+<li>Ajout d'un menu <code>Planification des alertes</code> permettant de paramétrer directement le déclencheur</li>
+<li>Ajout d'une colonne <code>Options avancées</code>
+</li>
+<li>Possibilité de définir un email par recherche via les <code>Options avancées</code>
+</li>
+<li>Paramètres utilisateurs à présent modifiables directement dans la feuille de calcul</li>
+<li>Centralisation des styles CSS de l'email dans inlineStyles.gs</li>
 </ul>
 </li>
 <li>
