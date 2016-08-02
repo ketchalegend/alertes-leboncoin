@@ -100,8 +100,13 @@ Pourquoi ce fork ?
 
 Changelog
 --------
+* **5.0.2** Léger refactoring du code
 * **5.0.0** :
- * Nombreuses améliorations (description à venir)
+ * Ajout d'un menu `Planification des alertes` permettant de paramétrer directement le déclencheur
+ * Ajout d'une colonne `Options avancées`
+ * Possibilité de définir un email par recherche via les `Options avancées`
+ * Paramètres utilisateurs à présent modifiables directement dans la feuille de calcul
+ * Centralisation des styles CSS de l'email dans inlineStyles.gs
 * **4.3.2** : améliorations du comportement de l'email 
 * **4.3.1** : email responsive + modifications visuelles
 * **4.3.0** :
