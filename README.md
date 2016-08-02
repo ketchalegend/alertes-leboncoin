@@ -37,8 +37,8 @@ Dans la feuille intitulée `Paramètres utilisateurs`, acessible également via 
 * `groupedResults` permet de grouper les résultats dans un seul mail (valeur : `=true` ou `=false`)
 
 ### Paramètres utilisateurs avancés
-Pour les utilisateurs avancés l'objet `userParams` permet de personnaliser la totalité des [variables de la librairie](https://github.com/maximelebreton/alertes-leboncoin/blob/master/Code.gs#L7) (dans la feuille de calcul : `Outils > Editeur de scripts`)
-exemple :
+Pour les utilisateurs avancés, l'objet `userParams` permet de personnaliser la totalité des [variables de la librairie](https://github.com/maximelebreton/alertes-leboncoin/blob/master/Code.gs#L7) (dans la feuille de calcul : `Outils > Editeur de scripts`)  
+Exemple :
 ```
 var userParams = {
   startIndex: 2,
@@ -51,7 +51,7 @@ var userParams = {
 ```
 
 ### Options avancées
-Il est possible de spécifier les options `email`, `showMap` et `mapZoom` pour chaque recherche dans la colonne `Options avancées` en passant un `objet JSON` stringifié.
+Il est possible de spécifier les options `email`, `showMap` et `mapZoom` pour chaque recherche dans la colonne `Options avancées` en passant un `objet JSON` stringifié.  
 Exemple : 
 ```
 {"email":"autre@email.com","showMap":true,"mapZoom":9}
