@@ -11,9 +11,11 @@ Pour commencer
 ------------------------------------------
 **Prérequis :** *vous devez avoir un compte Google et y être connecté.*
 
-###1. Créez [votre copie de la feuille de calcul *Alertes leboncoin*](https://docs.google.com/spreadsheet/ccc?key=1oruKJqdbEjg0z28K83hsqIKbaL2weBMqmA8lG0gYIfw&newcopy)  
-####2. Indiquez votre email dans les *Paramètres utilisateur*, et *lancez manuellement* votre première recherche via le menu *Alertes&nbsp;LeBonCoin*.
-####3. Pour être averti *automatiquement* des prochains résultats, réglez la *fréquence* à laquelle vous souhaitez être averti via le menu *Planification des alertes*
+1. **Créez [votre copie de la feuille de calcul *Alertes leboncoin*](https://docs.google.com/spreadsheet/ccc?key=1oruKJqdbEjg0z28K83hsqIKbaL2weBMqmA8lG0gYIfw&newcopy)**  
+
+2. **Indiquez votre email dans les *Paramètres utilisateur*, et *lancez manuellement* votre première recherche via le menu *Alertes&nbsp;LeBonCoin*.**  
+
+3. **Pour être averti *automatiquement* des prochains résultats, réglez la *fréquence* à laquelle vous souhaitez être averti via le menu *Planification des alertes***
 
 Comment ça fonctionne ?
 ----------------------------------
@@ -29,6 +31,15 @@ Les colonnes :
 Paramètres utilisateurs
 ----------------------
 Dans la feuille intitulée `Paramètres utilisateurs`, acessible également via le menu *Alertes LeBonCoin*.
+
+paramètre | valeur | Description
+------------ | -------------  | -------------  
+`email` | `mon@email.com` (exemple) | *l'adresse à laquelle sera envoyée les annonces*
+`showMap` | `=true` ou `=false` | *affiche une mini carte* 
+`mapZoom` | nombre de `=0` à `=17` | *règle le niveau de zoom de la carte*
+`showTags` | `=true` ou `=false` | *(experimental) affiche les critères de recherche*
+`groupedResults` | `=true` ou `=false` | *permet de grouper les résultats dans un seul mail*
+
 
 * `email` l'adresse à laquelle sera envoyée les annonces (exemple : `mon@email.com`)
 * `showMap` affiche une mini carte (valeur : `=true` ou `=false`)
