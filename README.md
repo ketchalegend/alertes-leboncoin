@@ -41,12 +41,6 @@ paramètre | valeur | Description
 `groupedResults` | `=true` ou `=false` | *permet de grouper les résultats dans un seul mail*
 
 
-* `email` l'adresse à laquelle sera envoyée les annonces (exemple : `mon@email.com`)
-* `showMap` affiche une mini carte (valeur : `=true` ou `=false`)
-* `mapZoom` règle le niveau de zoom de la carte (valeur : nombre de `=0` à `=17`)
-* `showTags` (beta) affiche les critères de recherche (valeur : `=true` ou `=false`)
-* `groupedResults` permet de grouper les résultats dans un seul mail (valeur : `=true` ou `=false`)
-
 ### Paramètres utilisateurs avancés
 Pour les utilisateurs avancés, l'objet `userParams` permet de personnaliser la totalité des [variables de la librairie](https://github.com/maximelebreton/alertes-leboncoin/blob/master/Code.gs#L7) (dans la feuille de calcul : `Outils > Editeur de scripts`)  
 Exemple :
