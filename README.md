@@ -35,7 +35,7 @@ Paramètres utilisateurs
 ----------------------
 Dans la **feuille** intitulée `Paramètres utilisateurs`, acessible également via le menu *Alertes LeBonCoin*.
 
-colonne paramètre | colonne valeur | description
+Paramètres | Valeurs | description
 ------------ | -------------  | -------------  
 `email` | `mon@email.com` (exemple) | *l'adresse à laquelle sera envoyée les annonces*
 `showMap` | `=true` ou `=false` | *affiche une mini carte* 
