@@ -15,24 +15,27 @@ Pour commencer
 
 2. **Indiquez votre email dans les *Paramètres utilisateur*, et *lancez manuellement* votre première recherche via le menu *Alertes&nbsp;LeBonCoin*.**  
 
-3. **Pour être averti *automatiquement* des prochains résultats, réglez la *fréquence* à laquelle vous souhaitez être averti via le menu *Planification des alertes***
+3. **Pour être averti *automatiquement* des prochains résultats, réglez la *fréquence* à laquelle vous souhaitez être averti via le menu *Planification des alertes*.**
 
 Comment ça fonctionne ?
 ----------------------------------
-C'est très simple, **chaque ligne correspond à une recherche** :
+C'est très simple, dans la **feuille** intitulée `Vos alertes`, **chaque ligne correspond à une recherche** :
 * Pour chaque recherche que vous souhaitez effectuer sur [leboncoin.fr](https://www.leboncoin.fr), il suffit simplement d'en **copier/coller le lien** dans la colonne prévue à cet effet.
 
 Les colonnes :
- * `Lien` l'url de votre recherche [**obligatoire**]
- * `Titre` le titre à votre recherche [**obligatoire**]
- * `Dernière annonce` indique la date du dernier résultat qui vous a été envoyé par email [**automatique**]
- * `Options avancées` est un champ qui s'adresse aux utilisateurs avancés [**facultatif**]
+
+  | *description* | *remarque*
+------------ | -------------  | -------------  
+**Lien** | *l'url de votre recherche* | *`obligatoire`*
+**Titre** | *le titre à votre recherche* | *` obligatoire`*
+**Dernière annonce** | *indique la date du dernier résultat qui vous a été envoyé par email* | *`automatique`*
+**Options avancées** | *est un champ qui s'adresse aux utilisateurs avancés* | *`facultatif`*
 
 Paramètres utilisateurs
 ----------------------
-Dans la feuille intitulée `Paramètres utilisateurs`, acessible également via le menu *Alertes LeBonCoin*.
+Dans la **feuille** intitulée `Paramètres utilisateurs`, acessible également via le menu *Alertes LeBonCoin*.
 
-paramètre | valeur | Description
+colonne paramètre | colonne valeur | description
 ------------ | -------------  | -------------  
 `email` | `mon@email.com` (exemple) | *l'adresse à laquelle sera envoyée les annonces*
 `showMap` | `=true` ou `=false` | *affiche une mini carte* 
@@ -83,7 +86,7 @@ Un problème ?
 **Avant de vous inquiéter :**  
 1. vérifiez que votre **adresse email est bien renseignée** et qu'elle ne contient pas de caractères spéciaux (oui, même le +...)  
 2. vérifiez que votre **[version est bien à jour](#obtenir-la-dernière-mise-à-jour)** (et n'oubliez pas de cliquer sur enregistrer lors du changement)  
-3. si ça ne fonctionne toujours pas, et que vous ne savez pas pourquoi, tentez une **[réinstallation complète](#installation-en-4-étapes)**  
+3. si ça ne fonctionne toujours pas, et que vous ne savez pas pourquoi, tentez une **[réinstallation complète](#pour-commencer)**  
 4. si le problème n'est pas déjà signalé, je vous invite à **[créer une issue](https://github.com/maximelebreton/alertes-leboncoin/issues)**  
 
 
