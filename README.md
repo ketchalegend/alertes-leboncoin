@@ -11,7 +11,7 @@ Pour commencer
 ------------------------------------------
 **Prérequis :** *vous devez avoir un compte Google et y être connecté.*
 
-1. **Créez [votre copie de la feuille de calcul *Alertes leboncoin*](https://docs.google.com/spreadsheet/ccc?key=1oruKJqdbEjg0z28K83hsqIKbaL2weBMqmA8lG0gYIfw&newcopy)**  
+1. **Créez [votre copie de la feuille de calcul *Alertes leboncoin*](https://goo.gl/Awjw5f)**  
 
 2. **Indiquez votre email dans les *Paramètres utilisateur*, et *lancez manuellement* votre première recherche via le menu *Alertes&nbsp;LeBonCoin*.**  
 
