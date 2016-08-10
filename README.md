@@ -69,14 +69,12 @@ Obtenir la dernière mise à jour
 ----------------------------------
  Dans la feuille de calcul, aller dans `Outils > Editeur de scripts`, puis `Ressources > Bibliothèques`, choisissez la version la plus récente, puis **cliquez sur Enregistrer**.  
 
-<details> 
-  <summary>Voir les étapes de mise à jour en image</summary>
+______________
 ![image](https://cloud.githubusercontent.com/assets/1072425/16683980/c0f5a8f8-4502-11e6-8bd3-1fd437a57fde.png)
 ______________
 ![image](https://cloud.githubusercontent.com/assets/1072425/16684012/e90b0554-4502-11e6-8c2b-64d41a4ce346.png)
 ______________
 ![image](https://cloud.githubusercontent.com/assets/1072425/16684050/27f7cdec-4503-11e6-8dff-15b9b76e4c4d.png)
-</details>
 
 
 
