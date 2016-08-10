@@ -27,7 +27,7 @@ Les colonnes :
   | *description* | *remarque*
 ------------ | -------------  | -------------  
 **Lien** | *l'url de votre recherche* | *`obligatoire`*
-**Titre** | *le titre à votre recherche* | *` obligatoire`*
+**Titre** | *le titre de votre recherche* | *` obligatoire`*
 **Dernière annonce** | *indique la date du dernier résultat qui vous a été envoyé par email* | *`automatique`*
 **Options avancées** | *est un champ qui s'adresse aux utilisateurs avancés* | *`facultatif`*
 
@@ -69,15 +69,14 @@ Obtenir la dernière mise à jour
 ----------------------------------
  Dans la feuille de calcul, aller dans `Outils > Editeur de scripts`, puis `Ressources > Bibliothèques`, choisissez la version la plus récente, puis **cliquez sur Enregistrer**.  
 
-
-______________
+<details> 
+  <summary>Voir les étapes de mise à jour en image</summary>
 ![image](https://cloud.githubusercontent.com/assets/1072425/16683980/c0f5a8f8-4502-11e6-8bd3-1fd437a57fde.png)
 ______________
 ![image](https://cloud.githubusercontent.com/assets/1072425/16684012/e90b0554-4502-11e6-8c2b-64d41a4ce346.png)
 ______________
 ![image](https://cloud.githubusercontent.com/assets/1072425/16684050/27f7cdec-4503-11e6-8dff-15b9b76e4c4d.png)
-______________
-
+</details>
 
 
 
@@ -115,6 +114,7 @@ Changelog
  * Possibilité de définir un email par recherche via les `Options avancées`
  * Paramètres utilisateurs à présent modifiables directement dans la feuille de calcul
  * Centralisation des styles CSS de l'email dans inlineStyles.gs
+ * Ajout d'un libellé 'pro' pour les annonces professionelles
 * **4.3.2** : améliorations du comportement de l'email 
 * **4.3.1** : email responsive + modifications visuelles
 * **4.3.0** :
