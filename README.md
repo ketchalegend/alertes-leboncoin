@@ -1,6 +1,6 @@
 
 
-Alertes leboncoin - 5.0.2
+Alertes leboncoin - 5.0.4
 =============================
 Recevez par email vos recherches leboncoin.fr (via Google Sheets / App Script)
 
@@ -105,6 +105,7 @@ Pourquoi ce fork ?
 
 Changelog
 --------
+* **5.0.4** Les autorisations d'accès sont maintenant limitées au document (par défaut, cela demandait un accès total !)
 * **5.0.2** Léger refactoring du code
 * **5.0.0** :
  * Ajout d'un menu `Planification des alertes` permettant de paramétrer directement le déclencheur
