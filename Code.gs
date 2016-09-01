@@ -1,7 +1,11 @@
+/**
+ * @OnlyCurrentDoc
+ */
+
 var cheerio = cheeriogasify.require('cheerio');
 var $ = cheerio;
 
-var version = "5.0.2";
+var version = "5.0.4";
 var sendMail = true;
 
 var defaults = {
