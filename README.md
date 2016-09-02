@@ -128,10 +128,7 @@ Changelog
 * **4.1.2** : Corrections de bugs, amélioration considérable des performances, données normalisées, et ajout de la possibilité de recevoir des mails individuels
 * **4.0** : version initiale du projet (bêta)
 
-
-
 _____________________________
-
 
 
 v1.x par http://justdocsit.blogspot.fr  
@@ -140,6 +137,8 @@ v4.x par [mlb](http://www.maximelebreton.com)
 **Clé projet de la bilbiothèque :** `M9iNq7X9ZWxS_D7pHmMGBb6YoFnfw0_Hk`  
 **Accéder au code de la bibliothèque:** : https://script.google.com/macros/library/versions/d/15GE-TW-COB9rfq49nF38GDqytbwpK2HMxLQOzdC1JZMGkUCfLqWoG0T4
 
+
+_____________________________
 
 
 [Laisser un commentaire](http://maximelebreton.github.io/alertes-leboncoin/#disqus_thread)
