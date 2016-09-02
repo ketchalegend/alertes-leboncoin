@@ -129,6 +129,9 @@ Changelog
 * **4.0** : version initiale du projet (bêta)
 
 
+[Laisser un commentaire](http://maximelebreton.github.io/alertes-leboncoin/#disqus_thread)
+-------------
+
 _____________________________
 
 
