@@ -82,8 +82,11 @@ Un problème ?
 4. si le problème n'est pas déjà signalé, je vous invite à **[créer une issue](https://github.com/maximelebreton/alertes-leboncoin/issues)**  
 
 
-Pourquoi ce fork ?
+Pourquoi cette version, et quelle différence avec les autres ?
 -----------------
+
+J'explique les raisons de cette version ici : 
+#### > [Vision et évolutions futures](https://github.com/maximelebreton/alertes-leboncoin/issues/2)
 
 **TL DR;**
 * refonte totale du code
@@ -94,7 +97,7 @@ Pourquoi ce fork ?
 * possibilité de choisir l'envoi des résultats en mails individuels ou en mail groupé (`groupedResults`)
 * Markup HTML externalisé dans des fichiers `.html` gérés par [HTML service](https://developers.google.com/apps-script/guides/html/templates)
 
-#### > [Vision et évolutions futures de la version 4.x ?](https://github.com/maximelebreton/alertes-leboncoin/issues/2)
+
 
 
 
