@@ -14,7 +14,7 @@ var inlineStyles = {
   adLayoutMap: "float: right; padding: 0 0 20px 20px; font-size: 0;",
   adLayoutContent: "min-width: 200px; display: inline-block; padding:0 0 20px 0; font-size: 13px; line-height: 19.5px;",
   
-  adImage: "display: inline-block; width: 100%; height: 120px; background-color: "+placeholderColor+"; vertical-align: middle;",
+  adImage: "display: inline-block; width: 100%; min-height: 120px; max-height: 120px; background-color: "+placeholderColor+"; vertical-align: middle;",
   adImageImg: "vertical-align:middle; display: inline-block; border: 0; max-width: 100%; height: auto;",
   adImagePlaceholder: "vertical-align: middle;",
   adImageAlignFix: "min-height: 120px; display: inline-block; font-size: 0; line-height: 0; vertical-align: middle;",
