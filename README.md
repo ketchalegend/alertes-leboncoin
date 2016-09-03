@@ -1,6 +1,6 @@
 
 
-Alertes leboncoin - 5.0.4
+Alertes leboncoin - 5.0.5
 =============================
 Recevez par email vos recherches leboncoin.fr (via Google Sheets / App Script)
 
