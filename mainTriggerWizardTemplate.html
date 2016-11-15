@@ -7,7 +7,7 @@
     
     function handleSave() {
       var frequencyValue = document.getElementById('frequency').value;
-      google.script.run.withSuccessHandler(onSuccess).onSetMainTrigger(frequencyValue);
+      google.script.run.withSuccessHandler(onSuccess).handleSetMainTrigger(frequencyValue);
       document.getElementById('save').disabled = true;
     };
 
@@ -23,14 +23,20 @@
 </head>
 <body>
     <div class="block form-group">
-        <label for="frequency">Recevoir les nouvelles annonces</label> <select id="frequency">
+        <label for="frequency">Recevoir les nouvelles annonces</label> <select id="frequency" style="min-width: 152px">
+           <option disabled selected>
+              Sélectionnez
+           </option>
+           <option value="0">
+                Mettre en pause
+            </option>
             <option value="2">
                 Toutes les 2&nbsp;heures
             </option>
             <option value="4">
                 Toutes les 4&nbsp;heures
             </option>
-            <option selected value="6">
+            <option value="6">
                 Toutes les 6&nbsp;heures
             </option>
             <option value="8">
@@ -39,6 +45,16 @@
             <option value="12">
                 Toutes les 12&nbsp;heures
             </option>
+            <option value="24">
+                Tous les jours
+            </option>
+            <option value="48">
+                Tous les 2 jours
+            </option>
+            <option value="168">
+                Toutes les semaines
+            </option>
+            
         </select>
     </div>
     <div class="block">
