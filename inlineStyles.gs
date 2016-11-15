@@ -5,7 +5,7 @@ var placeholderColor = "#f2f2f2";
 
 var inlineStyles = {
   
-  label: "display: inline; padding: .2em .6em .3em; font-size: 75%; font-weight: 700; line-height: 1; text-align: center; white-space: nowrap; vertical-align: baseline; border-radius: .25em;",
+  label: "display: inline; padding: .2em .6em .3em; font-size: .75em; font-weight: 700; line-height: 1; text-align: center; white-space: nowrap; vertical-align: baseline; border-radius: .25em;",
   labelPrimary: "color: "+brandPrimary+"; border: 1px solid "+brandPrimary+";",
   labelSecondary: "border: 1px solid "+brandSecondary+"; color: "+brandSecondary+";",
   
@@ -21,8 +21,8 @@ var inlineStyles = {
   
   adMap: "min-height: 120px;",
   
-  adContentTitle: "",
-  adContentTitleLink: "font-size:14px;font-weight:bold;color:"+brandPrimary+";text-decoration:none; vertical-align: middle;",
+  adContentTitle: "display: inline-block;",
+  adContentTitleLink: "font-size: 14px; font-weight: bold; color: "+brandPrimary+"; text-decoration: none; vertical-align: middle;",
   adContentPlace: "",
   adContentDate: "",
   adContentPrice: "line-height: 18px; font-size: 14px; font-weight: bold;",
