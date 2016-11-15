@@ -1,6 +1,6 @@
 
 
-Alertes leboncoin - 5.0.5
+Alertes leboncoin - 5.1.0
 =============================
 Recevez par email vos recherches leboncoin.fr (via Google Sheets / App Script)
 
@@ -60,6 +60,9 @@ var userParams = {
   },
   selectors: {
     adItem: '.mainList ul > li'
+  },
+  onDataResult: function(result, entities) {
+    // Custom callback
   }
 }
 ```
