@@ -5,7 +5,7 @@
 var cheerio = cheeriogasify.require('cheerio');
 var $ = cheerio;
 
-var version = "5.0.5";
+var version = "5.1.0";
 var sendMail = true;
 
 var defaults = {
@@ -48,14 +48,17 @@ var defaults = {
   },
   selectors: {
     adItem: '.mainList ul > li',
-    adsContext: '#listingAds'
+    adsContext: '#listingAds',
+    mainStartTag: '<main id="main"', // the tag is intentionnaly not closed
+    mainEndTag: '</main>'
   }
 };
 
 var normalizedData = {
   result: [],
   entities: {},
-  update: false
+  update: false,
+  sheetUrl: ''
 };
 
 // PARAMS global variable
@@ -122,10 +125,12 @@ function start(userParams) {
     highlightRow(row);
     
     var url = getCellByIndex( index, rangeNames.url, sheetNames.main ).getValue(); // String URL expected
-    var ads = getUrlAds(url);
+    
+    var html = getUrlContent( url );
+    var ads = getListingAdsFromHtml( html );
 
     if (ads.length && sendMail) {
-      
+           
       var latestAdCellValue = getCellByIndex( index, rangeNames.lastAd, sheetNames.main ).getValue(); // Date Object expected
       var latestAds = getLatestAds(ads, latestAdCellValue);
       
@@ -135,8 +140,12 @@ function start(userParams) {
         
         var stringifiedOptions = params.isAvailable.advancedOptions ? getCellByIndex( index, rangeNames.advancedOptions, sheetNames.main ).getValue() : "";
         var options = stringifiedOptions.length ? JSON.parse(stringifiedOptions) : {};
+
+        // not ready (experimental)
+        //var tags = getTagsFromHtml( html );
+        var tags = '';
         
-        setNormalizedData(index, label, url, latestAds, options);
+        setNormalizedData(index, label, url, latestAds, options, tags);
       }
     }
     
@@ -150,8 +159,15 @@ function start(userParams) {
     normalizedData.update = update;
   }
   
+  // sheet url
+  normalizedData.sheetUrl = getSpreadsheetContext().getUrl();
   
   var data = normalizedData;
+  
+  // user custom callback
+  if (params.onDataResult) {
+    params.onDataResult(data.result, data.entities);
+  }
   
   // If results, send email
   // TODO : refactor
@@ -171,9 +187,9 @@ function start(userParams) {
           forEachResult( result, data.entities, setLatestAdRangeValue );  
         } 
         
-      }
-      
+      }  
     });
+    
   }
     
 }
@@ -298,13 +314,39 @@ function checkMainTrigger(callbackString) {
 function setMainTrigger(hours) {
   
   deleteProjectTriggers();
-  var trigger = ScriptApp.newTrigger('alertesLeBonCoin').timeBased().everyHours(hours).create();
-  var triggerId = trigger.getUniqueId();
   
-  var toastText = "Vos alertes ont été réglées sur \"toutes les " + hours + " heures\"";
-  if (triggerId) {
-    getSpreadsheetContext().toast(toastText, 'Alertes LeBonCoin');
+  var triggerHour = 12;
+  var triggerMinute = 30;
+  var trigger = ScriptApp.newTrigger('alertesLeBonCoin').timeBased().nearMinute(triggerMinute);
+  
+  if (hours == 0) {
+    
+    getSpreadsheetContext().toast("Vos alertes ont été mises en pause", 'Alertes LeBonCoin');
+    
+  } else {
+  
+    if (hours >= 1 && hours <= 12) {
+      trigger = trigger.everyHours(hours);
+    }
+    if (hours == 24) {
+      trigger = trigger.atHour(triggerHour).everyDays(1);
+    }
+    if (hours == 48) {
+      trigger = trigger.atHour(triggerHour).everyDays(2);
+    }
+    if (hours == 168) {
+      trigger = trigger.atHour(triggerHour).everyWeeks(1).onWeekDay(ScriptApp.WeekDay.MONDAY);
+    }
+    
+    trigger = trigger.create();
+    var triggerId = trigger.getUniqueId();
+    
+    if (triggerId) {
+      getSpreadsheetContext().toast("Vos alertes ont été réglées sur \"toutes les " + hours + " heures\"", 'Alertes LeBonCoin');
+    }
+    
   }
+  
 }
 
 
@@ -476,6 +518,7 @@ function setLatestAdRangeValue(index, entities) {
 
 
 /**
+  * @deprecated
   * Get url ads
 */
 function getUrlAds(url) {
@@ -499,6 +542,76 @@ function getUrlContent(url) {
 
 
 /**
+  * Get tags from html
+*/
+function getTagsFromHtml( html ) {  
+  
+  var data = {};
+  
+  var startTag = 'var utag_data = '
+  var endTag = '</script>';
+  
+  //try {
+
+    var tagsHtml = extractHtml(html, startTag, endTag, startTag.length, endTag.length).trim();
+    
+    
+    /*var separator = ' : ';
+    
+    var wantedTags = ['prixmin', 'prixmax', 'anneemin', 'anneemax', 'subcat', 'cat', 'region', 'departement', 'kmmin', 'kmmax', 'cp', 'city'];
+    
+    for (var i = 0; i < wantedTags.length; i++ ) {
+      
+      var tagLabel = wantedTags[i];
+      var tagValue = extractHtml(tagsHtml, tagLabel, ',', tagLabel.length + separator.length);
+      
+      if (tagValue) {
+      
+        data[tagLabel] = convertType(tagValue);
+        
+      };
+      
+    }*/
+    
+    //data = JSON.parse( JSON.stringify(data) );
+    
+    data = tagsHtml;
+    
+    
+    //var tagsJSON = tagsHtml.replace(/\s:/g, ":").replace(/(['"])?([a-zA-Z0-9_]+)(['"])?:/g, '"$2": ');
+    
+    //var config = JSON.parse(data); //only data, no code
+
+    
+    
+    
+    /*tagsJSON = JSON.stringify(tagsJSON, function (key, value) {
+      if (typeof value === 'function') {
+        return value.toString();
+      }
+      return value;
+    });*/
+    
+    //tagsJSON = JSON.stringify(tagsJSON);
+    
+    //Logger.log(tagsHtml);
+    //tagsHtml = JSON.stringify(tagsHtml);
+    //Logger.log(tagsJSON);
+  
+    //data = JSON.parse( tagsJSON );
+    //data = tagsHtml; // just for security...
+    
+    
+  /*} catch (e) {
+    //console.error("Parsing error:", e); 
+  }
+  */
+    
+  return data;
+}
+
+
+/**
   * Get listing ads data
   * @returns {Object} Returns data of the listing ads
 */
@@ -507,7 +620,7 @@ function getListingAdsFromHtml( html ) {
   var data = [];
   var protocol = 'https:';
   
-  var mainHtml = extractMainHtml(html); // get only the needed part, for cheerio performance
+  var mainHtml = extractHtml(html, params.selectors.mainStartTag, params.selectors.mainEndTag, params.selectors.mainStartTag.length );
   
   /*var start1 = new Date().getTime();
   var end1 = new Date().getTime();
@@ -517,13 +630,6 @@ function getListingAdsFromHtml( html ) {
         
   // liste des annonces
   $selector.each(function(i, element) {
-    
-    // limiter le nombre de résultats
-    /*if (params.limitResults) {
-      if (i >= params.limitResults) {
-        return;
-      }
-    }*/
     
     var $this = $(this);
     
@@ -564,19 +670,23 @@ function getListingAdsFromHtml( html ) {
 
 
 /**
-  * Extract main html
+  * Extract html
 */
-function extractMainHtml(html){
+function extractHtml(html, startTag, endTag, startIndex, endIndex){
   
-  var mainStartTag = '<main id="main"';
-  var mainEndTag = '</main>';
+  var extractedHtml = "";
+  var startIndex = startIndex || 0;
+  var endIndex = endIndex || 0;
   
-  var from = html.indexOf(mainStartTag) + mainStartTag.length;
-  var to = html.indexOf(mainEndTag, from)
+  var from = html.indexOf(startTag);
   
-  var mainHtml = html.substring( from, to );
+  if (from !== -1) {
+    var to = html.indexOf(endTag, from);
+    
+    extractedHtml = html.substring( from + startIndex, to - endIndex);
+  }
   
-  return mainHtml;
+  return extractedHtml;
 }
 
 
@@ -753,7 +863,7 @@ function getDataBeforeTime(data, lastTime) {
 /**
   * Set normalized data (inspired by redux & normalizr principles)
 */
-function setNormalizedData(key, label, url, latestAds, options) {
+function setNormalizedData(key, label, url, latestAds, options, tags) {
  
   // Push new result
   normalizedData.result.push( key );
@@ -762,8 +872,8 @@ function setNormalizedData(key, label, url, latestAds, options) {
   var obj = {}; obj[key] = {};
   var labels = extend({}, obj);
   var urls = extend({}, obj);
-  var ads = extend({}, obj);          
-  var custom = extend({}, obj);          
+  var ads = extend({}, obj);
+  var custom = extend({}, obj);
   
   // Extend Labels
   labels[key] = {
@@ -782,7 +892,8 @@ function setNormalizedData(key, label, url, latestAds, options) {
   // Extend ads
   ads[key] = {
     id: key,
-    latest: latestAds
+    latest: latestAds,
+    tags: tags
   }
   ads = extend({}, normalizedData.entities.ads, ads);
   
@@ -820,6 +931,7 @@ function handleSendData(data, email, callback) {
   
   var defaultMailResults = [];
   var customMailResults = [];
+  var freeSmsResults = [];
  
   for (var i = 0; i < data.result.length; i++ ) {
     
@@ -833,12 +945,19 @@ function handleSendData(data, email, callback) {
       
       defaultMailResults.push( id );
     }
+    
+    if (customOptions.sendSms && customOptions.freeUser && customOptions.freePass)  {
+      
+      smsResults.push( id );
+    }
+    
   }
 
-  
+  // defaultMailResults
   sendDataTo(data, defaultMailResults, email, callback);
   
   
+  // customMailResults
   for (var j = 0; j < customMailResults.length; j++ ) {
     
     var id = customMailResults[j];
@@ -848,6 +967,64 @@ function handleSendData(data, email, callback) {
     sendSeparatedData(data, singleResult, customEmail, callback);
   }
   
+  // freeSmsResults
+  for (var k = 0; k < freeSmsResults.length; k++ ) {
+    
+    var id = freeSmsResults[k];
+    var singleResult = [id];
+    var freeUser = data.entities.custom[id].options.freeUser;
+    var freePass = data.entities.custom[id].options.freePass;
+    
+    sendSmsWithFreeGateway(data, singleResult, freeUser, freePass);
+  }
+  
+}
+
+
+// Testé avec sfr et orange, et ne marche pas...
+function sendMailSms(data, results, carrier, number, callback) {
+  
+  if (carrier === "bouygues") {
+    var email = number + "@mms.bouyguestelecom.fr";
+    
+    sendSeparatedData(data, results, email, callback);
+  }
+  
+  if (carrier === "sfr") {
+    var email = number + "@sfr.fr";
+    
+    sendSeparatedData(data, results, email, callback);
+  }
+  
+  if (carrier === "orange") {
+   var email = number + "@orange.fr";
+    
+   sendSeparatedData(data, results, email, callback);
+  }
+  
+  if (carrier === "free") {
+
+  }
+  
+}
+
+
+// Experimental
+function sendSmsWithFreeGateway(data, results, user, pass) {
+  
+  var id = data.result[results[0]];
+  var label = data.entities.labels[id].label;
+  var url = entities.urls[id].url;
+  var ads = data.entities.ads[id].latest;
+  
+  var msg = ads.length + " nouveaux résultats pour " + label + " : " + url;
+  
+  msg = msg.replace(/(\r\n|\n|\r)/gm," "); //les sauts de lignes ne passent pas en GET, alors on nettoie
+  msg = encodeURIComponent(msg.substring(0,480));
+ 
+  var url = "https://smsapi.free-mobile.fr/sendmsg?user=" + user + "&pass=" + pass + "&msg=" + message;
+  
+  UrlFetchApp.fetch(url);
 }
 
 
@@ -884,7 +1061,7 @@ function sendDataTo( data, results, email, callback ) {
 function sendGroupedData( data, results, email, callback ) {
     
   var mailTitle =  getMailTitle( results, data.entities );
-  var mailHtml = getMailTemplate( results, data.entities, data.update );
+  var mailHtml = getMailTemplate( results, data.entities, data.update, data.sheetUrl );
   
   sendEmail(email, mailTitle, mailHtml, data.result, callback);
   
@@ -902,7 +1079,7 @@ function sendSeparatedData( data, results, email, callback ) {
     var singleResult = [id];
     
     var mailTitle =  getMailTitle( singleResult, data.entities );
-    var mailHtml = getMailTemplate( singleResult, data.entities, data.update );
+    var mailHtml = getMailTemplate( singleResult, data.entities, data.update, data.sheetUrl );
     
     sendEmail(email, mailTitle, mailHtml, singleResult, callback);
     
@@ -994,12 +1171,13 @@ function getAdsTotalLength( result, entities ) {
 /*
   * Get mail template
 */
-function getMailTemplate(result, entities, update) {
+function getMailTemplate(result, entities, update, sheetUrl) {
   
   var template = HtmlService.createTemplateFromFile('mailTemplate');
   template.result = result;
   template.entities = entities;
   template.update = update;
+  template.sheetUrl = sheetUrl;
   
   return template.evaluate().getContent();
 }
@@ -1316,6 +1494,7 @@ versionCompare = function(left, right) {
     return 0;
 }
 
+
 /**
   * Sort object properties
 */
@@ -1350,6 +1529,17 @@ function dynamicSort(property) {
     }
 }
 
+
+/**
+  * Convert type
+*/
+function convertType(value){
+    try {
+        return (new Function("return " + value + ";"))();
+    } catch(e) {
+        return value;
+    }
+};
 
 /**
   * -------- *
