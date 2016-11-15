@@ -24,12 +24,9 @@ C'est très simple, dans la **feuille** intitulée `Vos alertes`, **chaque ligne
 
 Les colonnes :
 
-  | *description* | *remarque*
------------- | -------------  | -------------  
-**Lien** | *l'url de votre recherche* | *`obligatoire`*
-**Titre** | *le titre de votre recherche* | *` obligatoire`*
-**Dernière annonce** | *indique la date du dernier résultat qui vous a été envoyé par email* | *`automatique`*
-**Options avancées** | *est un champ qui s'adresse aux utilisateurs avancés* | *`facultatif`*
+Titre | Lien | Dernière annonce | Options avancées
+------------ | ------------- | ------------- | -------------  
+*le titre de votre recherche* (*`obligatoire`*) | *l'url de votre recherche* (*`obligatoire`*) | *indique la date du dernier résultat qui vous a été envoyé par email* (*`automatique`*) | *est un champ qui s'adresse aux utilisateurs avancés* (*`facultatif`*)
 
 Paramètres utilisateurs
 ----------------------
@@ -77,7 +74,9 @@ Exemple :
 
 Obtenir la dernière mise à jour
 ----------------------------------
- Dans la feuille de calcul, aller dans `Outils > Editeur de scripts`, puis `Ressources > Bibliothèques`, choisissez la version la plus récente, puis **cliquez sur Enregistrer**.  
+Pour mettre à jour la librairie, une fois dans la feuille de calcul, aller dans `Outils > Editeur de scripts`, puis `Ressources > Bibliothèques`, choisissez la version la plus récente, puis **cliquez sur Enregistrer**.  
+> *IMPORTANT : La mise à jour de la librairie ne mets pas à jour la feuille de calcul.
+Donc si vous souhaitez profiter des dernières fonctionnalités, il vous faudra récupérer la [dernière version de la feuille de calcul](https://goo.gl/Awjw5f).*
 
 <img src="https://raw.githubusercontent.com/maximelebreton/alertes-leboncoin/master/update.gif"/>
 
