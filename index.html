@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en-us">
+<html lang="fr">
   <head>
     <meta charset="UTF-8">
-    <title>Alertes leboncoin by maximelebreton</title>
+    <title>Alertes leboncoin | Recevez par email vos recherches leboncoin.fr (via Google Sheets / App Script)</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
@@ -13,10 +13,15 @@
     <section class="page-header">
       <h1 class="project-name">Alertes leboncoin</h1>
       <h2 class="project-tagline">Recevez par email vos recherches leboncoin.fr (via Google Sheets / App Script)</h2>
-      <a href="https://github.com/maximelebreton/alertes-leboncoin" class="btn">View on GitHub</a>
-      <a href="https://github.com/maximelebreton/alertes-leboncoin/zipball/master" class="btn">Download .zip</a>
-      <a href="https://github.com/maximelebreton/alertes-leboncoin/tarball/master" class="btn">Download .tar.gz</a>
+      <a href="https://goo.gl/Awjw5f" class="btn" target="_blank">Créer ma feuille d'Alertes, maintenant.</a>
+      <div><small><strong>Prérequis :</strong> <em>vous devez avoir un compte Google et y être connecté.</em></small></div>
     </section>
+
+<!-- 
+  * ------------------- *
+  * END STATIC HEADER 
+  * ------------------- *
+-->
 
     <section class="main-content">
       <h1>
@@ -232,11 +237,37 @@ repris depuis la 4.0 par <a href="http://www.maximelebreton.com">mlb</a>  </p>
 <p>Clé projet de la bilbiothèque : <code>M9iNq7X9ZWxS_D7pHmMGBb6YoFnfw0_Hk</code><br>
 Code de la bibliothèque : <a href="https://script.google.com/macros/library/versions/d/15GE-TW-COB9rfq49nF38GDqytbwpK2HMxLQOzdC1JZMGkUCfLqWoG0T4">script.google.com/...</a></p>
 
-<hr>
-
+<!-- 
+  * ------------------- *
+  * START STATIC FOOTER 
+  * ------------------- *
+-->
+      
 <h2>
-<a id="laisser-un-commentaire" class="anchor" href="#laisser-un-commentaire" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a><a href="http://maximelebreton.github.io/alertes-leboncoin/#disqus_thread">Laisser un commentaire</a>
+<a id="laisser-un-commentaire" class="anchor" href="#laisser-un-commentaire" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a><a href="#disqus_thread">Laisser un commentaire</a>
 </h2>
+
+<div id="disqus_thread"></div>
+<script>
+/**
+ *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+ *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables */
+/*
+var disqus_config = function () {
+    this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+    this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+*/
+(function() { // DON'T EDIT BELOW THIS LINE
+    var d = document, s = d.createElement('script');
+    s.src = '//alertesleboncoin.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+                                    
+
 
       <footer class="site-footer">
         <span class="site-footer-owner"><a href="https://github.com/maximelebreton/alertes-leboncoin">Alertes leboncoin</a> is maintained by <a href="https://github.com/maximelebreton">maximelebreton</a>.</span>
@@ -246,6 +277,8 @@ Code de la bibliothèque : <a href="https://script.google.com/macros/library/ver
 
     </section>
 
+<a href="#disqus_thread" class="btn disqus-comment-count" data-disqus-url="http://maximelebreton.github.io/alertes-leboncoin" style="color: #606c71; position: fixed; bottom: 0; right: 0;  margin-bottom: 0; background: rgba(255,255,255,0.8); width: auto;  border-color: #ddd; border-bottom: 0;  border-right: 0; border-radius: 0;">Commentaires</a>
+<script id="dsq-count-scr" src="//alertesleboncoin.disqus.com/count.js" async></script>
   
   </body>
 </html>
