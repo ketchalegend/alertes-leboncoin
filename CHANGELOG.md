@@ -1,7 +1,14 @@
 # Change Log
 
 
-## [5.0.4]
+## [Unreleased]
+### Added
+- 
+
+### Changed
+- 
+
+## [5.0.4] - 2016-09-01
 - Les autorisations d'accès sont maintenant limitées au document (par défaut, cela demandait un accès total !)
 
 ## [5.0.2]
