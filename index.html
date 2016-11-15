@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en-us">
   <head>
     <meta charset="UTF-8">
-    <title>Alertes leboncoin | Recevez par email vos recherches leboncoin.fr (via Google Sheets / App Script)</title>
+    <title>Alertes leboncoin by maximelebreton</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
@@ -13,19 +13,14 @@
     <section class="page-header">
       <h1 class="project-name">Alertes leboncoin</h1>
       <h2 class="project-tagline">Recevez par email vos recherches leboncoin.fr (via Google Sheets / App Script)</h2>
-      <a href="https://goo.gl/Awjw5f" class="btn" target="_blank">Créer ma feuille d'Alertes, maintenant.</a>
-      <div><small><strong>Prérequis :</strong> <em>vous devez avoir un compte Google et y être connecté.</em></small></div>
+      <a href="https://github.com/maximelebreton/alertes-leboncoin" class="btn">View on GitHub</a>
+      <a href="https://github.com/maximelebreton/alertes-leboncoin/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/maximelebreton/alertes-leboncoin/tarball/master" class="btn">Download .tar.gz</a>
     </section>
 
-<!-- 
-  * ------------------- *
-  * END STATIC HEADER 
-  * ------------------- *
--->
-    
     <section class="main-content">
       <h1>
-<a id="alertes-leboncoin---504" class="anchor" href="#alertes-leboncoin---504" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Alertes leboncoin - 5.0.4</h1>
+<a id="alertes-leboncoin---510" class="anchor" href="#alertes-leboncoin---510" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Alertes leboncoin - 5.1.0</h1>
 
 <p>Recevez par email vos recherches leboncoin.fr (via Google Sheets / App Script)</p>
 
@@ -39,9 +34,9 @@
 <p><strong>Prérequis :</strong> <em>vous devez avoir un compte Google et y être connecté.</em></p>
 
 <ol>
-<li><p><strong>Créez <a href="https://goo.gl/Awjw5f">votre copie de la feuille de calcul <em>Alertes leboncoin</em></a></strong>  </p></li>
-<li><p><strong>Indiquez votre email dans les <em>Paramètres utilisateur</em>, et <em>lancez manuellement</em> votre première recherche via le menu <em>Alertes LeBonCoin</em>.</strong>  </p></li>
-<li><p><strong>Pour être averti <em>automatiquement</em> des prochains résultats, réglez la <em>fréquence</em> à laquelle vous souhaitez être averti via le menu <em>Planification des alertes</em>.</strong></p></li>
+<li><p>Créez votre <strong><a href="https://goo.gl/Awjw5f">copie de la feuille de calcul <em>Alertes leboncoin</em></a></strong>  </p></li>
+<li><p>Indiquez votre <strong>email</strong> dans les <strong><code>Paramètres utilisateur</code></strong>, et <strong>lancez manuellement</strong> votre première recherche via le <strong>menu <code>Alertes LeBonCoin</code>.</strong>  </p></li>
+<li><p>Pour être averti <strong>automatiquement</strong> des prochains résultats, réglez la <strong>fréquence</strong> à laquelle vous souhaitez être averti via le <strong>menu dans <code>Planification des alertes</code>.</strong></p></li>
 </ol>
 
 <h2>
@@ -137,8 +132,11 @@
 </tbody>
 </table>
 
-<h3>
-<a id="paramètres-utilisateurs-avancés" class="anchor" href="#param%C3%A8tres-utilisateurs-avanc%C3%A9s" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Paramètres utilisateurs avancés</h3>
+<h2>
+<a id="utilisateurs-avancés" class="anchor" href="#utilisateurs-avanc%C3%A9s" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Utilisateurs avancés</h2>
+
+<h4>
+<a id="paramètres-avancés" class="anchor" href="#param%C3%A8tres-avanc%C3%A9s" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Paramètres avancés</h4>
 
 <p>Pour les utilisateurs avancés, l'objet <code>userParams</code> permet de personnaliser la totalité des <a href="https://github.com/maximelebreton/alertes-leboncoin/blob/master/Code.gs#L7">variables de la librairie</a> (dans la feuille de calcul : <code>Outils &gt; Editeur de scripts</code>)<br>
 Exemple :</p>
@@ -149,14 +147,20 @@ Exemple :</p>
     sheet: {
       main: 'Vos alertes'
     }
+  },
+  selectors: {
+    adItem: '.mainList ul &gt; li'
+  },
+  onDataResult: function(result, entities) {
+    // Custom callback
   }
 }
 </code></pre>
 
-<h3>
-<a id="options-avancées" class="anchor" href="#options-avanc%C3%A9es" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Options avancées</h3>
+<h4>
+<a id="options-avancées" class="anchor" href="#options-avanc%C3%A9es" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Options avancées</h4>
 
-<p>Il est possible de spécifier les options <code>email</code>, <code>showMap</code> et <code>mapZoom</code> pour chaque recherche dans la colonne <code>Options avancées</code> en passant un <code>objet JSON</code> stringifié.<br>
+<p>Il est également possible de spécifier les options <code>email</code>, <code>showMap</code> et <code>mapZoom</code> pour chaque recherche dans la colonne <code>Options avancées</code> en passant un <code>objet JSON</code> stringifié.<br>
 Exemple : </p>
 
 <pre><code>{"email":"autre@email.com","showMap":true,"mapZoom":9}
@@ -179,7 +183,13 @@ Exemple : </p>
 4. si le problème n'est pas déjà signalé, je vous invite à <strong><a href="https://github.com/maximelebreton/alertes-leboncoin/issues">créer une issue</a></strong>  </p>
 
 <h2>
-<a id="pourquoi-ce-fork-" class="anchor" href="#pourquoi-ce-fork-" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Pourquoi ce fork ?</h2>
+<a id="pourquoi-cette-version-et-quelle-différence-avec-les-autres-" class="anchor" href="#pourquoi-cette-version-et-quelle-diff%C3%A9rence-avec-les-autres-" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Pourquoi cette version, et quelle différence avec les autres ?</h2>
+
+<p>J'explique les raisons de cette version ici : </p>
+
+<h4>
+<a id="-vision-et-évolutions-futures" class="anchor" href="#-vision-et-%C3%A9volutions-futures" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>&gt; <a href="https://github.com/maximelebreton/alertes-leboncoin/issues/2">Vision et évolutions futures</a>
+</h4>
 
 <p><strong>TL DR;</strong></p>
 
@@ -195,115 +205,22 @@ Exemple : </p>
 </li>
 </ul>
 
-<h4>
-<a id="-vision-et-évolutions-futures-de-la-version-4x-" class="anchor" href="#-vision-et-%C3%A9volutions-futures-de-la-version-4x-" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>&gt; <a href="https://github.com/maximelebreton/alertes-leboncoin/issues/2">Vision et évolutions futures de la version 4.x ?</a>
-</h4>
-
 <h2>
-<a id="changelog" class="anchor" href="#changelog" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Changelog</h2>
+<a id="changelog" class="anchor" href="#changelog" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>CHANGELOG</h2>
 
-<ul>
-<li>
-<strong>5.0.4</strong> Les autorisations d'accès sont maintenant limitées au document (par défaut, cela demandait un accès total !)</li>
-<li>
-<strong>5.0.2</strong> Léger refactoring du code</li>
-<li>
-<strong>5.0.0</strong> :
+<p>Le détail des modifications se trouve dans le <strong><a href="https://github.com/maximelebreton/alertes-leboncoin/blob/master/CHANGELOG.md">CHANGELOG</a></strong></p>
 
-<ul>
-<li>Ajout d'un menu <code>Planification des alertes</code> permettant de paramétrer directement le déclencheur</li>
-<li>Ajout d'une colonne <code>Options avancées</code>
-</li>
-<li>Possibilité de définir un email par recherche via les <code>Options avancées</code>
-</li>
-<li>Paramètres utilisateurs à présent modifiables directement dans la feuille de calcul</li>
-<li>Centralisation des styles CSS de l'email dans inlineStyles.gs</li>
-<li>Ajout d'un libellé 'pro' pour les annonces professionelles</li>
-</ul>
-</li>
-<li>
-<strong>4.3.2</strong> : améliorations du comportement de l'email </li>
-<li>
-<strong>4.3.1</strong> : email responsive + modifications visuelles</li>
-<li>
-<strong>4.3.0</strong> :
+<p>version originale par <a href="http://justdocsit.blogspot.fr">http://justdocsit.blogspot.fr</a><br>
+repris depuis la 4.0 par <a href="http://www.maximelebreton.com">mlb</a>  </p>
 
-<ul>
-<li>utilisation des <a href="https://developers.google.com/apps-script/guides/html/templates">templates</a> pour faciliter la maintenance du markup des emails</li>
-<li>ajout du résumé des annonces dans l'aperçu du mail (mailPreheaderTemplate.html)</li>
-<li>ajout d'un placeholder lorsqu'aucune photo n'est disponible</li>
-</ul>
-</li>
-<li>
-<strong>4.2.1</strong> : 
-
-<ul>
-<li>Correction d'un bug lié à l'affichage des cartes <a href="https://github.com/maximelebreton/alertes-leboncoin/issues/3">#3</a>
-</li>
-<li>Ajout d'une fonction de tri pour que le mail envoyé ne contienne que les dernières annonces même lorsque l'on trie par prix.</li>
-</ul>
-</li>
-<li>
-<strong>4.2.0</strong> : 
-
-<ul>
-<li>Changement de l'algorithme de détection des dernières annonces (anciennement basé sur un id, et remplacé par un timestamp qui est la combinaison de la date et l'id)</li>
-<li>Améliorations visuelles (la progression est maintenant visible)</li>
-<li>Ajout d'une notification en bas de mail lorsqu'une mise à jour est disponible</li>
-</ul>
-</li>
-<li>
-<strong>4.1.5</strong> : modification du titre des emails envoyés</li>
-<li>
-<strong>4.1.4</strong> : ajout d'un footer</li>
-<li>
-<strong>4.1.3</strong> : Correction d'un bug lié aux paramètres utilisateurs qui n'étaient pas correctement étendus (extend VS deepExtend)</li>
-<li>
-<strong>4.1.2</strong> : Corrections de bugs, amélioration considérable des performances, données normalisées, et ajout de la possibilité de recevoir des mails individuels</li>
-<li>
-<strong>4.0</strong> : version initiale du projet (bêta)</li>
-</ul>
+<p>Clé projet de la bilbiothèque : <code>M9iNq7X9ZWxS_D7pHmMGBb6YoFnfw0_Hk</code><br>
+Code de la bibliothèque : <a href="https://script.google.com/macros/library/versions/d/15GE-TW-COB9rfq49nF38GDqytbwpK2HMxLQOzdC1JZMGkUCfLqWoG0T4">script.google.com/...</a></p>
 
 <hr>
 
-<p>v1.x par <a href="http://justdocsit.blogspot.fr">http://justdocsit.blogspot.fr</a><br>
-v4.x par <a href="http://www.maximelebreton.com">mlb</a>  </p>
-
-<p><strong>Clé projet de la bilbiothèque :</strong> <code>M9iNq7X9ZWxS_D7pHmMGBb6YoFnfw0_Hk</code><br>
-<strong><a href="https://script.google.com/macros/library/versions/d/15GE-TW-COB9rfq49nF38GDqytbwpK2HMxLQOzdC1JZMGkUCfLqWoG0T4">Accéder au code de la bibliothèque</a></strong></p>
-
-<!-- 
-  * ------------------- *
-  * START STATIC FOOTER 
-  * ------------------- *
--->
-      
 <h2>
-<a id="laisser-un-commentaire" class="anchor" href="#laisser-un-commentaire" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a><a href="#disqus_thread">Laisser un commentaire</a>
+<a id="laisser-un-commentaire" class="anchor" href="#laisser-un-commentaire" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a><a href="http://maximelebreton.github.io/alertes-leboncoin/#disqus_thread">Laisser un commentaire</a>
 </h2>
-
-<div id="disqus_thread"></div>
-<script>
-
-/**
- *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
- *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables */
-/*
-var disqus_config = function () {
-    this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
-    this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
-};
-*/
-(function() { // DON'T EDIT BELOW THIS LINE
-    var d = document, s = d.createElement('script');
-    s.src = '//alertesleboncoin.disqus.com/embed.js';
-    s.setAttribute('data-timestamp', +new Date());
-    (d.head || d.body).appendChild(s);
-})();
-</script>
-<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-                                    
-
 
       <footer class="site-footer">
         <span class="site-footer-owner"><a href="https://github.com/maximelebreton/alertes-leboncoin">Alertes leboncoin</a> is maintained by <a href="https://github.com/maximelebreton">maximelebreton</a>.</span>
@@ -313,8 +230,6 @@ var disqus_config = function () {
 
     </section>
 
-<a href="#disqus_thread" class="btn disqus-comment-count" data-disqus-url="http://maximelebreton.github.io/alertes-leboncoin" style="color: #606c71; position: fixed; bottom: 0; right: 0;  margin-bottom: 0; background: rgba(255,255,255,0.8); width: auto;  border-color: #ddd; border-bottom: 0;  border-right: 0; border-radius: 0;">Commentaires</a>
-<script id="dsq-count-scr" src="//alertesleboncoin.disqus.com/count.js" async></script>
   
   </body>
 </html>
