@@ -16,6 +16,18 @@
       * [lang="adLayoutImage"] { padding-right: 0 !important; }
     }
   </style>
+  <script type="application/ld+json">
+  {
+  "@context": "http://schema.org",
+  "@type": "EmailMessage",
+  "potentialAction": {
+  "@type": "ViewAction",
+  "target": "<?= sheetUrl ?>",
+  "name": "Éditer"
+  },
+  "description": "Ouvrir la feuille d'Alertes"
+  }
+  </script>
 </head>
 
 <body>
@@ -30,10 +42,10 @@
   
   <? if ( update ) { ?>
       <div style="<?!= inlineStyles.notification ?>">
-        <small>Une nouvelle version est disponible : <a href="<?= update.url ?>" title="<?= update.description ?>"><?= update.version ?></a></small>
+        <small>Une nouvelle version est disponible : <a href="<?= decodeURIComponent( update.url ) ?>" title="<?= update.description ?>"><?= update.version ?></a></small>
       </div>
   <? } ?>
-  
+
   
   <div lang="footer" style="<?!= inlineStyles.footer ?>">
     <small style="<?!= inlineStyles.footerLeft ?>">
