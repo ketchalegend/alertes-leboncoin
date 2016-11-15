@@ -26,7 +26,7 @@ Les colonnes :
 
 Titre | Lien | Dernière annonce | Options avancées
 ------------ | ------------- | ------------- | -------------  
-`Caravane` | `https://www.leboncoin.fr/caravaning/offres/bretagne/?th=1&q=caravane&pe=5` |  | `{"showMap":true}`
+`Caravane` | `https://www.leboncoin.fr/caravaning/` |  | `{"showMap":true}`
 *le titre de votre recherche* (*`obligatoire`*) | *l'url de votre recherche* (*`obligatoire`*) | *indique la date du dernier résultat qui vous a été envoyé par email* (*`automatique`*) | *est un champ qui s'adresse aux utilisateurs avancés* (*`facultatif`*)
 
 
