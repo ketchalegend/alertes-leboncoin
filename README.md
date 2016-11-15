@@ -11,11 +11,11 @@ Pour commencer
 ------------------------------------------
 **Prérequis :** *vous devez avoir un compte Google et y être connecté.*
 
-1. **Créez [votre copie de la feuille de calcul *Alertes leboncoin*](https://goo.gl/Awjw5f)**  
+1. Créez votre **[copie de la feuille de calcul *Alertes leboncoin*](https://goo.gl/Awjw5f)**  
 
-2. **Indiquez votre email dans les *Paramètres utilisateur*, et *lancez manuellement* votre première recherche via le menu *Alertes&nbsp;LeBonCoin*.**  
+2. Indiquez votre **email** dans les **`Paramètres utilisateur`**, et **lancez manuellement** votre première recherche via le **menu `Alertes LeBonCoin`.**  
 
-3. **Pour être averti *automatiquement* des prochains résultats, réglez la *fréquence* à laquelle vous souhaitez être averti via le menu *Planification des alertes*.**
+3. Pour être averti **automatiquement** des prochains résultats, réglez la **fréquence** à laquelle vous souhaitez être averti via le **menu dans `Planification des alertes`.**
 
 Comment ça fonctionne ?
 ----------------------------------
@@ -44,7 +44,10 @@ Paramètres | Valeurs | description
 `groupedResults` | `=true` ou `=false` | *permet de grouper les résultats dans un seul mail*
 
 
-### Paramètres utilisateurs avancés
+Utilisateurs avancés
+--------------------
+
+#### Paramètres avancés
 Pour les utilisateurs avancés, l'objet `userParams` permet de personnaliser la totalité des [variables de la librairie](https://github.com/maximelebreton/alertes-leboncoin/blob/master/Code.gs#L7) (dans la feuille de calcul : `Outils > Editeur de scripts`)  
 Exemple :
 ```
@@ -54,16 +57,20 @@ var userParams = {
     sheet: {
       main: 'Vos alertes'
     }
+  },
+  selectors: {
+    adItem: '.mainList ul > li'
   }
 }
 ```
-
-### Options avancées
-Il est possible de spécifier les options `email`, `showMap` et `mapZoom` pour chaque recherche dans la colonne `Options avancées` en passant un `objet JSON` stringifié.  
+  
+#### Options avancées
+Il est également possible de spécifier les options `email`, `showMap` et `mapZoom` pour chaque recherche dans la colonne `Options avancées` en passant un `objet JSON` stringifié.  
 Exemple : 
 ```
 {"email":"autre@email.com","showMap":true,"mapZoom":9}
 ```
+  
 
 Obtenir la dernière mise à jour
 ----------------------------------
@@ -98,48 +105,15 @@ J'explique les raisons de cette version ici :
 * Markup HTML externalisé dans des fichiers `.html` gérés par [HTML service](https://developers.google.com/apps-script/guides/html/templates)
 
 
+CHANGELOG
+-------------
+Le détail des modifications se trouve dans le **[CHANGELOG](https://github.com/maximelebreton/alertes-leboncoin/blob/master/CHANGELOG.md)**
 
+version originale par http://justdocsit.blogspot.fr  
+repris depuis la 4.0 par [mlb](http://www.maximelebreton.com)  
 
-
-Changelog
---------
-* **5.0.4** Les autorisations d'accès sont maintenant limitées au document (par défaut, cela demandait un accès total !)
-* **5.0.2** Léger refactoring du code
-* **5.0.0** :
- * Ajout d'un menu `Planification des alertes` permettant de paramétrer directement le déclencheur
- * Ajout d'une colonne `Options avancées`
- * Possibilité de définir un email par recherche via les `Options avancées`
- * Paramètres utilisateurs à présent modifiables directement dans la feuille de calcul
- * Centralisation des styles CSS de l'email dans inlineStyles.gs
- * Ajout d'un libellé 'pro' pour les annonces professionelles
-* **4.3.2** : améliorations du comportement de l'email 
-* **4.3.1** : email responsive + modifications visuelles
-* **4.3.0** :
- * utilisation des [templates](https://developers.google.com/apps-script/guides/html/templates) pour faciliter la maintenance du markup des emails
- * ajout du résumé des annonces dans l'aperçu du mail (mailPreheaderTemplate.html)
- * ajout d'un placeholder lorsqu'aucune photo n'est disponible
-* **4.2.1** : 
- * Correction d'un bug lié à l'affichage des cartes [#3](https://github.com/maximelebreton/alertes-leboncoin/issues/3)
- * Ajout d'une fonction de tri pour que le mail envoyé ne contienne que les dernières annonces même lorsque l'on trie par prix.
-* **4.2.0** : 
- * Changement de l'algorithme de détection des dernières annonces (anciennement basé sur un id, et remplacé par un timestamp qui est la combinaison de la date et l'id)
- * Améliorations visuelles (la progression est maintenant visible)
- * Ajout d'une notification en bas de mail lorsqu'une mise à jour est disponible
-* **4.1.5** : modification du titre des emails envoyés
-* **4.1.4** : ajout d'un footer
-* **4.1.3** : Correction d'un bug lié aux paramètres utilisateurs qui n'étaient pas correctement étendus (extend VS deepExtend)
-* **4.1.2** : Corrections de bugs, amélioration considérable des performances, données normalisées, et ajout de la possibilité de recevoir des mails individuels
-* **4.0** : version initiale du projet (bêta)
-
-_____________________________
-
-
-v1.x par http://justdocsit.blogspot.fr  
-v4.x par [mlb](http://www.maximelebreton.com)  
-
-**Clé projet de la bilbiothèque :** `M9iNq7X9ZWxS_D7pHmMGBb6YoFnfw0_Hk`  
-**Accéder au code de la bibliothèque:** : https://script.google.com/macros/library/versions/d/15GE-TW-COB9rfq49nF38GDqytbwpK2HMxLQOzdC1JZMGkUCfLqWoG0T4
-
+Clé projet de la bilbiothèque : `M9iNq7X9ZWxS_D7pHmMGBb6YoFnfw0_Hk`  
+Code de la bibliothèque : [script.google.com/...](https://script.google.com/macros/library/versions/d/15GE-TW-COB9rfq49nF38GDqytbwpK2HMxLQOzdC1JZMGkUCfLqWoG0T4)
 
 _____________________________
 
