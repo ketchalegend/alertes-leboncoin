@@ -30,9 +30,11 @@ Titre | Lien | Dernière annonce | Options avancées
 *le titre de votre recherche* (*`obligatoire`*) | *l'url de votre recherche* (*`obligatoire`*) | *indique la date du dernier résultat qui vous a été envoyé par email* (*`automatique`*) | *est un champ qui s'adresse aux utilisateurs avancés* (*`facultatif`*)
 
 
-Paramètres utilisateurs
+Paramètres utilisateur
 ----------------------
-Dans la **feuille** intitulée `Paramètres utilisateurs`, acessible également via le menu *Alertes LeBonCoin*.
+> *Les paramètres utilisateur s'appliquent à toutes les annonces*
+
+Dans la **feuille** intitulée `Paramètres utilisateur`, acessible également via le menu *Alertes LeBonCoin*.
 
 Paramètres | Valeurs | description
 ------------ | -------------  | -------------  
@@ -46,8 +48,11 @@ Paramètres | Valeurs | description
 Utilisateurs avancés
 --------------------
 
-#### Paramètres avancés
-Pour les utilisateurs avancés, l'objet `userParams` permet de personnaliser la totalité des [variables de la librairie](https://github.com/maximelebreton/alertes-leboncoin/blob/master/Code.gs#L7) (dans la feuille de calcul : `Outils > Editeur de scripts`)  
+#### Paramètres utilisateurs avancés
+> *Les paramètres utilisateurs avancés s'appliquent à toutes les annonces*
+
+Pour les utilisateurs avancés, l'objet `userParams` permet de personnaliser la totalité des [variables de la librairie](https://github.com/maximelebreton/alertes-leboncoin/blob/master/Code.gs#L7) (dans la feuille de calcul : `Outils > Editeur de scripts`) 
+
 Exemple :
 ```
 var userParams = {
@@ -65,13 +70,19 @@ var userParams = {
   }
 }
 ```
+
   
 #### Options avancées
+
+> *Les options avancées s'appliquent uniquement à l'annonce concernée*
+
 Il est également possible de spécifier les options `email`, `showMap` et `mapZoom` pour chaque recherche dans la colonne `Options avancées` en passant un `objet JSON` stringifié.  
+
 Exemple : 
 ```
 {"email":"autre@email.com","showMap":true,"mapZoom":9}
 ```
+
   
 
 Obtenir la dernière mise à jour
