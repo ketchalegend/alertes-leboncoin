@@ -89,7 +89,7 @@ Obtenir la dernière mise à jour
 ----------------------------------
 Pour mettre à jour la librairie, une fois dans la feuille de calcul, aller dans `Outils > Editeur de scripts`, puis `Ressources > Bibliothèques`, choisissez la version la plus récente, puis **cliquez sur Enregistrer**.  
 > *IMPORTANT : La mise à jour de la librairie ne mets pas à jour la feuille de calcul.
-Donc si vous souhaitez profiter des dernières fonctionnalités, il vous faudra récupérer la [dernière version de la feuille de calcul](https://goo.gl/Awjw5f).*
+Donc si une nouvelle fonctionnalité n'apparait pas alors que vous venez de mettre à jour la librairie, pensez à récupérer la [dernière version de la feuille de calcul](https://goo.gl/Awjw5f).*
 
 <img src="https://raw.githubusercontent.com/maximelebreton/alertes-leboncoin/master/update.gif"/>
 
