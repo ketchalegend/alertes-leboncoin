@@ -1,5 +1,9 @@
 # Change Log
 
+## 5.1.0 - 15/11/2016
+- possibilité d'exécuter une fonction custom (callback) via les paramètres utilisateurs avancés
+- dans la planification d'alertes, ajout des entrées 'tous les jours', 'tous les 2 jours', 'toutes les semaines' et 'mettre en pause'.
+- ajout d'un 'One Click Action' dans Gmail (Éditer) pour accéder directement à la feuille de calcul
 
 ## 5.0.4
 - Les autorisations d'accès sont maintenant limitées au document (par défaut, cela demandait un accès total !)
