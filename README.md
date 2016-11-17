@@ -38,7 +38,7 @@ Dans la **feuille** intitulée `Paramètres utilisateur`, acessible également v
 
 Paramètres | Valeurs | description
 ------------ | -------------  | -------------  
-`email` | `mon@email.com` (exemple) | *l'adresse à laquelle sera envoyée les annonces*
+`email` | `mon@email.com` (exemple) | *l'adresse à laquelle sera envoyée les annonces. Possibilité de définir plusieurs destinataires en les séparant par une virgule*
 `showMap` | `=true` ou `=false` | *affiche une mini carte* 
 `mapZoom` | nombre de `=0` à `=17` | *règle le niveau de zoom de la carte*
 `showTags` | `=true` ou `=false` | *(experimental) affiche les critères de recherche*
