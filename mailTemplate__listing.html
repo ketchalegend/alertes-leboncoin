@@ -4,7 +4,8 @@
    var label = entities.labels[id].label;
    var url = entities.urls[id].url;
    var ads = entities.ads[id].latest;
-   var options = entities.custom[id].options;
+   var tags = entities.ads[id].tags;
+   var singleParams = entities.advanced[id].params;
       
    var getUrlField = function(field) {
      var string = getQueryString(field, url);
@@ -14,6 +15,9 @@
    
    var searchQuery = getUrlField('q');
    var locationQuery = getUrlField('location');
+   //var minPrice = getUrlField('ps');
+   
+   
   ?>
 
   <? if (ads.length) { ?>
@@ -21,6 +25,7 @@
       <a lang="underlineOnHover" name="<?= params.names.mail.anchorPrefix+i ?>" href="<?= url ?>" style="<?!= inlineStyles.headerListLink; ?>"><?= label ?></a> (<?= ads.length ?>)
       
       <? if (params.showTags) { ?>
+      
       <span style="<?!= inlineStyles.headerListTags; ?>">
           <? if (searchQuery) { ?><span title="Recherche" style="<?!= inlineStyles.label + inlineStyles.labelSecondary ?>"><?= searchQuery ?></span><? } ?>
           <? if (locationQuery) { ?><span title="Localisation" style="<?!= inlineStyles.label + inlineStyles.labelSecondary ?>"><?= locationQuery ?></span><? } ?>
@@ -31,7 +36,7 @@
   
     <ul style="<?!= inlineStyles.list; ?>">
     
-      <?!= getMailAdsTemplate( ads, options ); ?>
+      <?!= getMailAdsTemplate( ads, singleParams ); ?>
       
     </ul>
   <? } ?>
