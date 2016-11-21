@@ -1,5 +1,11 @@
 # Change Log
 
+## 5.1.5 - `21/11/2016`
+- Phase expérimentale pour l'envoi de Sms (numéro Free Mobile uniquement)
+
+## 5.1.3 - `17/11/2016`
+- Ajout du mail en format texte
+
 ## 5.1.0 - `15/11/2016`
 - possibilité d'exécuter une fonction custom (`onDataResult()`) via les paramètres utilisateurs avancés
 - dans la planification d'alertes, ajout des entrées `tous les jours`, `tous les 2 jours`, `toutes les semaines` et `mettre en pause`.
