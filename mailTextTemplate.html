@@ -1,0 +1,48 @@
+<?
+for (var i = 0; i < result.length; i++ ) {
+    
+  var id = result[i];
+  var label = entities.labels[id].label;
+  var url = entities.urls[id].url;
+  var ads = entities.ads[id].latest;
+  
+  var pluralX = ads.length > 1 ? 'x' : '';
+  var pluralS = ads.length > 1 ? 's' : '';
+  
+  var title = ads.length + " résultat" + pluralS + " pour " + label;
+  var titleLine = Array(title.length + 1).join("=");
+  
+?>
+<?= title ?> 
+<?= titleLine ?> 
+
+<?
+
+  for (var j = 0; j < ads.length; j++) {
+  
+    var ad = ads[j];
+    
+?>
+- <?= ad.title ?> 
+ <?= ad.place ?> 
+ <?= ad.date ?> 
+<? if (ad.price) { ?>
+ <?= ad.price ?> 
+<? } ?>
+ <?= ad.shortUrl ?> 
+
+<?
+
+  }
+  
+?>
+ 
+<?
+
+}
+?>
+
+
+alertes-leboncoin version <?= version ?> : http://maximelebreton.github.io/alertes-leboncoin
+
+Éditer mes alertes : <?= sheetUrl ?>
