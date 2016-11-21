@@ -1,16 +1,21 @@
 <?
-      var showMap = options.hasOwnProperty("showMap") ? options.showMap : params.showMap;
-      var mapZoom = options.hasOwnProperty("mapZoom") ? options.mapZoom : params.mapZoom;
+
+var showMap = singleParams.hasOwnProperty("showMap") ? singleParams.showMap : params.showMap;
+var mapZoom = singleParams.hasOwnProperty("mapZoom") ? singleParams.mapZoom : params.mapZoom;
+
+var isMapAdLayoutImage = showMap ? inlineStyles.adLayoutImageWithMap : "";
       
-      var isMapAdLayoutImage = showMap ? inlineStyles.adLayoutImageWithMap : "";
 ?>
+<?
 
-<? for (var i = 0; i < ads.length; i++) { ?>
+for (var i = 0; i < ads.length; i++) {
 
-    <?
-      var ad = ads[i];
-    ?>
+?>
+<?
 
+  var ad = ads[i];
+
+?>
     <li style="<?!= inlineStyles.listItem ?>">
       <div style="<?!= inlineStyles.listItemContainer ?>">
         
@@ -56,4 +61,8 @@
         
       </div>
     </li>
-<? } ?>
+<?
+
+}
+
+?>
