@@ -5,7 +5,7 @@
 var cheerio = cheeriogasify.require('cheerio');
 var $ = cheerio;
 
-var version = "5.1.0";
+var version = "5.1.5";
 var sendMail = true;
 
 var defaults = {
@@ -15,6 +15,9 @@ var defaults = {
   showTags: false,
   groupedResults: true,
   startIndex: 2,
+  plainText: false,
+  sendMail: true,
+  maxSmsSendByResult: 3,
   dateFormat: {
     human: 'd MMMM, HH:mm',
     iso: 'YYYY-MM-DDTHH:mm:ss.sssZ'
@@ -51,7 +54,9 @@ var defaults = {
     adsContext: '#listingAds',
     mainStartTag: '<main id="main"', // the tag is intentionnaly not closed
     mainEndTag: '</main>'
-  }
+  },
+  freeUser: undefined,
+  freePass: undefined
 };
 
 var normalizedData = {
@@ -118,6 +123,10 @@ function start(userParams) {
     
     var rangeNames = params.names.range;
     var sheetNames = params.names.sheet;
+    
+    //Logger.log(getSpreadsheetContext().getSheets()[1].getSheetId());
+    
+    //getSheetId
       
     var lastRangeName = params.isAvailable.advancedOptions ? rangeNames.advancedOptions : rangeNames.lastAd;
     var row = getRowByIndex(index, lastRangeName, sheetNames.main);
@@ -129,7 +138,7 @@ function start(userParams) {
     var html = getUrlContent( url );
     var ads = getListingAdsFromHtml( html );
 
-    if (ads.length && sendMail) {
+    if (ads.length && params.sendMail == true) {
            
       var latestAdCellValue = getCellByIndex( index, rangeNames.lastAd, sheetNames.main ).getValue(); // Date Object expected
       var latestAds = getLatestAds(ads, latestAdCellValue);
@@ -138,14 +147,14 @@ function start(userParams) {
         
         var label = getCellByIndex( index, rangeNames.label, sheetNames.main ).getValue(); // String expected
         
-        var stringifiedOptions = params.isAvailable.advancedOptions ? getCellByIndex( index, rangeNames.advancedOptions, sheetNames.main ).getValue() : "";
-        var options = stringifiedOptions.length ? JSON.parse(stringifiedOptions) : {};
+        var stringifiedSingleParams = params.isAvailable.advancedOptions ? getCellByIndex( index, rangeNames.advancedOptions, sheetNames.main ).getValue() : "";
+        var singleParams = stringifiedSingleParams.length ? JSON.parse(stringifiedSingleParams) : {};
 
         // not ready (experimental)
         //var tags = getTagsFromHtml( html );
         var tags = '';
         
-        setNormalizedData(index, label, url, latestAds, options, tags);
+        setNormalizedData(index, label, url, latestAds, singleParams, tags);
       }
     }
     
@@ -171,7 +180,7 @@ function start(userParams) {
   
   // If results, send email
   // TODO : refactor
-  if ( data.result.length && sendMail ) {
+  if ( data.result.length && params.sendMail == true ) {
     
     var recipientEmail = getRecipientEmail();
     
@@ -366,6 +375,19 @@ function deleteProjectTriggers() {
   * Get recipient email
 */
 function getRecipientEmail() {
+  
+  var recipientEmail;
+  
+  if (params.isAvailable.sheetParams) {
+    recipientEmail = params.email;
+  } else {
+    recipientEmail = getValuesByRangeName( params.names.range.recipientEmail )[1][0];
+  }
+       
+  return recipientEmail;
+}
+
+function getFreeUser() {
   
   var recipientEmail;
   
@@ -627,7 +649,9 @@ function getListingAdsFromHtml( html ) {
   log( start1 - end1 );*/
   
   var $selector = $(params.selectors.adItem, params.selectors.adContext, mainHtml);
-        
+  
+
+  
   // liste des annonces
   $selector.each(function(i, element) {
     
@@ -646,10 +670,10 @@ function getListingAdsFromHtml( html ) {
         
     var item = {
       id: Number($a.data( "info" ).ad_listid),
-      title: $title.text().trim(),
-      price: $price.text(),
-      place: $place.text(),
-      date: $date.text(),
+      title: cleanText( $title.text() ),
+      price: cleanText( $price.text() ),
+      place: cleanText( $place.text() ),
+      date: cleanText( $date.text() ),
       isPro: isPro,
       url: protocol + $a.attr("href"),
       img: {
@@ -660,6 +684,7 @@ function getListingAdsFromHtml( html ) {
     
     // A real Date Object with milliseconds based on Ad Id to prevent conflicts
     item.timestamp = getAdDateTime( item.date, item.id ).getTime();
+    item.shortUrl = 'https://leboncoin.fr/vi/' + item.id;
         
     data.push(item);
     
@@ -668,6 +693,12 @@ function getListingAdsFromHtml( html ) {
   return data;
 }
 
+
+function cleanText(value) {
+ 
+  return value.trim().replace(/\s{2,}/g, ' ');
+  
+}
 
 /**
   * Extract html
@@ -863,7 +894,7 @@ function getDataBeforeTime(data, lastTime) {
 /**
   * Set normalized data (inspired by redux & normalizr principles)
 */
-function setNormalizedData(key, label, url, latestAds, options, tags) {
+function setNormalizedData(key, label, url, latestAds, singleParams, tags) {
  
   // Push new result
   normalizedData.result.push( key );
@@ -873,7 +904,7 @@ function setNormalizedData(key, label, url, latestAds, options, tags) {
   var labels = extend({}, obj);
   var urls = extend({}, obj);
   var ads = extend({}, obj);
-  var custom = extend({}, obj);
+  var advanced = extend({}, obj);
   
   // Extend Labels
   labels[key] = {
@@ -897,19 +928,19 @@ function setNormalizedData(key, label, url, latestAds, options, tags) {
   }
   ads = extend({}, normalizedData.entities.ads, ads);
   
-  // Extend custom
-  custom[key] = {
+  // Extend advanced
+  advanced[key] = {
     id: key,
-    options: options
+    params: singleParams
   }
-  custom = extend({}, normalizedData.entities.custom, custom);
+  advanced = extend({}, normalizedData.entities.advanced, advanced);
   
   // Extend entities
   normalizedData.entities = extend({}, normalizedData.entities, {
     labels: labels,
     urls: urls,
     ads: ads,
-    custom: custom
+    advanced: advanced
   });
   
 }
@@ -925,121 +956,177 @@ function setNormalizedData(key, label, url, latestAds, options, tags) {
 
 /**
   * Handle send data
-  * TO REFACTOR ?
 */
 function handleSendData(data, email, callback) {
   
-  var defaultMailResults = [];
-  var customMailResults = [];
-  var freeSmsResults = [];
- 
-  for (var i = 0; i < data.result.length; i++ ) {
-    
-    var id = data.result[i];
-    var customOptions = data.entities.custom[id].options;
-
-    if (customOptions.email && (customOptions.email !== email) ) {
-      
-      customMailResults.push( id );
-    } else {
-      
-      defaultMailResults.push( id );
-    }
-    
-    if (customOptions.sendSms && customOptions.freeUser && customOptions.freePass)  {
-      
-      smsResults.push( id );
-    }
-    
-  }
-
-  // defaultMailResults
-  sendDataTo(data, defaultMailResults, email, callback);
+  var results = splitResultBySendType(data.result, data.entities);
+	
+  // main result
+  sendDataTo(data, results.main, email, callback);
   
   
-  // customMailResults
-  for (var j = 0; j < customMailResults.length; j++ ) {
+  // custom result
+  for (var j = 0; j < results.custom.length; j++ ) {
     
-    var id = customMailResults[j];
+    var id = results.custom[j];
     var singleResult = [id];
-    var customEmail = data.entities.custom[id].options.email;  
+    var customEmail = data.entities.advanced[id].params.email;  
     
     sendSeparatedData(data, singleResult, customEmail, callback);
   }
   
-  // freeSmsResults
-  for (var k = 0; k < freeSmsResults.length; k++ ) {
+  // sms result
+  for (var k = 0; k < results.sms.length; k++ ) {
     
-    var id = freeSmsResults[k];
+    var id = results.sms[k];
     var singleResult = [id];
-    var freeUser = data.entities.custom[id].options.freeUser;
-    var freePass = data.entities.custom[id].options.freePass;
+		
+    var freeUser = data.entities.advanced[id].params.freeUser || params.freeUser;
+    var freePass = data.entities.advanced[id].params.freePass || params.freePass;
     
-    sendSmsWithFreeGateway(data, singleResult, freeUser, freePass);
+    if (freeUser && freePass) {
+      sendSmsWithFreeGateway(data, singleResult, freeUser, freePass);
+    }
+		
   }
   
 }
 
 
-// Testé avec sfr et orange, et ne marche pas...
-function sendMailSms(data, results, carrier, number, callback) {
-  
-  if (carrier === "bouygues") {
-    var email = number + "@mms.bouyguestelecom.fr";
+/**
+  * Split result by send type
+*/
+function splitResultBySendType(selectedResult, entities) {
+	
+	var results = {
+		main: [],
+		custom: [],
+		sms: []
+	}
+	
+	for (var i = 0; i < selectedResult.length; i++ ) {
     
-    sendSeparatedData(data, results, email, callback);
-  }
-  
-  if (carrier === "sfr") {
-    var email = number + "@sfr.fr";
-    
-    sendSeparatedData(data, results, email, callback);
-  }
-  
-  if (carrier === "orange") {
-   var email = number + "@orange.fr";
-    
-   sendSeparatedData(data, results, email, callback);
-  }
-  
-  if (carrier === "free") {
+    var id = selectedResult[i];
+    var singleParams = entities.advanced[id].params;
 
+    if (singleParams.email && (singleParams.email !== email) ) {
+      results.custom.push( id );
+    } else {
+      results.main.push( id );
+    }
+    
+    if (singleParams.sendSms == true)  {
+      results.sms.push( id );
+    }
+    
   }
   
+  return results;
 }
 
 
-// Experimental
-function sendSmsWithFreeGateway(data, results, user, pass) {
+/**
+  * Get Sms Ads Template (multi)
+*/
+function getSmsAdsTemplate(entities, selectedResult) {
+
+  var template = HtmlService.createTemplateFromFile('smsAdsTemplate');
+  var id = selectedResult[0];
+  template.label = entities.labels[id].label;
+  template.url = entities.urls[id].url;
+  template.ads = entities.ads[id].latest;
+
+  return template.evaluate().getContent();
+}
+
+
+/**
+  * Get Sms Ad Template (single)
+*/
+function getSmsAdTemplate(ad) {
+	
+  var template = HtmlService.createTemplateFromFile('smsAdTemplate');
+  template.ad = ad;
   
-  var id = data.result[results[0]];
-  var label = data.entities.labels[id].label;
-  var url = entities.urls[id].url;
+  return template.evaluate().getContent();
+}
+
+
+/**
+  * Send sms with free 
+*/
+function sendSmsWithFreeGateway(data, selectedResult, user, pass) {
+	
+	var messages = getSmsMessages(data, selectedResult);
+	
+	for (var i = 0; i < messages.length; i++ ) {    
+    var message = messages[i];
+		freeSendSms(user, pass, message);
+	}
+	
+}
+
+
+/**
+  * Get sms messages
+*/
+function getSmsMessages(data, selectedResult) {
+  
+	var messages = [];
+  var id = selectedResult[0];
   var ads = data.entities.ads[id].latest;
   
-  var msg = ads.length + " nouveaux résultats pour " + label + " : " + url;
+  if (ads.length > params.maxSmsSendByResult) {
+    var message = getSmsAdsTemplate(data.entities, selectedResult);
+    messages.push(message);
+		
+  } else {
+    
+    for (var i = 0; i < ads.length; i++ ) {    
+      var ad = ads[i];      
+      var message = getSmsAdTemplate(ad);
+      messages.push(message);
+			
+    }
+  }
+	
+	return messages;
+}
+
+
+/**
+  * Free send sms
+*/
+function freeSendSms(user, pass, message) {
   
-  msg = msg.replace(/(\r\n|\n|\r)/gm," "); //les sauts de lignes ne passent pas en GET, alors on nettoie
-  msg = encodeURIComponent(msg.substring(0,480));
- 
+  //message = message.replace(/(\r\n|\n|\r)/gm,""); //les sauts de lignes ne passent pas en GET, alors on nettoie
+  message = encodeURIComponent( message.substring(0, 480) ).replace(/'/g,"%27").replace(/"/g,"%22");
+  
+  //Logger.log(message);
+  
   var url = "https://smsapi.free-mobile.fr/sendmsg?user=" + user + "&pass=" + pass + "&msg=" + message;
   
-  UrlFetchApp.fetch(url);
+  try {
+    UrlFetchApp.fetch(url);
+    
+  } catch(e) {
+    Logger.log(e);
+  }
 }
+
 
 
 /**
   * Send data to
   * TO REFACTOR ?
 */
-function sendDataTo( data, results, email, callback ) {
-  
+function sendDataTo( data, selectedResult, email, callback ) {
   
   if (params.groupedResults) {
     
-    sendGroupedData(data, results, email, function(error, result) {
+    sendGroupedData(data, selectedResult, email, function(error, result) {
       if (error) {
-        sendSeparatedData(data, results, email, callback);
+        sendSeparatedData(data, selectedResult, email, callback);
       } else {
         
         if (callback && typeof(callback) === "function") {
@@ -1050,7 +1137,7 @@ function sendDataTo( data, results, email, callback ) {
     
   } else {
     
-    sendSeparatedData(data, results, email, callback);
+    sendSeparatedData(data, selectedResult, email, callback);
   }
 }
 
@@ -1058,12 +1145,13 @@ function sendDataTo( data, results, email, callback ) {
 /**
   * Send grouped data
 */
-function sendGroupedData( data, results, email, callback ) {
+function sendGroupedData( data, selectedResult, email, callback ) {
     
-  var mailTitle =  getMailTitle( results, data.entities );
-  var mailHtml = getMailTemplate( results, data.entities, data.update, data.sheetUrl );
+  var mailTitle =  getMailTitle( selectedResult, data.entities );
+  var mailHtml = getMailTemplate( selectedResult, data.entities, data.update, data.sheetUrl );
+  var mailText = getMailTextTemplate( selectedResult, data.entities, data.update, data.sheetUrl );
   
-  sendEmail(email, mailTitle, mailHtml, data.result, callback);
+  sendEmail(email, mailTitle, mailHtml, mailText, data.result, callback);
   
 }
 
@@ -1071,17 +1159,18 @@ function sendGroupedData( data, results, email, callback ) {
 /**
   * Send separated data
 */
-function sendSeparatedData( data, results, email, callback ) {  
+function sendSeparatedData( data, selectedResult, email, callback ) {  
   
-  for (var i = 0; i < results.length; i++ ) {
+  for (var i = 0; i < selectedResult.length; i++ ) {
     
     var id = data.result[i];
     var singleResult = [id];
     
     var mailTitle =  getMailTitle( singleResult, data.entities );
     var mailHtml = getMailTemplate( singleResult, data.entities, data.update, data.sheetUrl );
+    var mailText = getMailTextTemplate( singleResult, data.entities, data.update, data.sheetUrl );
     
-    sendEmail(email, mailTitle, mailHtml, singleResult, callback);
+    sendEmail(email, mailTitle, mailHtml, mailText, singleResult, callback);
     
   }
   
@@ -1091,7 +1180,7 @@ function sendSeparatedData( data, results, email, callback ) {
 /**
   * Send email
 */
-function sendEmail(email, title, htmlBody, result, callback) {
+function sendEmail(email, title, htmlBody, textBody, result, callback) {
   
   if (params.debug == true) {
     title = "[debug] " + title;
@@ -1099,14 +1188,16 @@ function sendEmail(email, title, htmlBody, result, callback) {
   
   var error;
   
+  var body = params.plainText == true ? textBody : htmlBody;
+  
   try {
 
     MailApp.sendEmail(
       email,
       title,
-      'corps',
+      textBody,
       { 
-        htmlBody: htmlBody 
+        htmlBody: params.plainText == true ? undefined : htmlBody
       }
     );
     
@@ -1182,6 +1273,17 @@ function getMailTemplate(result, entities, update, sheetUrl) {
   return template.evaluate().getContent();
 }
 
+function getMailTextTemplate(result, entities, update, sheetUrl) {
+  
+  var template = HtmlService.createTemplateFromFile('mailTextTemplate');
+  template.result = result;
+  template.entities = entities;
+  template.update = update;
+  template.sheetUrl = sheetUrl;
+  
+  return template.evaluate().getContent();
+}
+
 
 /*
   * Get mail preheader template
@@ -1225,11 +1327,11 @@ function getMailListingTemplate( result, entities ) {
 /*
   * Get mail ads template
 */
-function getMailAdsTemplate( ads, options ) {
+function getMailAdsTemplate( ads, singleParams ) {
   
   var template = HtmlService.createTemplateFromFile('mailTemplate__ads');
   template.ads = ads;
-  template.options = options;
+  template.singleParams = singleParams;
   return template.evaluate().getContent();
 }
 
@@ -1546,6 +1648,34 @@ function convertType(value){
   *  TO KEEP
   * -------- *
 */
+
+// Testé avec sfr et orange, et ne marche pas...
+/*
+function sendMailSms(data, selectedResult, carrier, number, callback) {
+  
+  if (carrier === "bouygues") {
+    var email = number + "@mms.bouyguestelecom.fr";
+    
+    sendSeparatedData(data, selectedResult, email, callback);
+  }
+  
+  if (carrier === "sfr") {
+    var email = number + "@sfr.fr";
+    
+    sendSeparatedData(data, selectedResult, email, callback);
+  }
+  
+  if (carrier === "orange") {
+   var email = number + "@orange.fr";
+    
+   sendSeparatedData(data, selectedResult, email, callback);
+  }
+  
+  if (carrier === "free") {
+
+  }
+  
+}*/
 
 /**
   * update recipient email
