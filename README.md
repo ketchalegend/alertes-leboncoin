@@ -1,6 +1,6 @@
 
 
-Alertes leboncoin - 5.1.0
+Alertes leboncoin - 5.1.5
 =============================
 Recevez par email vos recherches leboncoin.fr (via Google Sheets / App Script)
 
@@ -32,26 +32,25 @@ Titre | Lien | Dernière annonce | Options avancées
 
 Paramètres utilisateur
 ----------------------
-> *Les paramètres utilisateur s'appliquent à toutes les annonces*
+> *Les paramètres utilisateur s'appliquent à toutes les recherches*
 
 Dans la **feuille** intitulée `Paramètres utilisateur`, acessible également via le menu *Alertes LeBonCoin*.
 
-Paramètres | Valeurs | description
+Paramètre (global) | Valeur | Description
 ------------ | -------------  | -------------  
 `email` | `mon@email.com` (exemple) | *l'adresse à laquelle sera envoyée les annonces. Possibilité de définir plusieurs destinataires en les séparant par une virgule*
 `showMap` | `=true` ou `=false` | *affiche une mini carte* 
 `mapZoom` | nombre de `=0` à `=17` | *règle le niveau de zoom de la carte*
-`showTags` | `=true` ou `=false` | *(experimental) affiche les critères de recherche*
 `groupedResults` | `=true` ou `=false` | *permet de grouper les résultats dans un seul mail*
 
 
-Utilisateurs avancés
+Paramètres avancés
 --------------------
 
-#### Paramètres utilisateurs avancés
-> *Les paramètres utilisateurs avancés s'appliquent à toutes les annonces*
+#### Globaux
+> *Les paramètres globaux avancés s'appliquent à toutes les recherches*
 
-Pour les utilisateurs avancés, l'objet `userParams` permet de personnaliser la totalité des [variables de la librairie](https://github.com/maximelebreton/alertes-leboncoin/blob/master/Code.gs#L7) (dans la feuille de calcul : `Outils > Editeur de scripts`) 
+Via l'objet `userParams` (dans la feuille de calcul : `Outils > Editeur de scripts`), qui permet de personnaliser la totalité des **[variables de la librairie](https://github.com/maximelebreton/alertes-leboncoin/blob/master/Code.gs#L7)**  
 
 Exemple :
 ```
@@ -72,18 +71,26 @@ var userParams = {
 ```
 
   
-#### Options avancées
+#### Individuels
 
-> *Les options avancées s'appliquent uniquement à l'annonce concernée*
+> *Les paramètres individuels avancés s'appliquent uniquement à la recherche concernée*
 
-Il est également possible de spécifier les options `email`, `showMap` et `mapZoom` pour chaque recherche dans la colonne `Options avancées` en passant un `objet JSON` stringifié.  
+Via la colonne `Paramètres avancées` en passant un `objet JSON` stringifié.  
 
 Exemple : 
 ```
 {"email":"autre@email.com","showMap":true,"mapZoom":9}
 ```
 
-  
+Paramètre (individuel) | Valeur | Description
+------------ | -------------  | -------------  
+`email` | `mon@email.com` (exemple) | *l'adresse à laquelle sera envoyée les annonces. Possibilité de définir plusieurs destinataires en les séparant par une virgule*
+`showMap` | `true` ou `false` | *affiche une mini carte* 
+`mapZoom` | nombre de `0` à `17` | *règle le niveau de zoom de la carte*
+`sendSms` | `true` ou `false` | *[Experimental] Active l'envoi de Sms (uniquement compatible avec l'api __Free Mobile__ pour le moment)* 
+`freeUser` | `0123456789` (exemple) | *Numéro Free Mobile* 
+`freePass` | `xxxxxx` (exemple) | *Clé d'identification (à générer dans [votre espace Free Mobile](http://www.universfreebox.com/article/26337/Nouveau-Free-Mobile-lance-un-systeme-de-notification-SMS-pour-vos-appareils-connectes))* 
+
 
 Obtenir la dernière mise à jour
 ----------------------------------
