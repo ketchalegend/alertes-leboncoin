@@ -56,11 +56,6 @@ Exemple :
 ```
 var userParams = {
   startIndex: 2,
-  names: {
-    sheet: {
-      main: 'Vos alertes'
-    }
-  },
   selectors: {
     adItem: '.mainList ul > li'
   },
