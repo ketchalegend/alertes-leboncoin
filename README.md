@@ -24,7 +24,7 @@ C'est très simple, dans la **feuille** intitulée `Vos alertes`, **chaque ligne
 
 Les colonnes :
 
-Titre | Lien | Dernière annonce | Options avancées
+Titre | Lien | Dernière annonce | Paramètres avancés
 ------------ | ------------- | ------------- | -------------  
 `Caravane` | `https://www.leboncoin.fr/caravaning/` |  | `{"showMap":true}`
 *le titre de votre recherche* (*`obligatoire`*) | *l'url de votre recherche* (*`obligatoire`*) | *indique la date du dernier résultat qui vous a été envoyé par email* (*`automatique`*) | *est un champ qui s'adresse aux utilisateurs avancés* (*`facultatif`*)
