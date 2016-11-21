@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en-us">
   <head>
     <meta charset="UTF-8">
-    <title>Alertes leboncoin | Recevez par email vos recherches leboncoin.fr (via Google Sheets / App Script)</title>
+    <title>Alertes leboncoin by maximelebreton</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
@@ -13,19 +13,14 @@
     <section class="page-header">
       <h1 class="project-name">Alertes leboncoin</h1>
       <h2 class="project-tagline">Recevez par email vos recherches leboncoin.fr (via Google Sheets / App Script)</h2>
-      <a href="https://goo.gl/Awjw5f" class="btn" target="_blank">Créer ma feuille d'Alertes, maintenant.</a>
-      <div><small><strong>Prérequis :</strong> <em>vous devez avoir un compte Google et y être connecté.</em></small></div>
+      <a href="https://github.com/maximelebreton/alertes-leboncoin" class="btn">View on GitHub</a>
+      <a href="https://github.com/maximelebreton/alertes-leboncoin/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/maximelebreton/alertes-leboncoin/tarball/master" class="btn">Download .tar.gz</a>
     </section>
-
-<!-- 
-  * ------------------- *
-  * END STATIC HEADER 
-  * ------------------- *
--->
 
     <section class="main-content">
       <h1>
-<a id="alertes-leboncoin---510" class="anchor" href="#alertes-leboncoin---510" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Alertes leboncoin - 5.1.0</h1>
+<a id="alertes-leboncoin---515" class="anchor" href="#alertes-leboncoin---515" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Alertes leboncoin - 5.1.5</h1>
 
 <p>Recevez par email vos recherches leboncoin.fr (via Google Sheets / App Script)</p>
 
@@ -61,7 +56,7 @@
 <th>Titre</th>
 <th>Lien</th>
 <th>Dernière annonce</th>
-<th>Options avancées</th>
+<th>Paramètres avancés</th>
 </tr>
 </thead>
 <tbody>
@@ -88,7 +83,7 @@
 <a id="paramètres-utilisateur" class="anchor" href="#param%C3%A8tres-utilisateur" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Paramètres utilisateur</h2>
 
 <blockquote>
-<p><em>Les paramètres utilisateur s'appliquent à toutes les annonces</em></p>
+<p><em>Les paramètres utilisateur s'appliquent à toutes les recherches</em></p>
 </blockquote>
 
 <p>Dans la <strong>feuille</strong> intitulée <code>Paramètres utilisateur</code>, acessible également via le menu <em>Alertes LeBonCoin</em>.</p>
@@ -96,9 +91,9 @@
 <table>
 <thead>
 <tr>
-<th>Paramètres</th>
-<th>Valeurs</th>
-<th>description</th>
+<th>Paramètre (global)</th>
+<th>Valeur</th>
+<th>Description</th>
 </tr>
 </thead>
 <tbody>
@@ -106,7 +101,7 @@
 <td><code>email</code></td>
 <td>
 <code>mon@email.com</code> (exemple)</td>
-<td><em>l'adresse à laquelle sera envoyée les annonces</em></td>
+<td><em>l'adresse à laquelle sera envoyée les annonces. Possibilité de définir plusieurs destinataires en les séparant par une virgule</em></td>
 </tr>
 <tr>
 <td><code>showMap</code></td>
@@ -122,13 +117,6 @@
 <td><em>règle le niveau de zoom de la carte</em></td>
 </tr>
 <tr>
-<td><code>showTags</code></td>
-<td>
-<code>=true</code> ou <code>=false</code>
-</td>
-<td><em>(experimental) affiche les critères de recherche</em></td>
-</tr>
-<tr>
 <td><code>groupedResults</code></td>
 <td>
 <code>=true</code> ou <code>=false</code>
@@ -139,26 +127,21 @@
 </table>
 
 <h2>
-<a id="utilisateurs-avancés" class="anchor" href="#utilisateurs-avanc%C3%A9s" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Utilisateurs avancés</h2>
+<a id="paramètres-avancés" class="anchor" href="#param%C3%A8tres-avanc%C3%A9s" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Paramètres avancés</h2>
 
 <h4>
-<a id="paramètres-utilisateurs-avancés" class="anchor" href="#param%C3%A8tres-utilisateurs-avanc%C3%A9s" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Paramètres utilisateurs avancés</h4>
+<a id="globaux" class="anchor" href="#globaux" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Globaux</h4>
 
 <blockquote>
-<p><em>Les paramètres utilisateurs avancés s'appliquent à toutes les annonces</em></p>
+<p><em>Les paramètres globaux avancés s'appliquent à toutes les recherches</em></p>
 </blockquote>
 
-<p>Pour les utilisateurs avancés, l'objet <code>userParams</code> permet de personnaliser la totalité des <a href="https://github.com/maximelebreton/alertes-leboncoin/blob/master/Code.gs#L7">variables de la librairie</a> (dans la feuille de calcul : <code>Outils &gt; Editeur de scripts</code>) </p>
+<p>Via l'objet <code>userParams</code> (dans la feuille de calcul : <code>Outils &gt; Editeur de scripts</code>), qui permet de personnaliser la totalité des <strong><a href="https://github.com/maximelebreton/alertes-leboncoin/blob/master/Code.gs#L7">variables de la librairie</a></strong>  </p>
 
 <p>Exemple :</p>
 
 <pre><code>var userParams = {
   startIndex: 2,
-  names: {
-    sheet: {
-      main: 'Vos alertes'
-    }
-  },
   selectors: {
     adItem: '.mainList ul &gt; li'
   },
@@ -169,18 +152,68 @@
 </code></pre>
 
 <h4>
-<a id="options-avancées" class="anchor" href="#options-avanc%C3%A9es" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Options avancées</h4>
+<a id="individuels" class="anchor" href="#individuels" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Individuels</h4>
 
 <blockquote>
-<p><em>Les options avancées s'appliquent uniquement à l'annonce concernée</em></p>
+<p><em>Les paramètres individuels avancés s'appliquent uniquement à la recherche concernée</em></p>
 </blockquote>
 
-<p>Il est également possible de spécifier les options <code>email</code>, <code>showMap</code> et <code>mapZoom</code> pour chaque recherche dans la colonne <code>Options avancées</code> en passant un <code>objet JSON</code> stringifié.  </p>
+<p>Via la colonne <code>Paramètres avancées</code> en passant un <code>objet JSON</code> stringifié.  </p>
 
 <p>Exemple : </p>
 
 <pre><code>{"email":"autre@email.com","showMap":true,"mapZoom":9}
 </code></pre>
+
+<table>
+<thead>
+<tr>
+<th>Paramètre (individuel)</th>
+<th>Valeur</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>email</code></td>
+<td>
+<code>mon@email.com</code> (exemple)</td>
+<td><em>l'adresse à laquelle sera envoyée les annonces. Possibilité de définir plusieurs destinataires en les séparant par une virgule</em></td>
+</tr>
+<tr>
+<td><code>showMap</code></td>
+<td>
+<code>true</code> ou <code>false</code>
+</td>
+<td><em>affiche une mini carte</em></td>
+</tr>
+<tr>
+<td><code>mapZoom</code></td>
+<td>nombre de <code>0</code> à <code>17</code>
+</td>
+<td><em>règle le niveau de zoom de la carte</em></td>
+</tr>
+<tr>
+<td><code>sendSms</code></td>
+<td>
+<code>true</code> ou <code>false</code>
+</td>
+<td><em>[Experimental] Active l'envoi de Sms (uniquement compatible avec l'api <strong>Free Mobile</strong> pour le moment)</em></td>
+</tr>
+<tr>
+<td><code>freeUser</code></td>
+<td>
+<code>0123456789</code> (exemple)</td>
+<td><em>Numéro Free Mobile</em></td>
+</tr>
+<tr>
+<td><code>freePass</code></td>
+<td>
+<code>xxxxxx</code> (exemple)</td>
+<td><em>Clé d'identification (à générer dans <a href="http://www.universfreebox.com/article/26337/Nouveau-Free-Mobile-lance-un-systeme-de-notification-SMS-pour-vos-appareils-connectes">votre espace Free Mobile</a>)</em></td>
+</tr>
+</tbody>
+</table>
 
 <h2>
 <a id="obtenir-la-dernière-mise-à-jour" class="anchor" href="#obtenir-la-derni%C3%A8re-mise-%C3%A0-jour" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Obtenir la dernière mise à jour</h2>
@@ -237,37 +270,11 @@ repris depuis la 4.0 par <a href="http://www.maximelebreton.com">mlb</a>  </p>
 <p>Clé projet de la bilbiothèque : <code>M9iNq7X9ZWxS_D7pHmMGBb6YoFnfw0_Hk</code><br>
 Code de la bibliothèque : <a href="https://script.google.com/macros/library/versions/d/15GE-TW-COB9rfq49nF38GDqytbwpK2HMxLQOzdC1JZMGkUCfLqWoG0T4">script.google.com/...</a></p>
 
-<!-- 
-  * ------------------- *
-  * START STATIC FOOTER 
-  * ------------------- *
--->
-      
+<hr>
+
 <h2>
-<a id="laisser-un-commentaire" class="anchor" href="#laisser-un-commentaire" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a><a href="#disqus_thread">Laisser un commentaire</a>
+<a id="laisser-un-commentaire" class="anchor" href="#laisser-un-commentaire" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a><a href="http://maximelebreton.github.io/alertes-leboncoin/#disqus_thread">Laisser un commentaire</a>
 </h2>
-
-<div id="disqus_thread"></div>
-<script>
-/**
- *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
- *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables */
-/*
-var disqus_config = function () {
-    this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
-    this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
-};
-*/
-(function() { // DON'T EDIT BELOW THIS LINE
-    var d = document, s = d.createElement('script');
-    s.src = '//alertesleboncoin.disqus.com/embed.js';
-    s.setAttribute('data-timestamp', +new Date());
-    (d.head || d.body).appendChild(s);
-})();
-</script>
-<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-                                    
-
 
       <footer class="site-footer">
         <span class="site-footer-owner"><a href="https://github.com/maximelebreton/alertes-leboncoin">Alertes leboncoin</a> is maintained by <a href="https://github.com/maximelebreton">maximelebreton</a>.</span>
@@ -277,8 +284,6 @@ var disqus_config = function () {
 
     </section>
 
-<a href="#disqus_thread" class="btn disqus-comment-count" data-disqus-url="http://maximelebreton.github.io/alertes-leboncoin" style="color: #606c71; position: fixed; bottom: 0; right: 0;  margin-bottom: 0; background: rgba(255,255,255,0.8); width: auto;  border-color: #ddd; border-bottom: 0;  border-right: 0; border-radius: 0;">Commentaires</a>
-<script id="dsq-count-scr" src="//alertesleboncoin.disqus.com/count.js" async></script>
   
   </body>
 </html>
