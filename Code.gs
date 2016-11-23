@@ -5,7 +5,7 @@
 var cheerio = cheeriogasify.require('cheerio');
 var $ = cheerio;
 
-var version = "5.1.5";
+var version = "5.1.6";
 var sendMail = true;
 
 var defaults = {
@@ -141,7 +141,9 @@ function start(userParams) {
     if (ads.length && params.sendMail == true) {
            
       var latestAdCellValue = getCellByIndex( index, rangeNames.lastAd, sheetNames.main ).getValue(); // Date Object expected
-      var latestAds = getLatestAds(ads, latestAdCellValue);
+      var lastAdSentDate = latestAdCellValue;
+      var latestAds = getLatestAds(ads, lastAdSentDate);
+      
       
       if (latestAds.length) {
         
@@ -154,7 +156,7 @@ function start(userParams) {
         //var tags = getTagsFromHtml( html );
         var tags = '';
         
-        setNormalizedData(index, label, url, latestAds, singleParams, tags);
+        setNormalizedData(index, label, url, latestAds, singleParams, tags, lastAdSentDate);
       }
     }
     
@@ -387,18 +389,6 @@ function getRecipientEmail() {
   return recipientEmail;
 }
 
-function getFreeUser() {
-  
-  var recipientEmail;
-  
-  if (params.isAvailable.sheetParams) {
-    recipientEmail = params.email;
-  } else {
-    recipientEmail = getValuesByRangeName( params.names.range.recipientEmail )[1][0];
-  }
-       
-  return recipientEmail;
-}
 
 
 /**
@@ -894,7 +884,7 @@ function getDataBeforeTime(data, lastTime) {
 /**
   * Set normalized data (inspired by redux & normalizr principles)
 */
-function setNormalizedData(key, label, url, latestAds, singleParams, tags) {
+function setNormalizedData(key, label, url, latestAds, singleParams, tags, lastAdSentDate) {
  
   // Push new result
   normalizedData.result.push( key );
@@ -931,7 +921,8 @@ function setNormalizedData(key, label, url, latestAds, singleParams, tags) {
   // Extend advanced
   advanced[key] = {
     id: key,
-    params: singleParams
+    params: singleParams,
+    lastAdSentDate: lastAdSentDate
   }
   advanced = extend({}, normalizedData.entities.advanced, advanced);
   
@@ -954,21 +945,33 @@ function setNormalizedData(key, label, url, latestAds, singleParams, tags) {
 */
 
 
+function filterResults(a, b) {
+  
+  var results = a.filter(function(val) {
+    return b.indexOf(val) == -1;
+  });
+  
+  return results;
+  
+}
+
 /**
   * Handle send data
 */
 function handleSendData(data, email, callback) {
   
   var results = splitResultBySendType(data.result, data.entities);
-	
+  
   // main result
-  sendDataTo(data, results.main, email, callback);
+  var mainResultsToSend = filterResults(results.main, results.sendLater);	
+  sendDataTo(data, mainResultsToSend, email, callback);
   
   
   // custom result
-  for (var j = 0; j < results.custom.length; j++ ) {
+  var customResultsToSend = filterResults(results.custom, results.sendLater);
+  for (var j = 0; j < customResultsToSend.length; j++ ) {
     
-    var id = results.custom[j];
+    var id = customResultsToSend[j];
     var singleResult = [id];
     var customEmail = data.entities.advanced[id].params.email;  
     
@@ -976,9 +979,10 @@ function handleSendData(data, email, callback) {
   }
   
   // sms result
-  for (var k = 0; k < results.sms.length; k++ ) {
+  var smsResultsToSend = filterResults(results.sms, results.sendLater);
+  for (var k = 0; k < smsResultsToSend.length; k++ ) {
     
-    var id = results.sms[k];
+    var id = smsResultsToSend[k];
     var singleResult = [id];
 		
     var freeUser = data.entities.advanced[id].params.freeUser || params.freeUser;
@@ -998,17 +1002,29 @@ function handleSendData(data, email, callback) {
 */
 function splitResultBySendType(selectedResult, entities) {
 	
-	var results = {
-		main: [],
-		custom: [],
-		sms: []
-	}
-	
-	for (var i = 0; i < selectedResult.length; i++ ) {
+  var results = {
+    main: [],
+    custom: [],
+    sms: [],
+    sendLater: []
+  }
+  
+  for (var i = 0; i < selectedResult.length; i++ ) {
     
     var id = selectedResult[i];
     var singleParams = entities.advanced[id].params;
 
+    if ( singleParams.hourFrequency ) {
+      
+      var lastAdSent = entities.advanced[id].lastAdSentDate;
+      var now = new Date();
+      var hourDiff = getHourDiff(lastAdSent, now);
+
+      if (hourDiff < singleParams.hourFrequency) {
+        results.sendLater.push( id );
+      }      
+    }
+    
     if (singleParams.email && (singleParams.email !== email) ) {
       results.custom.push( id );
     } else {
@@ -1018,9 +1034,8 @@ function splitResultBySendType(selectedResult, entities) {
     if (singleParams.sendSms == true)  {
       results.sms.push( id );
     }
-    
   }
-  
+
   return results;
 }
 
@@ -1060,8 +1075,22 @@ function sendSmsWithFreeGateway(data, selectedResult, user, pass) {
 	var messages = getSmsMessages(data, selectedResult);
 	
 	for (var i = 0; i < messages.length; i++ ) {    
-    var message = messages[i];
-		freeSendSms(user, pass, message);
+      var message = messages[i];
+	  freeSendSms(user, pass, message);
+	}
+	
+}
+
+/**
+  * Send sms with bouygues 
+*/
+function sendSmsWithBouyguesGateway(data, selectedResult, user, pass) {
+	
+	var messages = getSmsMessages(data, selectedResult, 1);
+  
+	for (var i = 0; i < messages.length; i++ ) {    
+      var message = messages[i];
+      bouyguesSendSms(user, pass, message);
 	}
 	
 }
@@ -1070,13 +1099,15 @@ function sendSmsWithFreeGateway(data, selectedResult, user, pass) {
 /**
   * Get sms messages
 */
-function getSmsMessages(data, selectedResult) {
+function getSmsMessages(data, selectedResult, maxSmsSendByResult) {
   
 	var messages = [];
   var id = selectedResult[0];
   var ads = data.entities.ads[id].latest;
   
-  if (ads.length > params.maxSmsSendByResult) {
+  maxSmsSendByResult = maxSmsSendByResult || params.maxSmsSendByResult;
+  
+  if (ads.length > maxSmsSendByResult) {
     var message = getSmsAdsTemplate(data.entities, selectedResult);
     messages.push(message);
 		
@@ -1113,6 +1144,36 @@ function freeSendSms(user, pass, message) {
     Logger.log(e);
   }
 }
+
+
+function bouyguesSendSms(number, message) {
+  
+  message = encodeURIComponent( message.substring(0, 160) ).replace(/'/g,"%27").replace(/"/g,"%22");
+  
+  var postData = {
+    'fieldMsisdn': number,
+    'fieldMessage': message,
+    'Verif.x': '51',
+    'Verif.y': '16'
+  };
+  
+  var options = {
+   'method' : 'post',
+   'payload' : postData
+ };
+  
+  // ATTENTION : limite de bouygues à 5 sms / jour 
+  // inspiré de https://github.com/y3nd/bouygues-sms/blob/master/index.js, mais nécessite une athentification
+  
+  try {
+    UrlFetchApp.fetch('https://www.secure.bbox.bouyguestelecom.fr/services/SMSIHD/confirmSendSMS.phtml', options);
+    
+  } catch(e) {
+    Logger.log(e);
+  }
+  
+}
+
 
 
 
@@ -1642,6 +1703,14 @@ function convertType(value){
         return value;
     }
 };
+
+
+/**
+  * Get hour diff (between date objects)
+*/
+function getHourDiff(date1, date2) {
+  return Math.floor(Math.abs(date1 - date2) / 3600000);
+}
 
 /**
   * -------- *
