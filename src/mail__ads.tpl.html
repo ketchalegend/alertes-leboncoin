@@ -33,7 +33,7 @@ for (var i = 0; i < ads.length; i++) {
         <? if (showMap) { ?>
         <div lang="adLayoutMap" style="<?!= inlineStyles.adLayoutMap ?>">
           <div style="<?!= inlineStyles.adMap ?>">
-            <img style="" src="http://maps.googleapis.com/maps/api/staticmap?markers=<?= encodeForStaticMapApi(ad.place) ?>&zoom=<?= mapZoom ?>&size=120x120&sensor=false&language=fr&sensor=false" />
+            <img style="" src="http://maps.googleapis.com/maps/api/staticmap?markers=<?= encodeForStaticMapApi(ad.textPlace) ?>&zoom=<?= mapZoom ?>&size=120x120&sensor=false&language=fr&sensor=false" />
           </div>
         </div>
         <? } ?>
@@ -48,13 +48,13 @@ for (var i = 0; i < ads.length; i++) {
             <? } ?> 
           </div>
           <div style="<?!= inlineStyles.adContentPlace ?>">
-            <?= ad.place ?>
+            <?= ad.textPlace ?>
           </div>
           <div style="<?!= inlineStyles.adContentDate ?>">
-            <?= ad.date ?>
+            <?= ad.textDate ?>
           </div>
           <div style="<?!= inlineStyles.adContentPrice ?>">
-            <?= ad.price ?>
+            <?= ad.textPrice ?>
           </div>
         </div>
         

@@ -43,7 +43,8 @@ var inlineStyles = {
   
   notification: "border:1px solid #FFECB3; background-color: #FFFDE7; text-align:center; margin-top:10px; margin-bottom:10px; padding:10px; clear:both; overflow:hidden;",
   
-  footer: "border-top:1px solid #f7f7f7; text-align:center; margin-top:10px; padding-top:20px; clear:both; overflow:hidden;",
+  footer: "border-top:1px solid #f7f7f7; text-align:center; margin-top:10px; padding-top:20px; line-height: 18px; clear:both; overflow:hidden;",
   footerLeft: "float: left;",
+  footerMiddle: "margin-left: 10px; margin-right: 10px;",
   footerRight: "float: right;"
 }

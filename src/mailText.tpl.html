@@ -4,7 +4,7 @@ for (var i = 0; i < result.length; i++ ) {
   var id = result[i];
   var label = entities.labels[id].label;
   var url = entities.urls[id].url;
-  var ads = entities.ads[id].latest;
+  var ads = entities.ads[id].toSend;
   
   var pluralX = ads.length > 1 ? 'x' : '';
   var pluralS = ads.length > 1 ? 's' : '';
@@ -24,10 +24,10 @@ for (var i = 0; i < result.length; i++ ) {
     
 ?>
 - <?= ad.title ?> 
- <?= ad.place ?> 
- <?= ad.date ?> 
-<? if (ad.price) { ?>
- <?= ad.price ?> 
+ <?= ad.textPlace ?> 
+ <?= ad.textDate ?> 
+<? if (ad.textPrice) { ?>
+ <?= ad.textPrice ?> 
 <? } ?>
  <?= ad.shortUrl ?> 
 

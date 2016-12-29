@@ -9,7 +9,7 @@
     }
     @media only screen and (max-width:480px) { 
       * [lang="footer"] { width: 100% !important; text-align: center !important; }
-      * [lang="footer"] small { float: none !important; }
+      * [lang="footer__item"] { float: none !important; width: 100% !important; }
       * [lang="adLayoutMap"] { padding-left: 0 !important; }
     }
     @media only screen and (max-width:320px) { 
@@ -48,13 +48,16 @@
 
   
   <div lang="footer" style="<?!= inlineStyles.footer ?>">
-    <small style="<?!= inlineStyles.footerLeft ?>">
+    <small lang="footer__item" style="<?!= inlineStyles.footerLeft ?>">
       made with &#9829; by <a href="http://www.maximelebreton.com">mlb</a>, inspired by <a href="http://justdocsit.blogspot.fr/2012/07/creer-une-alerte-sur-le-bon-coin.html">Just docs it</a>
     </small>
-    <small style="<?!= inlineStyles.footerRight ?>">
+<? if ( params.showMailEditLink == true ) { ?>
+    <small lang="footer__item" style="<?!= inlineStyles.footerMiddle ?>"><a href="<?= sheetUrl ?>">Éditer&nbsp;mes&nbsp;alertes</a></small>
+<? } ?>
+    <small lang="footer__item" style="<?!= inlineStyles.footerRight ?>">
       <a href="http://maximelebreton.github.io/alertes-leboncoin">alertes-leboncoin</a> version&nbsp;<?= version ?></small>
     </small>
-  </div>
-  
+  </div>  
+
 </body>
 </html>

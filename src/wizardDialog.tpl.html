@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <link rel="stylesheet" href="https://ssl.gstatic.com/docs/script/css/add-ons1.css">
+    
+    <script>
+    var eventSave = new Event('save');
+    
+    function handleSubmit() {
+    document.dispatchEvent(eventSave);
+    }
+    </script>
+    
+  </head>
+  <body>
+    
+    
+    <?!= getUserEmailTemplate(); ?>
+    <div style="margin: 10px 0;"></div>
+    <?!= getMainTriggerTemplate(); ?>
+    
+    <div class="block">
+  <div class="form-group">
+  <input type="button" value="Enregistrer" class="action" id="save" onclick="handleSubmit()" />
+  <input type="button" value="Annuler" onclick="google.script.host.close()" />
+  </div></div>
+    
+  </body>
+</html>
+
+

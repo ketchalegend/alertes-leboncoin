@@ -1,0 +1,28 @@
+<div style="<?!= inlineStyles.preheader; ?>">
+<? 
+    var preheaderCount = 0;
+    var preheaderLimit = 10;
+    var preheaderContent = "";
+    
+    for (var i = 0; i < result.length; i++ ) {
+
+      var id = result[i];
+      var label = entities.labels[id].label;
+      var ads = entities.ads[id].toSend;
+
+      if (ads.length) {
+        for (var j = 0; j < ads.length; j++ ) {
+          
+          var ad = ads[j];
+          
+          if (preheaderCount < preheaderLimit) {
+            preheaderContent += ad.title + ", "
+          }
+          preheaderCount++ 
+        }
+      }
+    }
+    
+?>
+<?= preheaderContent ?>
+</div>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <base target="_top">
+    <link href="https://ssl.gstatic.com/docs/script/css/add-ons1.css" rel="stylesheet">
+    <script>
+    
+    function handleSave() {
+      var emailValue = document.getElementById('email').value;
+      google.script.run.withSuccessHandler(onSuccess).onSetRecipientEmail(emailValue);
+      document.getElementById('save').disabled = true;
+    };
+    
+    function onSuccess() {
+      var callback = eval( document.getElementById('save').getAttribute('data-callback') );
+      if (callback && typeof callback == 'function') {
+        callback()
+      }
+      google.script.host.close();
+    }
+    </script>
+    <title></title>
+</head>
+<body>
+    <div class="block form-group">
+        <label for="email">Envoyer les alertes à cette adresse :</label> <input id="email" placeholder="votre@adresse.com" type="text" value="<?= email ? email : "" ?>">
+    </div>
+    <div class="block">
+        <div class="form-group">
+            <input class="action" id="save" onclick="handleSave()" type="button" value="Enregistrer" data-callback="<?= callbackString ?>"> <input onclick="google.script.host.close()" type="button" value="Annuler">
+        </div>
+    </div>
+    <div style="margin-top: 6px;">
+        <small class="gray">L'email reste modifiable à tout moment dans la feuille "Variables"</small>
+    </div>
+</body>
+</html>
