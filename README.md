@@ -1,6 +1,6 @@
 
 
-Alertes leboncoin - 5.1.6
+Alertes leboncoin - 5.2.0 [![GitHub watchers](https://img.shields.io/github/watchers/badges/shields.svg?style=social&label=Watch)](https://github.com/maximelebreton/alertes-leboncoin)
 =============================
 Recevez par email vos recherches leboncoin.fr (via Google Sheets / App Script)
 
@@ -13,9 +13,11 @@ Pour commencer
 
 1. Créez votre **[copie de la feuille de calcul *Alertes leboncoin*](https://goo.gl/Awjw5f)**  
 
-2. Indiquez votre **email** dans les **`Paramètres utilisateur`**, et **lancez manuellement** votre première recherche via le **menu `Alertes LeBonCoin`.**  
+2. Indiquez votre **email** dans l'onglet  **`Paramètres utilisateur`**, et **lancez manuellement** votre première recherche via le **menu `Alertes LeBonCoin`.**  
 
 3. Pour être averti **automatiquement** des prochains résultats, réglez la **fréquence** à laquelle vous souhaitez être averti via le **menu dans `Planification des alertes`.**
+
+4. Il ne vous reste plus qu'à vous rendre sur le site [leboncoin.fr](https://www.leboncoin.fr) pour **copier** l'`url` de votre recherche, et la **coller** dans l'onglet **`Vos alertes`** de la feuille de calcul. (Pour plus de détails, lire la suite)
 
 Comment ça fonctionne ?
 ----------------------------------
@@ -51,7 +53,7 @@ Paramètre | Valeur | Description
 #### Paramères globaux
 > *Les paramètres globaux avancés s'appliquent à toutes les recherches*
 
-Via l'objet `userParams` (dans la feuille de calcul : `Outils > Editeur de scripts`), qui permet de personnaliser la totalité des **[variables de la librairie](https://github.com/maximelebreton/alertes-leboncoin/blob/master/Code.gs#L7)**  
+Via l'objet `userParams` (dans la feuille de calcul : `Outils > Editeur de scripts`), qui permet de personnaliser la totalité des **[variables de la librairie](https://github.com/maximelebreton/alertes-leboncoin/blob/master/src/Code.js#L10)**  
 
 Exemple :
 ```
@@ -81,9 +83,11 @@ Exemple :
 Paramètre (individuel) | Valeur | Description | Type
 ------------ | -------------  | -------------  | -------------  
 `email` | `"mon@email.com"` (exemple) | *l'adresse à laquelle sera envoyée les annonces. Possibilité de définir plusieurs destinataires en les séparant par une virgule* | `String`
-`showMap` | `true` ou `false` | *affiche une mini carte*  | `Boolean`
-`mapZoom` | nombre de `0` à `17` | *règle le niveau de zoom de la carte* | `Number`
+`showMap` | `true` ou `false` | *Affiche une mini carte*  | `Boolean`
+`mapZoom` | nombre de `0` à `17` | *Règle le niveau de zoom de la carte* | `Number`
 `hourFrequency` | `36` (exemple) | *Permet de modifier individuellement la fréquence des envois d'email (en nombre d'heures). Doit être __supérieur__ au déclencheur principal.* | `Number`
+`minPrice` | `150` (exemple) | *Spécifier un prix minimum (>=)* | `Number`
+`maxPrice` | `275` (exemple) | *Spécifier un prix maximum (<=)* | `Number`
 `sendSms` | `true` ou `false` | *[Experimental] Active l'envoi de Sms (uniquement compatible avec l'api __Free Mobile__ pour le moment)* | `Boolean`
 `freeUser` | `"0123456789"` (exemple) | *Numéro Free Mobile* | `String`
 `freePass` | `"xxxxxx"` (exemple) | *Clé d'identification (à générer dans [votre espace Free Mobile](http://www.universfreebox.com/article/26337/Nouveau-Free-Mobile-lance-un-systeme-de-notification-SMS-pour-vos-appareils-connectes))*  | `String`
