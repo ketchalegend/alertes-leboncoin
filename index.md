@@ -118,7 +118,7 @@ Un problème ?
 
 
 Pourquoi cette version, et quelle différence avec les autres ?
------------------
+--------------------------------------------------------------
 
 J'explique les raisons de cette version ici : 
 #### > [Vision et évolutions futures](https://github.com/maximelebreton/alertes-leboncoin/issues/2)
