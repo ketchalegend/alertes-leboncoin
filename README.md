@@ -1,6 +1,6 @@
 
 
-Alertes leboncoin - 5.2.0 [![GitHub watchers](https://img.shields.io/github/watchers/badges/shields.svg?style=social&label=Watch)](https://github.com/maximelebreton/alertes-leboncoin)
+Alertes leboncoin - 5.2.0 [![GitHub watchers](https://img.shields.io/github/stars/maximelebreton/alertes-leboncoin.svg?style=social&label=Watch)](https://github.com/maximelebreton/alertes-leboncoin)
 =============================
 Recevez par email vos recherches leboncoin.fr (via Google Sheets / App Script)
 
