@@ -1,6 +1,6 @@
 
 
-Alertes leboncoin - 5.1.5
+Alertes leboncoin - 5.2.0 [![GitHub watchers](https://img.shields.io/github/stars/maximelebreton/alertes-leboncoin.svg?style=social&label=Star)](https://github.com/maximelebreton/alertes-leboncoin)
 =============================
 Recevez par email vos recherches leboncoin.fr (via Google Sheets / App Script)
 
@@ -13,16 +13,24 @@ Pour commencer
 
 1. Créez votre **[copie de la feuille de calcul *Alertes leboncoin*](https://goo.gl/Awjw5f)**  
 
-2. Indiquez votre **email** dans les **`Paramètres utilisateur`**, et **lancez manuellement** votre première recherche via le **menu `Alertes LeBonCoin`.**  
+2. Indiquez votre **email** dans l'onglet  **`Paramètres utilisateur`**, et **lancez manuellement** votre première recherche via le **menu `Alertes LeBonCoin`.**  
 
 3. Pour être averti **automatiquement** des prochains résultats, réglez la **fréquence** à laquelle vous souhaitez être averti via le **menu dans `Planification des alertes`.**
 
-Comment ça fonctionne ?
-----------------------------------
-C'est très simple, dans la **feuille** intitulée `Vos alertes`, **chaque ligne correspond à une recherche** :
-* Pour chaque recherche que vous souhaitez effectuer sur [leboncoin.fr](https://www.leboncoin.fr), il suffit simplement d'en **copier/coller le lien** dans la colonne prévue à cet effet.
+4. Il ne vous reste plus qu'à vous rendre sur le site [leboncoin.fr](https://www.leboncoin.fr) pour **copier le lien** de votre recherche, puis le **coller** dans votre feuille de calcul (colonne `Lien` de l'onglet **`Vos alertes`**).
 
-Les colonnes :
+Wiki
+-----
+
+- [Comment obtenir le lien de votre recherche ?](https://github.com/maximelebreton/alertes-leboncoin/wiki/Comment-obtenir-le-lien-de-votre-recherche-%3F)
+
+
+Vos alertes
+----------------------------------
+Dans la **feuille** intitulée `Vos alertes`, **chaque ligne correspond à une recherche** :  
+> Pour chaque recherche que vous souhaitez effectuer sur [leboncoin.fr](https://www.leboncoin.fr), après avoir **copié** le lien de votre recherche, il vous suffit de le **coller** dans la colonne prévue à cet effet, puis de lui donner un titre.
+
+Les colonnes (avec un exemple) :
 
 Titre | Lien | Dernière annonce | Paramètres avancés
 ------------ | ------------- | ------------- | -------------  
@@ -32,25 +40,26 @@ Titre | Lien | Dernière annonce | Paramètres avancés
 
 Paramètres utilisateur
 ----------------------
-> *Les paramètres utilisateur s'appliquent à toutes les recherches*
 
-Dans la **feuille** intitulée `Paramètres utilisateur`, acessible également via le menu *Alertes LeBonCoin*.
+### Méthode simple
+Dans la **feuille** intitulée `Paramètres utilisateur`, accessible également via le menu `Alertes LeBonCoin` > `Paramètres utilisateur`.
 
-Paramètre (global) | Valeur | Description
+> *Les paramètres définis via la feuille `Paramètres utilisateur` s'appliquent à toutes les recherches*
+
+Paramètre | Valeur | Description
 ------------ | -------------  | -------------  
 `email` | `mon@email.com` (exemple) | *l'adresse à laquelle sera envoyée les annonces. Possibilité de définir plusieurs destinataires en les séparant par une virgule*
 `showMap` | `=true` ou `=false` | *affiche une mini carte* 
 `mapZoom` | nombre de `=0` à `=17` | *règle le niveau de zoom de la carte*
 `groupedResults` | `=true` ou `=false` | *permet de grouper les résultats dans un seul mail*
+  
 
+### Méthode avancée
 
-Paramètres avancés
---------------------
-
-#### Globaux
+#### Paramères globaux
 > *Les paramètres globaux avancés s'appliquent à toutes les recherches*
 
-Via l'objet `userParams` (dans la feuille de calcul : `Outils > Editeur de scripts`), qui permet de personnaliser la totalité des **[variables de la librairie](https://github.com/maximelebreton/alertes-leboncoin/blob/master/Code.gs#L7)**  
+Via l'objet `userParams` (dans la feuille de calcul : `Outils > Editeur de scripts`), qui permet de personnaliser la totalité des **[variables de la librairie](https://github.com/maximelebreton/alertes-leboncoin/blob/master/src/Code.js#L10)**  
 
 Exemple :
 ```
@@ -66,7 +75,7 @@ var userParams = {
 ```
 
   
-#### Individuels
+#### Paramètres individuels
 
 > *Les paramètres individuels avancés s'appliquent uniquement à la recherche concernée*
 
@@ -77,14 +86,17 @@ Exemple :
 {"email":"autre@email.com","showMap":true,"mapZoom":9}
 ```
 
-Paramètre (individuel) | Valeur | Description
------------- | -------------  | -------------  
-`email` | `mon@email.com` (exemple) | *l'adresse à laquelle sera envoyée les annonces. Possibilité de définir plusieurs destinataires en les séparant par une virgule*
-`showMap` | `true` ou `false` | *affiche une mini carte* 
-`mapZoom` | nombre de `0` à `17` | *règle le niveau de zoom de la carte*
-`sendSms` | `true` ou `false` | *[Experimental] Active l'envoi de Sms (uniquement compatible avec l'api __Free Mobile__ pour le moment)* 
-`freeUser` | `0123456789` (exemple) | *Numéro Free Mobile* 
-`freePass` | `xxxxxx` (exemple) | *Clé d'identification (à générer dans [votre espace Free Mobile](http://www.universfreebox.com/article/26337/Nouveau-Free-Mobile-lance-un-systeme-de-notification-SMS-pour-vos-appareils-connectes))* 
+Paramètre (individuel) | Valeur | Description | Type
+------------ | -------------  | -------------  | -------------  
+`email` | `"mon@email.com"` (exemple) | *l'adresse à laquelle sera envoyée les annonces. Possibilité de définir plusieurs destinataires en les séparant par une virgule* | `String`
+`showMap` | `true` ou `false` | *Affiche une mini carte*  | `Boolean`
+`mapZoom` | nombre de `0` à `17` | *Règle le niveau de zoom de la carte* | `Number`
+`hourFrequency` | `36` (exemple) | *Permet de modifier individuellement la fréquence des envois d'email (en nombre d'heures). Doit être __supérieur__ au déclencheur principal.* | `Number`
+`minPrice` | `150` (exemple) | *Spécifier un prix minimum (>=)* | `Number`
+`maxPrice` | `275` (exemple) | *Spécifier un prix maximum (<=)* | `Number`
+`sendSms` | `true` ou `false` | *[Experimental] Active l'envoi de Sms (uniquement compatible avec l'api __Free Mobile__ pour le moment)* | `Boolean`
+`freeUser` | `"0123456789"` (exemple) | *Numéro Free Mobile* | `String`
+`freePass` | `"xxxxxx"` (exemple) | *Clé d'identification (à générer dans [votre espace Free Mobile](http://www.universfreebox.com/article/26337/Nouveau-Free-Mobile-lance-un-systeme-de-notification-SMS-pour-vos-appareils-connectes))*  | `String`
 
 
 Obtenir la dernière mise à jour
@@ -127,7 +139,7 @@ CHANGELOG
 Le détail des modifications se trouve dans le **[CHANGELOG](https://github.com/maximelebreton/alertes-leboncoin/blob/master/CHANGELOG.md)**
 
 version originale par http://justdocsit.blogspot.fr  
-repris depuis la 4.0 par [mlb](http://www.maximelebreton.com)  
+repris depuis la version `4.0.0` par [mlb](http://www.maximelebreton.com)  
 
 Clé projet de la bilbiothèque : `M9iNq7X9ZWxS_D7pHmMGBb6YoFnfw0_Hk`  
 Code de la bibliothèque : [script.google.com/...](https://script.google.com/macros/library/versions/d/15GE-TW-COB9rfq49nF38GDqytbwpK2HMxLQOzdC1JZMGkUCfLqWoG0T4)
