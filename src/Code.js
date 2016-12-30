@@ -5,7 +5,7 @@
 var cheerio = cheeriogasify.require('cheerio');
 var $ = cheerio;
 
-var version = "5.2.0";
+var version = "5.2.2";
 
 var defaults = {
   debug: false,
@@ -149,6 +149,8 @@ function start(userParams) {
   normalizedData.sheetUrl = getSpreadsheetContext().getUrl();
   
   var data = normalizedData;
+  
+  Logger.log(data);
   
   // user custom callback
   if (params.onDataResult) {

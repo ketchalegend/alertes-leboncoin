@@ -33,15 +33,25 @@ function openVariablesSheet(userParams) {
 
 
 /**
+  * Get main trigger wizard template
+*/
+function getMainTriggerWizardTemplate(callbackString) {
+  
+  var template = HtmlService.createTemplateFromFile('mainTriggerWizard.tpl');
+      template.callbackString = callbackString;
+  
+  return template.evaluate();
+}
+
+
+/**
   * Show main trigger wizard
 */
 function showMainTriggerWizard(callbackString) {
   
   var ui = SpreadsheetApp.getUi();
-  var template = HtmlService.createTemplateFromFile('mainTriggerWizardTemplate');
-      template.callbackString = callbackString;
   
-  var html = template.evaluate().setWidth(360).setHeight(120);
+  var html = getMainTriggerWizardTemplate(callbackString).setWidth(360).setHeight(120);
   var response = ui.showModelessDialog(html, "Voulez-vous planifier l'envoi des alertes ?");
 }
 

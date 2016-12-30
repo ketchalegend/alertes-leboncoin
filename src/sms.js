@@ -8,8 +8,8 @@
   * Get Sms Ads Template (multi)
 */
 function getSmsAdsTemplate(entities, selectedResult) {
-
-  var template = HtmlService.createTemplateFromFile('smsAdsTemplate');
+  
+  var template = HtmlService.createTemplateFromFile('smsAds.tpl');
   var id = selectedResult[0];
   template.label = entities.labels[id].label;
   template.url = entities.urls[id].url;
@@ -24,7 +24,7 @@ function getSmsAdsTemplate(entities, selectedResult) {
 */
 function getSmsAdTemplate(ad) {
 	
-  var template = HtmlService.createTemplateFromFile('smsAdTemplate');
+  var template = HtmlService.createTemplateFromFile('smsAd.tpl');
   template.ad = ad;
   
   return template.evaluate().getContent();
