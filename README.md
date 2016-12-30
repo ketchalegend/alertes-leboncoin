@@ -17,7 +17,7 @@ Pour commencer
 
 3. Pour être averti **automatiquement** des prochains résultats, réglez la **fréquence** à laquelle vous souhaitez être averti via le **menu dans `Planification des alertes`.**
 
-4. Il ne vous reste plus qu'à vous rendre sur le site [leboncoin.fr](https://www.leboncoin.fr) pour **copier** l'`url` de votre recherche, et la **coller** dans l'onglet **`Vos alertes`** de la feuille de calcul. (Pour plus de détails, lire la suite)
+4. Il ne vous reste plus qu'à vous rendre sur le site [leboncoin.fr](https://www.leboncoin.fr) pour **copier** l'`url` de votre recherche, et la **coller** dans la colonne prévue à cet effet via l'onglet **`Vos alertes`** de la feuille de calcul. (Pour plus de détails, lire la suite)
 
 Comment ça fonctionne ?
 ----------------------------------
