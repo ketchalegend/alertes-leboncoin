@@ -1,7 +1,12 @@
 # Change Log
 
-## 5.1.5 - `21/11/2016`
-- Phase expérimentale pour l'envoi de Sms (numéro Free Mobile uniquement)
+## 5.2.0 - `21/11/2016`
+- Envoi de Sms (numéro Free Mobile uniquement) `sendSms`, `freeUser`, `freePass`
+- Possibilité de définir de manière plus fine le prix minimum et maximum `minprice` et `maxprice`
+- Possibilité d'ajuster la fréquence des envois de mail de manière individuelle `hourFrequency`
+- Pro indiqué entre parenthèses lorsque les résultats ne contiennent que des résultats profesionnels
+- Ajout du lien "Éditer mes alertes" en bas de mail (avec la possibilité de le désactiver) `showMailEditLink`
+- Refactoring du code, et séparation des fichiers
 
 ## 5.1.3 - `17/11/2016`
 - Ajout du mail en format texte
