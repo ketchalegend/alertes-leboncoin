@@ -1,6 +1,6 @@
 title: Alertes leboncoin
 description: Recevez par email vos recherches leboncoin.fr (via Google Sheets / App Script)
-google_analytics: UA-1974322-8
+google_analytics: "UA-1974322-8"
 show_downloads: true
 theme: jekyll-theme-cayman
 markdown: kramdown
