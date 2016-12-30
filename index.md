@@ -124,7 +124,7 @@ J'explique les raisons de cette version ici :
 
 > [Vision et évolutions futures](https://github.com/maximelebreton/alertes-leboncoin/issues/2)
 
-**TL DR;**
+**TL DR;**  
 * refonte totale du code
 * intégration de [cheerio](https://github.com/3846masa/cheerio-gasify) (équivalent de jquery côté serveur)
 * **mise à jour semi-automatique du code** (`Outils > Editeur de scripts`, puis `Ressources > Bibliothèques` pour choisir la version)
