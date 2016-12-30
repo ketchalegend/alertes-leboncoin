@@ -17,12 +17,18 @@ Pour commencer
 
 3. Pour être averti **automatiquement** des prochains résultats, réglez la **fréquence** à laquelle vous souhaitez être averti via le **menu dans `Planification des alertes`.**
 
-4. Il ne vous reste plus qu'à vous rendre sur le site [leboncoin.fr](https://www.leboncoin.fr) pour **copier** l'`url` de votre recherche, et la **coller** dans la colonne prévue à cet effet via l'onglet **`Vos alertes`** de la feuille de calcul. (Pour plus de détails, lire la suite)
+4. Il ne vous reste plus qu'à vous rendre sur le site [leboncoin.fr](https://www.leboncoin.fr) pour **copier le lien** de votre recherche, puis le **coller** dans votre feuille de calcul (colonne `Lien` de l'onglet **`Vos alertes`**).
 
-Comment ça fonctionne ?
+Wiki
+-----
+
+- [Comment obtenir le lien de votre recherche ?](https://github.com/maximelebreton/alertes-leboncoin/wiki/Comment-obtenir-le-lien-de-votre-recherche-%3F)
+
+
+Vos alertes
 ----------------------------------
-C'est très simple, dans la **feuille** intitulée `Vos alertes`, **chaque ligne correspond à une recherche** :
-* Pour chaque recherche que vous souhaitez effectuer sur [leboncoin.fr](https://www.leboncoin.fr), il suffit simplement d'en **copier/coller le lien** dans la colonne prévue à cet effet.
+Dans la **feuille** intitulée `Vos alertes`, **chaque ligne correspond à une recherche** :  
+> Pour chaque recherche que vous souhaitez effectuer sur [leboncoin.fr](https://www.leboncoin.fr), après avoir **copié** le lien de votre recherche, il vous suffit de le **coller** dans la colonne prévue à cet effet, puis de lui donner un titre.
 
 Les colonnes (avec un exemple) :
 
@@ -36,7 +42,7 @@ Paramètres utilisateur
 ----------------------
 
 ### Méthode simple
-Accessible via le menu `Alertes LeBonCoin` > `Paramètres utilisateur`.
+Dans la **feuille** intitulée `Paramètres utilisateur`, accessible également via le menu `Alertes LeBonCoin` > `Paramètres utilisateur`.
 
 > *Les paramètres définis via la feuille `Paramètres utilisateur` s'appliquent à toutes les recherches*
 
