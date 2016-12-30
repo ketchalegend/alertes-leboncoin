@@ -3,6 +3,7 @@ description: Recevez par email vos recherches leboncoin.fr (via Google Sheets / 
 google_analytics: 
 show_downloads: true
 theme: jekyll-theme-cayman
+markdown: kramdown
 
 gems:
   - jekyll-mentions
