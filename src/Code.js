@@ -93,7 +93,7 @@ function start(userParams) {
    showDialog("Oups !", "Merci de remplir le champ <strong><em>email</em></strong>");
    return; 
   }
-
+  
   // For each value in the url range sheet
   forEachCellInRange( params.names.range.url, params.startIndex, function(index) {
     
@@ -101,9 +101,7 @@ function start(userParams) {
     var sheetNames = params.names.sheet;
     
     //Logger.log(getSpreadsheetContext().getSheets()[1].getSheetId());
-    
-    //getSheetId
-      
+          
     var lastRangeName = params.isAvailable.advancedOptions ? rangeNames.advancedOptions : rangeNames.lastAd;
     var row = getRowByIndex(index, lastRangeName, sheetNames.main);
     
@@ -113,6 +111,7 @@ function start(userParams) {
     
     var html = getUrlContent( url );
     var ads = getListingAdsFromHtml( html );
+    
 
     if (ads.length && params.sendMail == true) {
       
@@ -132,7 +131,7 @@ function start(userParams) {
         //var tags = getTagsFromHtml( html );
         var tags = '';
         
-        setNormalizedData(index, label, url, adsToSend, singleParams, tags, lastAdSentDate);
+        setNormalizedData(index, label, url, ads, adsToSend, singleParams, tags, lastAdSentDate);
       }
     }
     
@@ -176,6 +175,12 @@ function start(userParams) {
         
       }  
     });
+    
+  }
+  
+  if ( !data.result.length ) {
+
+    getSpreadsheetContext().toast("Aucune annonce à envoyer");
     
   }
     

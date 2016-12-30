@@ -8,7 +8,7 @@
 /**
   * Set normalized data (inspired by redux & normalizr principles)
 */
-function setNormalizedData(key, label, url, adsToSend, singleParams, tags, lastAdSentDate) {
+function setNormalizedData(key, label, url, allAds, adsToSend, singleParams, tags, lastAdSentDate) {
  
   // Push new result
   normalizedData.result.push( key );
@@ -37,6 +37,7 @@ function setNormalizedData(key, label, url, adsToSend, singleParams, tags, lastA
   // Extend ads
   ads[key] = {
     id: key,
+    all: allAds,
     toSend: adsToSend,
     tags: tags
   }
