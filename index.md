@@ -124,14 +124,14 @@ J'explique les raisons de cette version ici :
 
 > [Vision et évolutions futures](https://github.com/maximelebreton/alertes-leboncoin/issues/2)
 
-**TL DR;**  
-- refonte totale du code
-- intégration de [cheerio](https://github.com/3846masa/cheerio-gasify) (équivalent de jquery côté serveur)
-- **mise à jour semi-automatique du code** (`Outils > Editeur de scripts`, puis `Ressources > Bibliothèques` pour choisir la version)
-- ajout de paramètres utilisateur
-- ajout d'une mini carte pour localiser rapidement l'annonce (`showMap`)
-- possibilité de choisir l'envoi des résultats en mails individuels ou en mail groupé (`groupedResults`)
-- Markup HTML externalisé dans des fichiers `.html` gérés par [HTML service](https://developers.google.com/apps-script/guides/html/templates)
+**TL DR;**
+- refonte totale du code  
+- intégration de [cheerio](https://github.com/3846masa/cheerio-gasify) (équivalent de jquery côté serveur)  
+- **mise à jour semi-automatique du code** (`Outils > Editeur de scripts`, puis `Ressources > Bibliothèques` pour choisir la version) 
+- ajout de paramètres utilisateur  
+- ajout d'une mini carte pour localiser rapidement l'annonce (`showMap`)  
+- possibilité de choisir l'envoi des résultats en mails individuels ou en mail groupé (`groupedResults`)  
+- Markup HTML externalisé dans des fichiers `.html` gérés par [HTML service](https://developers.google.com/apps-script/guides/html/templates)  
 
 
 CHANGELOG
