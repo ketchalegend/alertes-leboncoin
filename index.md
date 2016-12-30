@@ -21,7 +21,6 @@ Pour commencer
 
 Wiki
 -----
-
 - [Comment obtenir le lien de votre recherche ?](https://github.com/maximelebreton/alertes-leboncoin/wiki/Comment-obtenir-le-lien-de-votre-recherche-%3F)
 
 
