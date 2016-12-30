@@ -1,6 +1,6 @@
 # Change Log
 
-## 5.2.0 - `21/11/2016`
+## 5.2.0 - `30/12/2016`
 - Envoi de Sms (numéro Free Mobile uniquement) `sendSms`, `freeUser`, `freePass`
 - Possibilité de définir de manière plus fine le prix minimum et maximum `minprice` et `maxprice`
 - Possibilité d'ajuster la fréquence des envois de mail de manière individuelle `hourFrequency`
