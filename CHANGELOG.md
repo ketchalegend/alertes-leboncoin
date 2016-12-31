@@ -2,7 +2,7 @@
 
 
 ### 5.2.2
-- Amélioration du footer de mise à jour
+- Amélioration du footer de notification de mise à jour
 
 ### 5.2.1
 - Correction d'un bug causé par le refactoring
