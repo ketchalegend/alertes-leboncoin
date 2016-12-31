@@ -42,7 +42,10 @@
   
   <? if ( update ) { ?>
       <div style="<?!= inlineStyles.notification ?>">
-        <small>Une nouvelle version est disponible : <a href="<?= decodeURIComponent( update.url ) ?>" title="<?= update.description ?>"><?= update.version ?></a></small>
+        <small>
+        Une nouvelle version est disponible : <a href="<?= decodeURIComponent( update.url ) ?>" title="<?= update.description ?>"><?= update.version ?></a><br/>
+        <a href="<?= decodeURIComponent( update.helpUrl ) ?>"><?= update.helpLabel ?></a> | <a href="<?= sheetUrl ?>"><?= update.openLabel ?></a>
+        </small>
       </div>
   <? } ?>
 
