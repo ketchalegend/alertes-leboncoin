@@ -1,5 +1,8 @@
 {
-  "version"  : "5.2.1",
-  "description" : "Comment obtenir la dernière mise à jour ?",
-  "url": "https://github.com/maximelebreton/alertes-leboncoin#obtenir-la-dernière-mise-à-jour"
+  "version"  : "5.2.2",
+  "description" : "Voir le changelog",
+  "url": "https://github.com/maximelebreton/alertes-leboncoin/blob/master/CHANGELOG.md",
+  "helpLabel": "Comment mettre à jour ?",
+  "helpUrl": "https://github.com/maximelebreton/alertes-leboncoin#obtenir-la-dernière-mise-à-jour",
+  "openLabel": "Ouvrir la feuille de calcul"
 }
