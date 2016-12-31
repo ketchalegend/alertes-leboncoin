@@ -1,5 +1,12 @@
 # Change Log
 
+
+### 5.2.2
+- Amélioration du footer de mise à jour
+
+### 5.2.1
+- Correction d'un bug causé par le refactoring
+
 ## 5.2.0 - `30/12/2016`
 - Envoi de Sms (numéro Free Mobile uniquement) `sendSms`, `freeUser`, `freePass`
 - Possibilité de définir de manière plus fine le prix minimum et maximum `minprice` et `maxprice`
@@ -8,7 +15,7 @@
 - Ajout du lien "Éditer mes alertes" en bas de mail (avec la possibilité de le désactiver) `showMailEditLink`
 - Refactoring du code, et séparation des fichiers
 
-## 5.1.3 - `17/11/2016`
+### 5.1.3
 - Ajout du mail en format texte
 
 ## 5.1.0 - `15/11/2016`
@@ -16,10 +23,10 @@
 - dans la planification d'alertes, ajout des entrées `tous les jours`, `tous les 2 jours`, `toutes les semaines` et `mettre en pause`.
 - ajout d'un 'One Click Action' dans Gmail (`Éditer`) pour accéder directement à la feuille de calcul
 
-## 5.0.4
+### 5.0.4
 - Les autorisations d'accès sont maintenant limitées au document (par défaut, cela demandait un accès total !)
 
-## 5.0.2
+### 5.0.2
 - Léger refactoring du code
 
 ## 5.0.0
@@ -30,10 +37,10 @@
 - Centralisation des styles CSS de l'email dans inlineStyles.gs
 - Ajout d'un libellé 'pro' pour les annonces professionelles
 
-## 4.3.2
+### 4.3.2
 - améliorations du comportement de l'email 
 
-## 4.3.1
+### 4.3.1
 - email responsive + modifications visuelles
 
 ## 4.3.0
@@ -41,7 +48,7 @@
 - ajout du résumé des annonces dans l'aperçu du mail (mailPreheaderTemplate.html)
 - ajout d'un placeholder lorsqu'aucune photo n'est disponible
 
-## 4.2.1
+### 4.2.1
  - Correction d'un bug lié à l'affichage des cartes [#3](https://github.com/maximelebreton/alertes-leboncoin/issues/3)
  - Ajout d'une fonction de tri pour que le mail envoyé ne contienne que les dernières annonces même lorsque l'on trie par prix.
  
@@ -50,16 +57,16 @@
  - Améliorations visuelles (la progression est maintenant visible)
  - Ajout d'une notification en bas de mail lorsqu'une mise à jour est disponible
  
-## 4.1.5
+### 4.1.5
 - modification du titre des emails envoyés
 
-## 4.1.4
+### 4.1.4
 - ajout d'un footer
 
-## 4.1.3
+### 4.1.3
 - Correction d'un bug lié aux paramètres utilisateurs qui n'étaient pas correctement étendus (extend VS deepExtend)
 
-## 4.1.2
+### 4.1.2
 - Corrections de bugs, amélioration considérable des performances, données normalisées, et ajout de la possibilité de recevoir des mails individuels
 
 ## 4.0.0
