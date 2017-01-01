@@ -1,6 +1,8 @@
 # Change Log
 
 ### 5.2.4
+> Si vous avez utilisé une **version inférieure à la 5.2.4** lors du passage entre 2016 à 2017, il est possible que vous ne receviez plus les nouvelles annonces. Je vous invite donc à **faire la mise à jour**, et à **vérifier les dates** indiquées dans votre colonne 'Dernière annonce', car elles pourraient avoir 1 an d'avance !  
+
 - Correction du bug de l'an 2000 (du même genre en tout cas, les annonces restaient bloquées au 31 décembre)
 - correctif [#14](https://github.com/maximelebreton/alertes-leboncoin/issues/14)
 
