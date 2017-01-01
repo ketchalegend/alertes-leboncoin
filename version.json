@@ -1,7 +1,7 @@
 {
   "version"  : "5.2.4",
   "description" : "Voir le changelog",
-  "url": "https://github.com/maximelebreton/alertes-leboncoin/blob/master/CHANGELOG.md#524",
+  "url": "https://github.com/maximelebreton/alertes-leboncoin/blob/master/CHANGELOG.md#change-log",
   "helpLabel": "Comment mettre à jour ?",
   "helpUrl": "https://github.com/maximelebreton/alertes-leboncoin#obtenir-la-dernière-mise-à-jour",
   "openLabel": "Ouvrir la feuille de calcul"
