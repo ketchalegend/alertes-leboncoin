@@ -104,13 +104,14 @@ function handleMailSend( data, selectedResult, email, callback ) {
   
   if (params.groupedResults) {
     
-    mailSendGroupedResults(data, selectedResult, email, function(error, result) {
+    mailSendGroupedResults(data, selectedResult, email, function(error, resultCallback) {
+      // If grouped mail is too big, try to send in separate results
       if (error) {
         mailSendSeparateResults(data, selectedResult, email, callback);
       } else {
         
         if (callback && typeof(callback) === "function") {
-          return callback(error, result);
+          return callback(error, resultCallback);
         } 
       }
     });
@@ -123,62 +124,87 @@ function handleMailSend( data, selectedResult, email, callback ) {
 
 
 /**
-  * Send grouped data
+  * Mail send grouped results
 */
 function mailSendGroupedResults( data, selectedResult, email, callback ) {
     
-  var mailTitle =  getMailTitle( selectedResult, data.entities );
-  var mailHtml = getMailTemplate( selectedResult, data.entities, data.update, data.sheetUrl, email );
-  var mailText = getTextMailTemplate( selectedResult, data.entities, data.update, data.sheetUrl, email );
+  var mail = getGroupedMail( data, selectedResult );
   
-  sendEmail(email, mailTitle, mailHtml, mailText, selectedResult, callback);
-  
+  sendEmail(email, mail, callback, selectedResult);
 }
 
 
 /**
-  * Send separated data
+  * Mail send separate results
 */
 function mailSendSeparateResults( data, selectedResult, email, callback ) {  
+  
+  var mails = getSeparateMails(data, selectedResult);
+  
+  for (var i = 0; i < mails.length; i++ ) {
+    var mail = mails[i];
+    
+    sendEmail(email, mail, callback);    
+  }
+}
+
+
+/**
+  * Get grouped mail
+*/
+function getGroupedMail( data, selectedResult ) {
+ 
+  var mail = {
+    title: getMailTitle( selectedResult, data.entities ),
+    html: getMailTemplate( selectedResult, data.entities, data.update, data.sheetUrl ),
+    text: getTextMailTemplate( selectedResult, data.entities, data.update, data.sheetUrl )
+  }
+  
+  return mail;
+}
+
+
+/**
+  * Get separate mails
+*/
+function getSeparateMails( data, selectedResult ) {  
+  
+  var mails = [];
   
   for (var i = 0; i < selectedResult.length; i++ ) {
     
     var id = data.result[i];
     var singleResult = [id];
     
-    var mailTitle =  getMailTitle( singleResult, data.entities );
-    var mailHtml = getMailTemplate( singleResult, data.entities, data.update, data.sheetUrl, email );
-    var mailText = getMailTextTemplate( singleResult, data.entities, data.update, data.sheetUrl, email );
+    var mail = {
+      title: getMailTitle( singleResult, data.entities ),
+      html: getMailTemplate( singleResult, data.entities, data.update, data.sheetUrl ),
+      text: getTextMailTemplate( singleResult, data.entities, data.update, data.sheetUrl )
+    };
     
-    sendEmail(email, mailTitle, mailHtml, mailText, singleResult, callback);
-    
+    mails.push(mail);
   }
   
+  return mails;
 }
-
 
 
 /**
   * Send email
 */
-function sendEmail(email, title, htmlBody, textBody, result, callback) {
+function sendEmail(email, mail, callback, resultCallback) {
   
-  if (params.debug == true) {
-    title = "[debug] " + title;
-  }
-  
+  var titlePrefix = params.debug == true ? "[debug] " : "";
   var error;
-  
-  var body = params.plainText == true ? textBody : htmlBody;
   
   try {
 
     MailApp.sendEmail(
       email,
-      title,
-      textBody,
+      titlePrefix + mail.title,
+      mail.text,
       { 
-        htmlBody: params.plainText == true ? undefined : htmlBody
+        htmlBody: params.plainText == true ? undefined : mail.html
       }
     );
     
@@ -189,7 +215,7 @@ function sendEmail(email, title, htmlBody, textBody, result, callback) {
   }
   
   if (callback && typeof(callback) === "function") {
-    return callback(error, result);
+    return callback(error, resultCallback);
   }
   //{"message":"Limite dépassée : Taille du corps de l'e-mail.","name":"Exception","fileName":"Code","lineNumber":566,"stack":"\tat Code:566 (sendEmail)\n\tat Code:557 (sendGroupedData)\n\tat Code:530 (sendDataTo)\n\tat Code:256 (start)\n"}
 }
