@@ -1,7 +1,7 @@
 # Change Log
 
 ### 5.2.4
-- Correction du bug de l'an 2000 (du même genre en tout cas) (les annonces restaient bloquées au 31 décembre)
+- Correction du bug de l'an 2000 (du même genre en tout cas, les annonces restaient bloquées au 31 décembre)
 - correctif [#14](https://github.com/maximelebreton/alertes-leboncoin/issues/14)
 
 ### 5.2.3
