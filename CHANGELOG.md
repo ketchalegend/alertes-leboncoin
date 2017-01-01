@@ -74,11 +74,11 @@
 ## 4.0.0 - `08/06/2016`
 - Reprise intégrale du projet et refactoring complet selon ces principes : https://github.com/maximelebreton/alertes-leboncoin/issues/2
 
-## v3 - `07/03/2016`
+## 3 - `07/03/2016`
 - par [@jief](https://github.com/jief666) : https://github.com/jief666/alertes-leboncoin
 
-## v2 - `22/10/2012`
+## 2 - `22/10/2012`
 - http://justdocsit.blogspot.fr/2012/11/alerte-leboncoin-v2.html
 
-## v1 - `09/07/2012`
+## 1 - `09/07/2012`
 - version originale par [@St3ph-fr](https://github.com/St3ph-fr) : http://justdocsit.blogspot.fr/2012/07/creer-une-alerte-sur-le-bon-coin.html
