@@ -1,5 +1,7 @@
 # Change Log
 
+### 5.2.3
+- Refactoring + correctif de [#13](https://github.com/maximelebreton/alertes-leboncoin/issues/13)
 
 ### 5.2.2
 - Amélioration du footer de notification de mise à jour
