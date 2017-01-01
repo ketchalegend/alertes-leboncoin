@@ -142,7 +142,7 @@ version originale par http://justdocsit.blogspot.fr
 repris depuis la version `4.0.0` par [mlb](http://www.maximelebreton.com)  
 
 Clé projet de la bilbiothèque : `M9iNq7X9ZWxS_D7pHmMGBb6YoFnfw0_Hk`  
-Code de la bibliothèque : [script.google.com/...](https://script.google.com/macros/library/versions/d/15GE-TW-COB9rfq49nF38GDqytbwpK2HMxLQOzdC1JZMGkUCfLqWoG0T4)
+Code de la bibliothèque : [script.google.com/...](https://script.google.com/d/15GE-TW-COB9rfq49nF38GDqytbwpK2HMxLQOzdC1JZMGkUCfLqWoG0T4/edit?usp=drive_web)
 
 _____________________________
 
