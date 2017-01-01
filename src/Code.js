@@ -5,7 +5,7 @@
 var cheerio = cheeriogasify.require('cheerio');
 var $ = cheerio;
 
-var version = "5.2.3";
+var version = "5.2.4";
 
 var defaults = {
   debug: false,
@@ -18,6 +18,8 @@ var defaults = {
   sendMail: true,
   maxSmsSendByResult: 3,
   showMailEditLink: true,
+  useCache: false,
+  cacheTime: 1500,
   dateFormat: {
     human: 'd MMMM, HH:mm',
     iso: 'YYYY-MM-DDTHH:mm:ss.sssZ'
@@ -93,7 +95,7 @@ function start(userParams) {
    showDialog("Oups !", "Merci de remplir le champ <strong><em>email</em></strong>");
    return; 
   }
-  
+    
   // For each value in the url range sheet
   forEachCellInRange( params.names.range.url, params.startIndex, function(index) {
     
@@ -109,9 +111,21 @@ function start(userParams) {
     
     var url = getCellByIndex( index, rangeNames.url, sheetNames.main ).getValue(); // String URL expected
     
-    var html = getUrlContent( url );
-    var ads = getListingAdsFromHtml( html );
-    
+    // Cache is only necessary when debugging with large datasets
+    if (params.useCache) {
+      var cachedUrlContent = getCachedContent( url );
+      if ( cachedUrlContent ) {
+        var ads = JSON.parse( cachedUrlContent );   
+      }
+    }
+    if ( (params.useCache && !cachedUrlContent) || !params.useCache) {
+      
+      var html = getUrlContent( url );
+      var ads = getListingAdsFromHtml( html );
+    }
+    if ( params.useCache && !cachedUrlContent ) {
+      setCache( url, JSON.stringify( ads ) );
+    }
 
     if (ads.length && params.sendMail == true) {
       
@@ -150,7 +164,7 @@ function start(userParams) {
   
   var data = normalizedData;
   
-  Logger.log(data);
+  //Logger.log(data);
   
   // user custom callback
   if (params.onDataResult) {
@@ -163,8 +177,8 @@ function start(userParams) {
     
     var recipientEmail = getRecipientEmail();
     
-    handleSendData( data, recipientEmail, function(error, result) {
-
+    handleSendData( data, recipientEmail, function(error, callbackResult) {
+            
       if (error && error.name == 'Exception') {
         getSpreadsheetContext().toast(error.message, 'Alertes LeBonCoin');
       } else {
@@ -172,7 +186,7 @@ function start(userParams) {
         getSpreadsheetContext().toast("mail envoyé  à " + recipientEmail, 'Alertes LeBonCoin');
         
         if (params.debug !== true) {
-          forEachResult( result, data.entities, setLatestAdRangeValue );  
+          forEachResult( callbackResult, data.entities, setLatestAdRangeValue );  
         } 
         
       }  

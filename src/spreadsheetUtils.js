@@ -133,3 +133,47 @@ function getValuesByRangeName(rangeName, asString) {
   }
   
 }
+
+
+/**
+  * Get cached content
+*/
+function getCachedContent(url) {
+  
+  var cache = CacheService.getPublicCache();
+  var cached = cache.get( getUrlHashcode(url) );
+  
+  if (cached != null) {
+    return cached;
+  } else {
+    return false;
+  }
+}
+
+
+/**
+  * Set cache
+*/
+function setCache(url, content) {
+  var cache = CacheService.getPublicCache();
+  cache.put( getUrlHashcode(url), content, params.cacheTime);
+}
+
+
+/**
+  * Get url hashcode
+*/
+function getUrlHashcode( url ) {
+  return url.toString().split("/").pop().hashCode().toString();
+}
+
+
+/**
+  * Hashcode function
+*/
+String.prototype.hashCode = function() {
+  for(var ret = 0, i = 0, len = this.length; i < len; i++) {
+    ret = (31 * ret + this.charCodeAt(i)) << 0;
+  }
+  return ret;
+};

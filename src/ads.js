@@ -37,7 +37,8 @@ function getListingAdsFromHtml( html ) {
       price: Number( $price.attr('content') ),
       textPrice: cleanText( $price.text() ),
       textPlace: cleanText( $place.text() ),
-      textDate: cleanText( $date.text() ),
+      textDateTime: cleanText( $date.text() ),
+      textDate: String( $date.attr('content') ),
       isPro: isPro,
       url: protocol + $a.attr('href'),
       img: {
@@ -45,9 +46,9 @@ function getListingAdsFromHtml( html ) {
       }
       
     };
-    
+                     
     // A real Date Object with milliseconds based on Ad Id to prevent conflicts
-    ad.timestamp = getAdDateTime( ad.textDate, ad.id ).getTime();
+    ad.timestamp = getAdDateTime( ad.textDate, ad.textDateTime, ad.id ).getTime();
     ad.shortUrl = 'https://leboncoin.fr/vi/' + ad.id;
         
     ads.push(ad);
@@ -172,7 +173,7 @@ function getAdsBetweenPrice(ads, minPrice, maxPrice) {
 /**
   * Get Ad Date Time (with adId param to generate milliseconds)
 */
-var getAdDateTime = function(adDateTime, adId) {
+var getAdDateTime = function(adTextDate, adTextDateTime, adId) {
   
   // Date is now
   var d = new Date();
@@ -180,12 +181,19 @@ var getAdDateTime = function(adDateTime, adId) {
   d.setSeconds(0);
   d.setMilliseconds(0);
   
-  var dateTimeSeparator = adDateTime.indexOf(',');
-  var dateString = adDateTime.substring(0, dateTimeSeparator).trim().toLowerCase();
-  var timeString = adDateTime.substring(dateTimeSeparator + 1).trim();
-  var timeSeparator = timeString.indexOf(":");
-  var dateSeparator = dateString.indexOf(" ");
+  var dateSplit = adTextDate.split('-');
+  var year = Number(dateSplit[0]);
+  var month = Number(dateSplit[1]) - 1; // because months = 0-11
+  var day = Number(dateSplit[2]);
   
+  var dateTimeSeparator = adTextDateTime.indexOf(',');
+  //var dateString = adTextDateTime.substring(0, dateTimeSeparator).trim().toLowerCase();
+  var timeString = adTextDateTime.substring(dateTimeSeparator + 1).trim();
+  var timeSeparator = timeString.indexOf(":");
+  //var dateSeparator = dateString.indexOf(" ");
+  
+  /**
+    * DEPRECATED since leboncoin use microdata for date
   // Month, Day
   var month;
   var day;
@@ -205,7 +213,7 @@ var getAdDateTime = function(adDateTime, adId) {
           var dayString = dateString.substring(0, dateSeparator);
           month = getMonthNumber( monthString );
           day = Number( dayString );
-  }
+  }*/
   
   // Hours, minutes
   var hours = Number(timeString.substring(0, timeSeparator));
@@ -214,6 +222,7 @@ var getAdDateTime = function(adDateTime, adId) {
   // Milliseconds based on Ad Id (magic trick)
   var milliseconds = getMillisecondsByMagic( adId );
   
+  d.setYear( year );
   d.setMonth( month );
   d.setDate( day );
   d.setHours( hours );
@@ -233,6 +242,7 @@ var getAdDateTime = function(adDateTime, adId) {
 
 /**
   * Get month number
+  * DEPRECATED since leboncoin use microdata for date
 */
 function getMonthNumber(month) {
     

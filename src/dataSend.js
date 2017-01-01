@@ -11,7 +11,7 @@ function handleSendData(data, email, callback) {
   
   var results = splitResultBySendType(data.result, data.entities);
   
-  Logger.log(results.sendLater);
+  //Logger.log(results.sendLater);
   
   // main result
   var mainResultsToSend = filterResults(results.main, results.sendLater);	
@@ -103,21 +103,23 @@ function splitResultBySendType(selectedResult, entities) {
 function handleMailSend( data, selectedResult, email, callback ) {
   
   if (params.groupedResults) {
-    
-    mailSendGroupedResults(data, selectedResult, email, function(error, resultCallback) {
+    Logger.log(selectedResult);
+    mailSendGroupedResults(data, selectedResult, email, function(error, callbackResult) {
       // If grouped mail is too big, try to send in separate results
       if (error) {
+        
         mailSendSeparateResults(data, selectedResult, email, callback);
       } else {
         
         if (callback && typeof(callback) === "function") {
-          return callback(error, resultCallback);
+          return callback(error, callbackResult);
         } 
       }
     });
     
   } else {
     
+    Logger.log("ouais");
     mailSendSeparateResults(data, selectedResult, email, callback);
   }
 }
@@ -141,10 +143,12 @@ function mailSendSeparateResults( data, selectedResult, email, callback ) {
   
   var mails = getSeparateMails(data, selectedResult);
   
-  for (var i = 0; i < mails.length; i++ ) {
+  for (var i = 0; i < selectedResult.length; i++ ) {
     var mail = mails[i];
+    var id = data.result[i];
+    var singleResult = [id];
     
-    sendEmail(email, mail, callback);    
+    sendEmail(email, mail, callback, singleResult);    
   }
 }
 
@@ -192,7 +196,7 @@ function getSeparateMails( data, selectedResult ) {
 /**
   * Send email
 */
-function sendEmail(email, mail, callback, resultCallback) {
+function sendEmail(email, mail, callback, callbackResult) {
   
   var titlePrefix = params.debug == true ? "[debug] " : "";
   var error;
@@ -215,7 +219,8 @@ function sendEmail(email, mail, callback, resultCallback) {
   }
   
   if (callback && typeof(callback) === "function") {
-    return callback(error, resultCallback);
+    Logger.log("ok le callback");
+    return callback(error, callbackResult);
   }
   //{"message":"Limite dépassée : Taille du corps de l'e-mail.","name":"Exception","fileName":"Code","lineNumber":566,"stack":"\tat Code:566 (sendEmail)\n\tat Code:557 (sendGroupedData)\n\tat Code:530 (sendDataTo)\n\tat Code:256 (start)\n"}
 }
