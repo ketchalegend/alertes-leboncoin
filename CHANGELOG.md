@@ -1,7 +1,11 @@
 # Change Log
 
+### 5.2.4
+- Correction du bug de l'an 2000 (du même genre en tout cas)
+- correctif [#14](https://github.com/maximelebreton/alertes-leboncoin/issues/14)
+
 ### 5.2.3
-- Refactoring + correctif de [#13](https://github.com/maximelebreton/alertes-leboncoin/issues/13)
+- Refactoring + correctif [#13](https://github.com/maximelebreton/alertes-leboncoin/issues/13)
 
 ### 5.2.2
 - Amélioration du footer de notification de mise à jour
