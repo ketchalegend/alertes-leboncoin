@@ -31,7 +31,7 @@
 ### 5.0.2
 - Léger refactoring du code
 
-## 5.0.0
+## 5.0.0 - `01/08/2016`
 - Ajout d'un menu `Planification des alertes` permettant de paramétrer directement le déclencheur
 - Ajout d'une colonne `Options avancées`
 - Possibilité de définir un email par recherche via les `Options avancées`
@@ -45,7 +45,7 @@
 ### 4.3.1
 - email responsive + modifications visuelles
 
-## 4.3.0
+## 4.3.0 - `12/07/2016`
 - utilisation des [templates](https://developers.google.com/apps-script/guides/html/templates) pour faciliter la maintenance du markup des emails
 - ajout du résumé des annonces dans l'aperçu du mail (mailPreheaderTemplate.html)
 - ajout d'un placeholder lorsqu'aucune photo n'est disponible
@@ -54,7 +54,7 @@
  - Correction d'un bug lié à l'affichage des cartes [#3](https://github.com/maximelebreton/alertes-leboncoin/issues/3)
  - Ajout d'une fonction de tri pour que le mail envoyé ne contienne que les dernières annonces même lorsque l'on trie par prix.
  
-## 4.2.0
+## 4.2.0 - `04/07/2016`
  - Changement de l'algorithme de détection des dernières annonces (anciennement basé sur un id, et remplacé par un timestamp qui est la combinaison de la date et l'id)
  - Améliorations visuelles (la progression est maintenant visible)
  - Ajout d'une notification en bas de mail lorsqu'une mise à jour est disponible
@@ -71,5 +71,14 @@
 ### 4.1.2
 - Corrections de bugs, amélioration considérable des performances, données normalisées, et ajout de la possibilité de recevoir des mails individuels
 
-## 4.0.0
-- version initiale du projet (bêta)
+## 4.0.0 - `08/06/2016`
+- Reprise intégrale du projet et refactoring complet selon ces principes : https://github.com/maximelebreton/alertes-leboncoin/issues/2
+
+## v3 - `07/03/2016`
+- par [@jief](https://github.com/jief666) : https://github.com/jief666/alertes-leboncoin
+
+## v2 - `22/10/2012`
+- http://justdocsit.blogspot.fr/2012/11/alerte-leboncoin-v2.html
+
+## v1 - `09/07/2012`
+- version originale par [@St3ph-fr](https://github.com/St3ph-fr) : http://justdocsit.blogspot.fr/2012/07/creer-une-alerte-sur-le-bon-coin.html
