@@ -72,7 +72,7 @@
 - Corrections de bugs, amélioration considérable des performances, données normalisées, et ajout de la possibilité de recevoir des mails individuels
 
 ## 4.0.0 - `08/06/2016`
-- Reprise intégrale du projet et refactoring complet selon ces principes : https://github.com/maximelebreton/alertes-leboncoin/issues/2
+- Reprise intégrale du projet par [@maximelebreton](https://github.com/maximelebreton) et refactoring complet selon ces principes : https://github.com/maximelebreton/alertes-leboncoin/issues/2
 
 ## 3.x.x - `07/03/2016`
 - par [@jief](https://github.com/jief666) : https://github.com/jief666/alertes-leboncoin
