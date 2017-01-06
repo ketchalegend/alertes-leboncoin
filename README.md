@@ -81,7 +81,7 @@ var userParams = {
 
 > *Les paramètres individuels avancés s'appliquent uniquement à la recherche concernée*
 
-Via la colonne `Paramètres avancées` en passant un `objet JSON` stringifié.  
+Via la colonne `Paramètres avancées` en passant un `objet JSON`.  
 
 Exemple : 
 ```
