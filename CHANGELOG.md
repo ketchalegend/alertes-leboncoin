@@ -1,5 +1,11 @@
 # Change Log
 
+### 5.2.6
+- fix #22
+
+### 5.2.5
+- fix #17
+
 ### 5.2.4
 > Si vous avez utilisé une **version inférieure à la 5.2.4** lors du passage entre 2016 à 2017, il est possible que vous ne receviez plus les nouvelles annonces. Je vous invite donc à **faire la mise à jour**, et à **vérifier les dates** indiquées dans votre colonne 'Dernière annonce', car elles pourraient avoir 1 an d'avance !  
 
