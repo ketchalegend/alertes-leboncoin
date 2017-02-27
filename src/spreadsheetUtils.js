@@ -8,9 +8,29 @@
 /**
   * Get url content
 */
-function getUrlContent(url) {
+function getUrlContent(url, remainingAttempts) {
+  
+  var remainingAttempts = remainingAttempts || 3; // TODO : refactor because in this way the default param can't be 0
+  var response = getUrlResponse(url);
+  
+  if (response.getResponseCode() === 500 && remainingAttempts > 1) { // TODO : refactor, should be > 0
+    Utilities.sleep(1000); // Waiting 1 sec and retry
+    getUrlContent(url, remainingAttempts-1);
+    return;
+  }
+  
+  return response.getContentText("iso-8859-15");
+}
 
-  return UrlFetchApp.fetch(url).getContentText("iso-8859-15");
+
+/**
+  * Get url response
+*/
+function getUrlResponse(url) {
+  
+  var response = UrlFetchApp.fetch(url, {muteHttpExceptions: params.muteHttpExceptions});
+  
+  return response;  
 }
 
 

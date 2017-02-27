@@ -8,56 +8,58 @@
 /**
   * Set normalized data (inspired by redux & normalizr principles)
 */
-function setNormalizedData(key, label, url, allAds, adsToSend, singleParams, tags, lastAdSentDate) {
- 
+function getNormalizedData( data, datum ) {
+  
   // Push new result
-  normalizedData.result.push( key );
+  data.result.push( datum.index );
         
   // Because GAS is not ecmascript 6, we need to use this method to set dynamic object names...
-  var obj = {}; obj[key] = {};
+  var obj = {}; obj[ datum.index ] = {};
   var labels = extend({}, obj);
   var urls = extend({}, obj);
   var ads = extend({}, obj);
   var advanced = extend({}, obj);
   
   // Extend Labels
-  labels[key] = {
-    id: key,
-    label: label 
+  labels [datum.index ] = {
+    id: datum.index,
+    label: datum.label 
   }
-  labels = extend({}, normalizedData.entities.labels, labels);  
+  labels = extend({}, data.entities.labels, labels);  
   
   // Extend urls
-  urls[key] = {
-    id: key,
-    url: url
+  urls[ datum.index ] = {
+    id: datum.index,
+    url: datum.url
   }
-  urls = extend({}, normalizedData.entities.urls, urls);
+  urls = extend({}, data.entities.urls, urls);
   
   // Extend ads
-  ads[key] = {
-    id: key,
-    all: allAds,
-    toSend: adsToSend,
-    tags: tags
+  ads[ datum.index ] = {
+    id: datum.index,
+    //all: datum.ads,
+    toSend: datum.adsToSend,
+    tags: datum.tags
   }
-  ads = extend({}, normalizedData.entities.ads, ads);
+  ads = extend({}, data.entities.ads, ads);
   
   // Extend advanced
-  advanced[key] = {
-    id: key,
-    params: singleParams,
-    lastAdSentDate: lastAdSentDate
+  advanced[ datum.index ] = {
+    id: datum.index,
+    params: datum.singleParams,
+    lastAdSentDate: datum.lastAdSentDate
   }
-  advanced = extend({}, normalizedData.entities.advanced, advanced);
+  advanced = extend({}, data.entities.advanced, advanced);
   
   // Extend entities
-  normalizedData.entities = extend({}, normalizedData.entities, {
+  data.entities = extend({}, data.entities, {
     labels: labels,
     urls: urls,
     ads: ads,
     advanced: advanced
   });
+  
+  return data;
   
 }
 

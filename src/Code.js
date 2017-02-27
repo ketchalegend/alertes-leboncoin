@@ -5,7 +5,7 @@
 var cheerio = cheeriogasify.require('cheerio');
 var $ = cheerio;
 
-var version = "5.2.4";
+var version = "5.2.6";
 
 var defaults = {
   debug: false,
@@ -20,6 +20,7 @@ var defaults = {
   showMailEditLink: true,
   useCache: false,
   cacheTime: 1500,
+  muteHttpExceptions: true,
   dateFormat: {
     human: 'd MMMM, HH:mm',
     iso: 'YYYY-MM-DDTHH:mm:ss.sssZ'
@@ -109,23 +110,8 @@ function start(userParams) {
     
     highlightRow(row);
     
-    var url = getCellByIndex( index, rangeNames.url, sheetNames.main ).getValue(); // String URL expected
-    
-    // Cache is only necessary when debugging with large datasets
-    if (params.useCache) {
-      var cachedUrlContent = getCachedContent( url );
-      if ( cachedUrlContent ) {
-        var ads = JSON.parse( cachedUrlContent );   
-      }
-    }
-    if ( (params.useCache && !cachedUrlContent) || !params.useCache) {
-      
-      var html = getUrlContent( url );
-      var ads = getListingAdsFromHtml( html );
-    }
-    if ( params.useCache && !cachedUrlContent ) {
-      setCache( url, JSON.stringify( ads ) );
-    }
+    var url = getCellByIndex( index, rangeNames.url, sheetNames.main ).getValue(); // String URL expected    
+    var ads = getAdsFromUrl( url );
 
     if (ads.length && params.sendMail == true) {
       
@@ -134,7 +120,6 @@ function start(userParams) {
       
       var lastAdSentDate = getCellByIndex( index, rangeNames.lastAd, sheetNames.main ).getValue(); // Date Object expected
       var unsentAds = getLatestAds(ads, lastAdSentDate);
-      
       var adsToSend = filterAds(unsentAds, singleParams); 
             
       if (adsToSend.length) {
@@ -143,9 +128,19 @@ function start(userParams) {
         
         // not ready (experimental)
         //var tags = getTagsFromHtml( html );
-        var tags = '';
         
-        setNormalizedData(index, label, url, ads, adsToSend, singleParams, tags, lastAdSentDate);
+        var datum = {
+          index: index,
+          label: label,
+          url: url,
+          //ads: ads,
+          adsToSend: adsToSend,
+          singleParams: singleParams,
+          tags: '',
+          lastAdSentDate: lastAdSentDate
+        }
+                
+        normalizedData = getNormalizedData( normalizedData, datum );
       }
     }
     
@@ -161,23 +156,19 @@ function start(userParams) {
   
   // sheet url
   normalizedData.sheetUrl = getSpreadsheetContext().getUrl();
-  
-  var data = normalizedData;
-  
-  //Logger.log(data);
-  
+    
   // user custom callback
   if (params.onDataResult) {
-    params.onDataResult(data.result, data.entities);
+    params.onDataResult(normalizedData.result, normalizedData.entities);
   }
   
   // If results, send email
   // TODO : refactor
-  if ( data.result.length && params.sendMail == true ) {
+  if ( normalizedData.result.length && params.sendMail == true ) {
     
     var recipientEmail = getRecipientEmail();
     
-    handleSendData( data, recipientEmail, function(error, callbackResult) {
+    handleSendData( normalizedData, recipientEmail, function(error, callbackResult) {
             
       if (error && error.name == 'Exception') {
         getSpreadsheetContext().toast(error.message, 'Alertes LeBonCoin');
@@ -186,7 +177,7 @@ function start(userParams) {
         getSpreadsheetContext().toast("mail envoyé  à " + recipientEmail, 'Alertes LeBonCoin');
         
         if (params.debug !== true) {
-          forEachResult( callbackResult, data.entities, setLatestAdRangeValue );  
+          forEachResult( callbackResult, normalizedData.entities, setLatestAdRangeValue );  
         } 
         
       }  
@@ -194,7 +185,7 @@ function start(userParams) {
     
   }
   
-  if ( !data.result.length ) {
+  if ( !normalizedData.result.length ) {
 
     getSpreadsheetContext().toast("Aucune annonce à envoyer");
     

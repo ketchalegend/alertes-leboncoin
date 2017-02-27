@@ -103,7 +103,7 @@ function splitResultBySendType(selectedResult, entities) {
 function handleMailSend( data, selectedResult, email, callback ) {
   
   if (params.groupedResults) {
-    Logger.log(selectedResult);
+    //Logger.log(selectedResult);
     mailSendGroupedResults(data, selectedResult, email, function(error, callbackResult) {
       // If grouped mail is too big, try to send in separate results
       if (error) {
@@ -119,7 +119,6 @@ function handleMailSend( data, selectedResult, email, callback ) {
     
   } else {
     
-    Logger.log("ouais");
     mailSendSeparateResults(data, selectedResult, email, callback);
   }
 }
@@ -156,12 +155,12 @@ function mailSendSeparateResults( data, selectedResult, email, callback ) {
 /**
   * Get grouped mail
 */
-function getGroupedMail( data, selectedResult ) {
+function getGroupedMail( data, result ) {
  
   var mail = {
-    title: getMailTitle( selectedResult, data.entities ),
-    html: getMailTemplate( selectedResult, data.entities, data.update, data.sheetUrl ),
-    text: getTextMailTemplate( selectedResult, data.entities, data.update, data.sheetUrl )
+    title: getMailTitle( data.entities, result ),
+    html: getMailTemplate( data, result ),
+    text: getTextMailTemplate( data, result )
   }
   
   return mail;
@@ -171,19 +170,19 @@ function getGroupedMail( data, selectedResult ) {
 /**
   * Get separate mails
 */
-function getSeparateMails( data, selectedResult ) {  
+function getSeparateMails( data, result ) {  
   
   var mails = [];
   
-  for (var i = 0; i < selectedResult.length; i++ ) {
+  for (var i = 0; i < result.length; i++ ) {
     
-    var id = data.result[i];
+    var id = data.result[i]; // todo: why data.result and not result ?
     var singleResult = [id];
     
     var mail = {
-      title: getMailTitle( singleResult, data.entities ),
-      html: getMailTemplate( singleResult, data.entities, data.update, data.sheetUrl ),
-      text: getTextMailTemplate( singleResult, data.entities, data.update, data.sheetUrl )
+      title: getMailTitle( data.entities, singleResult ),
+      html: getMailTemplate( data, singleResult ),
+      text: getTextMailTemplate( data, singleResult )
     };
     
     mails.push(mail);
@@ -219,7 +218,7 @@ function sendEmail(email, mail, callback, callbackResult) {
   }
   
   if (callback && typeof(callback) === "function") {
-    Logger.log("ok le callback");
+    //Logger.log("ok le callback");
     return callback(error, callbackResult);
   }
   //{"message":"Limite dépassée : Taille du corps de l'e-mail.","name":"Exception","fileName":"Code","lineNumber":566,"stack":"\tat Code:566 (sendEmail)\n\tat Code:557 (sendGroupedData)\n\tat Code:530 (sendDataTo)\n\tat Code:256 (start)\n"}

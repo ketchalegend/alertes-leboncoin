@@ -2,9 +2,9 @@
 for (var i = 0; i < result.length; i++ ) {
     
   var id = result[i];
-  var label = entities.labels[id].label;
-  var url = entities.urls[id].url;
-  var ads = entities.ads[id].toSend;
+  var label = data.entities.labels[id].label;
+  var url = data.entities.urls[id].url;
+  var ads = data.entities.ads[id].toSend;
   
   var pluralX = ads.length > 1 ? 'x' : '';
   var pluralS = ads.length > 1 ? 's' : '';
@@ -43,6 +43,6 @@ for (var i = 0; i < result.length; i++ ) {
 ?>
 
 
-alertes-leboncoin version <?= version ?> : http://maximelebreton.github.io/alertes-leboncoin
+alertes-leboncoin version <?= data.version ?> : http://maximelebreton.github.io/alertes-leboncoin
 
-Éditer mes alertes : <?= sheetUrl ?>
+Éditer mes alertes : <?= data.sheetUrl ?>

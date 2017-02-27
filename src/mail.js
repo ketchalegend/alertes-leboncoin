@@ -8,13 +8,14 @@
 /**
   * Get mail title
 */
-function getMailTitle( result, entities ) {
+function getMailTitle( entities, result ) {
   
-  var length = getAdsTotalLength( result, entities );
+  var length = getAdsTotalLength( entities, result );
   
   var onlyProAds = true;
   for (var i = 0; i < result.length; i++ ) {
-    var id = result[i]; var ads = entities.ads[id].toSend;
+    var id = result[i];
+    var ads = entities.ads[id].toSend;
     
     if (ads.length) {
       for (var j = 0; j < ads.length; j++ ) {
@@ -43,7 +44,7 @@ function getMailTitle( result, entities ) {
 /**
   * Get ads length
 */
-function getAdsTotalLength( result, entities ) {
+function getAdsTotalLength( entities, result ) {
   var length = 0;
   for (var i = 0; i < result.length; i++ ) {
     var id = result[i];
@@ -57,14 +58,11 @@ function getAdsTotalLength( result, entities ) {
 /*
   * Get mail template
 */
-function getMailTemplate(result, entities, update, sheetUrl, email) {
+function getMailTemplate( data, result ) {
   
   var template = HtmlService.createTemplateFromFile('mail.tpl');
   template.result = result;
-  template.entities = entities;
-  template.update = update;
-  template.sheetUrl = sheetUrl;
-  //template.email = email;
+  template.data = data;
   
   return template.evaluate().getContent();
 }
@@ -73,14 +71,11 @@ function getMailTemplate(result, entities, update, sheetUrl, email) {
 /*
   * Get mail text template
 */
-function getTextMailTemplate(result, entities, update, sheetUrl, email) {
+function getTextMailTemplate( data, result ) {
   
   var template = HtmlService.createTemplateFromFile('mailText.tpl');
+  template.data = data;
   template.result = result;
-  template.entities = entities;
-  template.update = update;
-  template.sheetUrl = sheetUrl;
-  //template.email = email;
   
   return template.evaluate().getContent();
 }
@@ -89,11 +84,11 @@ function getTextMailTemplate(result, entities, update, sheetUrl, email) {
 /*
   * Get mail preheader template
 */
-function getMailPreheaderTemplate(result, entities) {
+function getMailPreheaderTemplate( entities, result ) {
   
   var template = HtmlService.createTemplateFromFile('mail__preheader.tpl');
-  template.result = result;
   template.entities = entities;
+  template.result = result;
   
   return template.evaluate().getContent();
 }
@@ -102,11 +97,11 @@ function getMailPreheaderTemplate(result, entities) {
 /*
   * Get mail summary template
 */
-function getMailSummaryTemplate(result, entities) {
+function getMailSummaryTemplate( entities, result ) {
   
   var template = HtmlService.createTemplateFromFile('mail__summary.tpl');
-  template.result = result;
   template.entities = entities;
+  template.result = result;
   
   return template.evaluate().getContent();
 }
@@ -115,11 +110,11 @@ function getMailSummaryTemplate(result, entities) {
 /*
   * Get mail listing template
 */
-function getMailListingTemplate( result, entities ) {
+function getMailListingTemplate( entities, result ) {
   
   var template = HtmlService.createTemplateFromFile('mail__listing.tpl');
-  template.result = result;
   template.entities = entities;
+  template.result = result;
   
   return template.evaluate().getContent();
 }

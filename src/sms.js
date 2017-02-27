@@ -7,10 +7,10 @@
 /**
   * Get Sms Ads Template (multi)
 */
-function getSmsAdsTemplate(entities, selectedResult) {
+function getSmsAdsTemplate( entities, result ) {
   
   var template = HtmlService.createTemplateFromFile('smsAds.tpl');
-  var id = selectedResult[0];
+  var id = result[0];
   template.label = entities.labels[id].label;
   template.url = entities.urls[id].url;
   template.ads = entities.ads[id].toSend;
@@ -34,16 +34,16 @@ function getSmsAdTemplate(ad) {
 /**
   * Get sms messages
 */
-function getSmsMessages(data, selectedResult, maxSmsSendByResult) {
+function getSmsMessages(data, result, maxSmsSendByResult) {
   
   var messages = [];
-  var id = selectedResult[0];
+  var id = result[0];
   var ads = data.entities.ads[id].toSend;
   
   maxSmsSendByResult = maxSmsSendByResult || params.maxSmsSendByResult;
   
   if (ads.length > maxSmsSendByResult) {
-    var message = getSmsAdsTemplate(data.entities, selectedResult);
+    var message = getSmsAdsTemplate(data.entities, result);
     messages.push(message);
 		
   } else {

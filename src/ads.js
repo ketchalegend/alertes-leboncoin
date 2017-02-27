@@ -5,6 +5,33 @@
 */
 
 /**
+  * Get ads from url
+*/
+function getAdsFromUrl( url ) {
+  
+  var ads;
+    
+  // Cache is only necessary when debugging with large datasets
+  if (params.useCache) {
+    var cachedUrlContent = getCachedContent( url );
+    if ( cachedUrlContent ) {
+      ads = JSON.parse( cachedUrlContent );   
+    }
+  }
+  if ( (params.useCache && !cachedUrlContent) || !params.useCache) {
+    
+    var html = getUrlContent( url );
+    ads = getListingAdsFromHtml( html );
+  }
+  if ( params.useCache && !cachedUrlContent ) {
+    setCache( url, JSON.stringify( ads ) );
+  }
+  
+  return ads;
+  
+}
+
+/**
   * Get listing ads data
   * @returns {Object} Returns data of the listing ads
 */
