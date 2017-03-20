@@ -2,7 +2,7 @@
 
 ### 5.2.7
 - Refactoring et amélioration du correctif #22
-- ajout du paramètre individuel "pause"
+- ajout du paramètre individuel `pause`
 
 ### 5.2.6
 - correctif [#22](https://github.com/maximelebreton/alertes-leboncoin/issues/22)
