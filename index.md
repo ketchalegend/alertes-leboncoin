@@ -1,7 +1,7 @@
 
 
 
-Alertes leboncoin - 5.2.6 [![GitHub watchers](https://img.shields.io/github/stars/maximelebreton/alertes-leboncoin.svg?style=social&label=Star)](https://github.com/maximelebreton/alertes-leboncoin)
+Alertes leboncoin - 5.2.7 [![GitHub watchers](https://img.shields.io/github/stars/maximelebreton/alertes-leboncoin.svg?style=social&label=Star)](https://github.com/maximelebreton/alertes-leboncoin)
 =============================
 Recevez par email vos recherches leboncoin.fr (via Google Sheets / App Script)
 
@@ -95,8 +95,9 @@ Paramètre (individuel) | Valeur | Description | Type
 `minPrice` | `150` (exemple) | *Spécifier un prix minimum (>=)* | `Number`
 `maxPrice` | `275` (exemple) | *Spécifier un prix maximum (<=)* | `Number`
 `sendSms` | `true` ou `false` | *[Experimental] Active l'envoi de Sms (uniquement compatible avec l'api __Free Mobile__ pour le moment)* | `Boolean`
-`freeUser` | `"0123456789"` (exemple) | *Numéro Free Mobile* | `String`
+`freeUser` | `"0123456789"` (exemple) | *ID Free Mobile* | `String`
 `freePass` | `"xxxxxx"` (exemple) | *Clé d'identification (à générer dans [votre espace Free Mobile](http://www.universfreebox.com/article/26337/Nouveau-Free-Mobile-lance-un-systeme-de-notification-SMS-pour-vos-appareils-connectes))*  | `String`
+`pause` | `true` ou `false` | *Mets en pause l'annonce* | `Boolean`
 
 
 Obtenir la dernière mise à jour
