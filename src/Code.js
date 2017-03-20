@@ -5,7 +5,7 @@
 var cheerio = cheeriogasify.require('cheerio');
 var $ = cheerio;
 
-var version = "5.2.6";
+var version = "5.2.7";
 
 var defaults = {
   debug: false,
@@ -28,7 +28,8 @@ var defaults = {
   colors: {
     background: {
       working: '#ECEFF1',
-      success: '#DCEDC8'
+      success: '#DCEDC8',
+      warning: '#FF0000'
     },
     border: {
       working: '#B0BEC5'
@@ -112,12 +113,12 @@ function start(userParams) {
     
     var url = getCellByIndex( index, rangeNames.url, sheetNames.main ).getValue(); // String URL expected    
     var ads = getAdsFromUrl( url );
+    
+    var stringifiedSingleParams = params.isAvailable.advancedOptions ? getCellByIndex( index, rangeNames.advancedOptions, sheetNames.main ).getValue() : "";
+    var singleParams = stringifiedSingleParams.length ? JSON.parse(stringifiedSingleParams) : {};
 
-    if (ads.length && params.sendMail == true) {
-      
-      var stringifiedSingleParams = params.isAvailable.advancedOptions ? getCellByIndex( index, rangeNames.advancedOptions, sheetNames.main ).getValue() : "";
-      var singleParams = stringifiedSingleParams.length ? JSON.parse(stringifiedSingleParams) : {};
-      
+    if (singleParams.pause !== true && ads.length && params.sendMail == true) {
+  
       var lastAdSentDate = getCellByIndex( index, rangeNames.lastAd, sheetNames.main ).getValue(); // Date Object expected
       var unsentAds = getLatestAds(ads, lastAdSentDate);
       var adsToSend = filterAds(unsentAds, singleParams); 

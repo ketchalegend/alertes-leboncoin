@@ -10,16 +10,28 @@
 */
 function getUrlContent(url, remainingAttempts) {
   
-  var remainingAttempts = remainingAttempts || 3; // TODO : refactor because in this way the default param can't be 0
+  var content = "";
+  var remainingAttempts = remainingAttempts || 2; // String
+      remainingAttempts = Number(remainingAttempts); // Number
   var response = getUrlResponse(url);
   
-  if (response.getResponseCode() === 500 && remainingAttempts > 1) { // TODO : refactor, should be > 0
-    Utilities.sleep(1000); // Waiting 1 sec and retry
-    getUrlContent(url, remainingAttempts-1);
-    return;
+  if ( response.getResponseCode() === 500 ) {
+    
+    if ( remainingAttempts == 0 ) {
+      
+      getSpreadsheetContext().toast( response.getContentText() );
+      
+    } else {
+      Utilities.sleep(1000); // Waiting 1 sec and retry
+      remainingAttempts = remainingAttempts-1; // Number
+      getUrlContent(url, remainingAttempts.toString()); // Inside loop, remainingAttemps need to be a String and not a number because of 0
+    }
+    
+  } else {
+    content = response.getContentText("iso-8859-15");
   }
   
-  return response.getContentText("iso-8859-15");
+  return content;
 }
 
 
@@ -28,7 +40,7 @@ function getUrlContent(url, remainingAttempts) {
 */
 function getUrlResponse(url) {
   
-  var response = UrlFetchApp.fetch(url, {muteHttpExceptions: params.muteHttpExceptions});
+  var response = UrlFetchApp.fetch(url, {muteHttpExceptions: params.muteHttpExceptions, followRedirects: true});
   
   return response;  
 }

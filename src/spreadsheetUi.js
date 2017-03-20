@@ -71,9 +71,11 @@ function showDialog(title, content) {
 /**
   * Highlight row
 */
-function highlightRow(row) {
-  row.setBorder(true, true, true, true, false, false, params.colors.border.working, null);
-  row.setBackground( params.colors.background.working );
+function highlightRow(row, backgroundColor, borderColor) {
+  var backgroundColor = backgroundColor || params.colors.background.working; 
+  var borderColor = borderColor || params.colors.border.working; 
+  row.setBackground( backgroundColor );
+  row.setBorder(true, true, true, true, false, false, borderColor, null);
   SpreadsheetApp.flush(); // see https://developers.google.com/apps-script/reference/spreadsheet/spreadsheet-app#flush
 }
 
@@ -82,8 +84,8 @@ function highlightRow(row) {
   * Unhighlight row
 */
 function unhighlightRow(row) {
-  row.setBorder(false, false, false, false, false, false);
   row.setBackground('');
+  row.setBorder(false, false, false, false, false, false);
   SpreadsheetApp.flush();
 }
 
