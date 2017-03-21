@@ -21,6 +21,7 @@ Pour commencer
 
 4. Il ne vous reste plus qu'à vous rendre sur le site [leboncoin.fr](https://www.leboncoin.fr) pour **copier le lien** de votre recherche, puis le **coller** dans votre feuille de calcul (colonne `Lien` de l'onglet **`Vos alertes`**).
 
+
 Wiki
 -----
 
@@ -101,6 +102,13 @@ Paramètre (individuel) | Valeur | Description | Type
 `freePass` | `"xxxxxx"` (exemple) | *Clé d'identification (à générer dans [votre espace Free Mobile](http://www.universfreebox.com/article/26337/Nouveau-Free-Mobile-lance-un-systeme-de-notification-SMS-pour-vos-appareils-connectes))*  | `String`
 `pause` | `true` ou `false` | *Mets en pause l'annonce* | `Boolean`
 
+
+Limitations
+---------------
+Le **code** du projet *Alertes leboncoin* est libre, mais basé sur le **service** *App Script* associé à votre compte Google.  
+Bien que ma solution a l'avantage d'être "gratuite", elle reste totalement dépendante de Google, de sa politique et de ses limitations.  
+Il est donc plus que conseillé d'avoir un **usage raisonnable de la solution**, sans quoi vous seriez vite confrontés aux [limitations du service](https://developers.google.com/apps-script/guides/services/quotas#current_limitations) (ce qui ne pénalise que vous).  
+Mais plus important, *leboncoin.fr* pourrait détecter et sanctionner ces abus, ce qui pénaliserait cette fois toute la communauté.
 
 
 Obtenir la dernière mise à jour
