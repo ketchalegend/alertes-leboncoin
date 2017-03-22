@@ -105,10 +105,10 @@ Paramètre (individuel) | Valeur | Description | Type
 
 Limitations
 ---------------
-Le **code** du projet *Alertes leboncoin* est libre, mais basé sur le **service** *App Script* associé à votre compte Google.  
-Bien que ma solution a l'avantage d'être "gratuite", elle reste totalement dépendante de Google, de sa politique et de ses limitations.  
-Il est donc plus que conseillé d'avoir un **usage raisonnable de la solution**, sans quoi vous seriez vite confrontés aux [limitations du service](https://developers.google.com/apps-script/guides/services/quotas#current_limitations) (ce qui ne pénalise que vous).  
-Mais plus important, *leboncoin.fr* pourrait détecter et sanctionner ces abus, ce qui pénaliserait cette fois toute la communauté.
+*Alertes leboncoin* est une **web application open source**, mais basé sur le **service *App Script*** associé à votre compte *Google*.  
+Bien que ma solution a l'**avantage d'être "gratuite"**, elle reste totalement **dépendante de *Google*, de sa politique et de ses limitations**.  
+Il est donc plus que conseillé d'avoir un **usage raisonnable de la solution**, sans quoi vous seriez vite confrontés aux **[limitations du service](https://developers.google.com/apps-script/guides/services/quotas#current_limitations)**.  
+D'autre part, il faut savior que *leboncoin.fr* pourrait détecter et sanctionner ces abus, ce qui viendrait pénaliser toute la communauté.
 
 
 Obtenir la dernière mise à jour
