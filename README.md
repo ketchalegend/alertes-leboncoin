@@ -108,7 +108,7 @@ Limitations
 *Alertes leboncoin* est une **web application dont le code est open source**, mais basée sur le **service *App Script*** associé à votre compte *Google* (**qui lui ne l'est pas**).  
 Bien que cette solution a l'**avantage d'être "gratuite"**, elle reste totalement **dépendante de la politique de *Google* et de ses limitations**.  
 Il est plus que conseillé d'avoir un **usage raisonnable de la solution**, sans quoi vous seriez vite confrontés aux **[limitations du service](https://developers.google.com/apps-script/guides/services/quotas#top_of_page)**.  
-D'autre part, il faut savoir que *leboncoin.fr* pourrait détecter et sanctionner ces abus, ce qui viendrait pénaliser toute la communauté.
+D'autre part, n'étant pas une solution officielle d'alertes, *leboncoin.fr* peut tout à fait décider d'y mettre un terme s'il considère qu'il y'a des abus, ce qui viendrait pénaliser toute la communauté.
 
 
 Obtenir la dernière mise à jour
