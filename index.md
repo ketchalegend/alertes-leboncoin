@@ -99,6 +99,12 @@ Paramètre (individuel) | Valeur | Description | Type
 `freePass` | `"xxxxxx"` (exemple) | *Clé d'identification (à générer dans [votre espace Free Mobile](http://www.universfreebox.com/article/26337/Nouveau-Free-Mobile-lance-un-systeme-de-notification-SMS-pour-vos-appareils-connectes))*  | `String`
 `pause` | `true` ou `false` | *Mets en pause l'annonce* | `Boolean`
 
+Limitations
+---------------
+*Alertes leboncoin* est une **web application dont le code est open source**, mais basée sur le **service *App Script*** associé à votre compte *Google* (**qui lui ne l'est pas**).  
+Bien que cette solution a l'**avantage d'être "gratuite"**, elle reste totalement **dépendante de la politique de *Google* et de ses limitations**.  
+Il est plus que conseillé d'avoir un **usage raisonnable de la solution**, sans quoi vous seriez vite confrontés aux **[limitations du service](https://developers.google.com/apps-script/guides/services/quotas#top_of_page)**.  
+D'autre part, n'étant pas une solution officielle d'alertes, *leboncoin.fr* peut tout à fait décider d'y mettre un terme s'il considère qu'il y'a des abus, ce qui viendrait pénaliser toute la communauté.
 
 Obtenir la dernière mise à jour
 ----------------------------------
