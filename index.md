@@ -1,9 +1,9 @@
 
 
-
 Alertes leboncoin - 5.2.7 [![GitHub watchers](https://img.shields.io/github/stars/maximelebreton/alertes-leboncoin.svg?style=social&label=Star)](https://github.com/maximelebreton/alertes-leboncoin)
 =============================
-Recevez par email vos recherches leboncoin.fr (via Google Sheets / App Script)
+Recevez par email vos recherches leboncoin.fr (via Google Sheets / App Script) &nbsp; 
+[![Faire un don](https://www.paypalobjects.com/fr_FR/FR/i/btn/btn_donate_SM.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7Y34RFD6WYVRA)
 
 <div style="float:right;"><img src="https://raw.githubusercontent.com/maximelebreton/alertes-leboncoin/master/main.png"/></div>
 _____________________________
@@ -156,7 +156,7 @@ Code de la bibliothèque : [script.google.com/...](https://script.google.com/mac
 
 _____________________________
 
-<div style="text-align:center;">[![Faire un don](https://www.paypalobjects.com/fr_FR/FR/i/btn/btn_donate_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7Y34RFD6WYVRA)</div>
+[![Faire un don](https://www.paypalobjects.com/fr_FR/FR/i/btn/btn_donate_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7Y34RFD6WYVRA)
 
 [Laisser un commentaire](http://maximelebreton.github.io/alertes-leboncoin/#disqus_thread)
 -------------
