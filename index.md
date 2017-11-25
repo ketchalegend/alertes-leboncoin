@@ -156,7 +156,7 @@ Code de la bibliothèque : [script.google.com/...](https://script.google.com/mac
 
 _____________________________
 
-<center>[![Faire un don](https://www.paypalobjects.com/fr_FR/FR/i/btn/btn_donate_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7Y34RFD6WYVRA)</center>
+<div style="text-align:center;">[![Faire un don](https://www.paypalobjects.com/fr_FR/FR/i/btn/btn_donate_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7Y34RFD6WYVRA)</div>
 
 [Laisser un commentaire](http://maximelebreton.github.io/alertes-leboncoin/#disqus_thread)
 -------------
