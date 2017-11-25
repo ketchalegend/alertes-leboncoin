@@ -1,5 +1,4 @@
 
-> Chers utilisateurs, si vous avez utilisé une **version inférieure à la 5.2.4** lors du passage entre 2016 à 2017, il est possible que vous ne receviez plus les nouvelles annonces. Je vous invite donc à **faire la mise à jour**, et à **vérifier les dates** indiquées dans votre colonne 'Dernière annonce', car elles pourraient avoir 1 an d'avance !
 
 
 Alertes leboncoin - 5.2.7 [![GitHub watchers](https://img.shields.io/github/stars/maximelebreton/alertes-leboncoin.svg?style=social&label=Star)](https://github.com/maximelebreton/alertes-leboncoin)
@@ -7,7 +6,7 @@ Alertes leboncoin - 5.2.7 [![GitHub watchers](https://img.shields.io/github/star
 Recevez par email vos recherches leboncoin.fr (via Google Sheets / App Script)
 
 <div style="float:right;"><img src="https://raw.githubusercontent.com/maximelebreton/alertes-leboncoin/master/main.png"/></div>
-_____________________________
+
 
 Pour commencer
 ------------------------------------------
@@ -161,3 +160,6 @@ _____________________________
 
 [Laisser un commentaire](http://maximelebreton.github.io/alertes-leboncoin/#disqus_thread)
 -------------
+
+
+[![Faire un don](https://www.paypalobjects.com/fr_FR/FR/i/btn/btn_donate_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7Y34RFD6WYVRA)
