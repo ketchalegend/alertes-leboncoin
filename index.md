@@ -1,4 +1,4 @@
->   ***leboncoin.fr** ayant récemment entièrement réécrit le code de son site, **Alertes LeBonCoin** se retrouve face à des contraintes techniques insolubles pour le moment (comme l'affichage des images), mais j'espère trouver une solution d'ici peu. Affaire à suivre.*
+>   Juin 2018 : ***leboncoin.fr** ayant récemment entièrement réécrit le code de son site, **Alertes LeBonCoin** se retrouve face à des contraintes techniques insolubles pour le moment (comme l'affichage des images), mais j'espère trouver une solution d'ici peu. Affaire à suivre.*
 
 ----------------
 
