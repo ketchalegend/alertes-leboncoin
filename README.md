@@ -1,13 +1,13 @@
+>   Juin 2018 : ***leboncoin.fr** ayant récemment entièrement réécrit le code de son site, **Alertes LeBonCoin** se retrouve face à des contraintes techniques insolubles pour le moment (comme l'affichage des images), mais j'espère trouver une solution d'ici peu. Affaire à suivre.*
 
-> Chers utilisateurs, si vous avez utilisé une **version inférieure à la 5.2.4** lors du passage entre 2016 à 2017, il est possible que vous ne receviez plus les nouvelles annonces. Je vous invite donc à **faire la mise à jour**, et à **vérifier les dates** indiquées dans votre colonne 'Dernière annonce', car elles pourraient avoir 1 an d'avance !
-
+----------------
 
 Alertes leboncoin - 5.2.7 [![GitHub watchers](https://img.shields.io/github/stars/maximelebreton/alertes-leboncoin.svg?style=social&label=Star)](https://github.com/maximelebreton/alertes-leboncoin)
 =============================
 Recevez par email vos recherches leboncoin.fr (via Google Sheets / App Script)
 
 <div style="float:right;"><img src="https://raw.githubusercontent.com/maximelebreton/alertes-leboncoin/master/main.png"/></div>
-_____________________________
+
 
 Pour commencer
 ------------------------------------------
@@ -20,6 +20,7 @@ Pour commencer
 3. Pour être averti **automatiquement** des prochains résultats, réglez la **fréquence** à laquelle vous souhaitez être averti via le **menu dans `Planification des alertes`.**
 
 4. Il ne vous reste plus qu'à vous rendre sur le site [leboncoin.fr](https://www.leboncoin.fr) pour **copier le lien** de votre recherche, puis le **coller** dans votre feuille de calcul (colonne `Lien` de l'onglet **`Vos alertes`**).
+
 
 Wiki
 -----
@@ -102,6 +103,13 @@ Paramètre (individuel) | Valeur | Description | Type
 `pause` | `true` ou `false` | *Mets en pause l'annonce* | `Boolean`
 
 
+Limitations
+---------------
+*Alertes leboncoin* est une **web application dont le code est open source**, mais basée sur le **service *App Script*** associé à votre compte *Google* (**qui lui ne l'est pas**).  
+Bien que cette solution a l'**avantage d'être "gratuite"**, elle reste totalement **dépendante de la politique de *Google* et de ses limitations**.  
+Il est plus que conseillé d'avoir un **usage raisonnable de la solution**, sans quoi vous seriez vite confrontés aux **[limitations du service](https://developers.google.com/apps-script/guides/services/quotas#top_of_page)**.  
+D'autre part, n'étant pas une solution officielle d'alertes, *leboncoin.fr* peut tout à fait décider d'y mettre un terme s'il considère qu'il y'a des abus, ce qui viendrait pénaliser toute la communauté.
+
 
 Obtenir la dernière mise à jour
 ----------------------------------
@@ -153,3 +161,6 @@ _____________________________
 
 [Laisser un commentaire](http://maximelebreton.github.io/alertes-leboncoin/#disqus_thread)
 -------------
+
+
+[![Faire un don](https://www.paypalobjects.com/fr_FR/FR/i/btn/btn_donate_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7Y34RFD6WYVRA)
