@@ -8,15 +8,40 @@
 /**
   * Set params
 */
-function setParams(userScriptParams) {
-  
+function getParams(defaults, userScriptParams) {
+   
   var scriptParams = deepExtend({}, defaults, handleDepreciatedParams(userScriptParams) );
- 
-  params = scriptParams; // because getUserParamsFromSheet() need params... (maybe needs to refactor?)
-  var sheetParams = getUserParamsFromSheet();
+  
+  //var params = scriptParams; // because getUserParamsFromSheet() need params... (maybe needs to refactor?)
+  var sheetParams = getUserParamsFromSheet( scriptParams );
   
   var mergedParams = deepExtend({}, scriptParams, sheetParams)
-  params = mergedParams;
+  //params = mergedParams;
+  
+  
+  var stringifiedParams = {};
+  Object.keys(mergedParams).forEach( function(key) {
+    
+    var value = JSON.stringify( mergedParams[key], function(key, val) {
+      if (typeof val === 'function') {
+        return val + ''; // implicitly `toString` it
+      }
+      return val;
+    });
+    
+    stringifiedParams[key] = value;
+  });
+  
+  var documentProperties = PropertiesService.getDocumentProperties();
+  documentProperties.setProperties( stringifiedParams ); 
+  
+  var names = getParam('names');
+  Logger.log( stringifiedParams );
+  Logger.log( typeof names );
+  Logger.log( names.sheet );
+  Logger.log( names['sheet'] );
+    
+  return mergedParams;
 }
 
 
@@ -54,6 +79,13 @@ function handleDepreciatedParams(userScriptParams) {
     modifiedParams.isAvailable.advancedOptions = true;
   }
   
+  var advancedMenuRange = rangeNames.advancedMenu;
+  if (typeof advancedMenuRange == 'undefined') {
+    modifiedParams.isAvailable.advancedMenu = false;
+  } else {
+    modifiedParams.isAvailable.advancedMenu = true;
+  }
+  
   return modifiedParams;
 }
 
@@ -61,7 +93,7 @@ function handleDepreciatedParams(userScriptParams) {
 /**
   * Get user params from variables sheet
 */
-function getUserParamsFromSheet() {
+function getUserParamsFromSheet( params ) {
   
   var sheetUserParams = {};
     
@@ -86,10 +118,10 @@ function getRecipientEmail() {
   
   var recipientEmail;
   
-  if (params.isAvailable.sheetParams) {
-    recipientEmail = params.email;
+  if ( getParam('isAvailable').sheetParams ) {
+    recipientEmail = getParam('email');
   } else {
-    recipientEmail = getValuesByRangeName( params.names.range.recipientEmail )[1][0];
+    recipientEmail = getValuesByRangeName( getParam('names').range.recipientEmail )[1][0];
   }
        
   return recipientEmail;

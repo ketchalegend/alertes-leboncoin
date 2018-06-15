@@ -6,6 +6,7 @@
    var ads = entities.ads[id].toSend;
    var tags = entities.ads[id].tags;
    var singleParams = entities.advanced[id].params;
+   var haveDuplicates = entities.advanced[id].haveDuplicates;
       
    var getUrlField = function(field) {
      var string = getQueryString(field, url);
@@ -21,10 +22,17 @@
   ?>
 
   <? if (ads.length) { ?>
+  
+  <? if (haveDuplicates == true && ads.length <= 1) { ?>
+  
+    <p style="<?!= inlineStyles.headerList; ?>"><em>Le résultat pour <?= label ?> a été masqué pour éviter les doublons</em></p>
+    
+  <? } else { ?>
+  
     <p style="<?!= inlineStyles.headerList; ?>">
-      <a lang="underlineOnHover" name="<?= params.names.mail.anchorPrefix+i ?>" href="<?= url ?>" style="<?!= inlineStyles.headerListLink; ?>"><?= label ?></a> (<?= ads.length ?>)
+      <a lang="underlineOnHover" name="<?= getParam('names').mail.anchorPrefix+i ?>" href="<?= url ?>" style="<?!= inlineStyles.headerListLink; ?>"><?= label ?></a> (<?= ads.length ?>)
       
-      <? if (params.showTags) { ?>
+      <? if ( getParam('showTags') ) { ?>
       
       <span style="<?!= inlineStyles.headerListTags; ?>">
           <? if (searchQuery) { ?><span title="Recherche" style="<?!= inlineStyles.label + inlineStyles.labelSecondary ?>"><?= searchQuery ?></span><? } ?>
@@ -36,9 +44,10 @@
   
     <ul style="<?!= inlineStyles.list; ?>">
     
-      <?!= getMailAdsTemplate( ads, singleParams ); ?>
+      <?!= getMailAdsTemplate( ads, singleParams, haveDuplicates ); ?>
       
     </ul>
+  <? } ?>
   <? } ?>
   
 <? } ?>

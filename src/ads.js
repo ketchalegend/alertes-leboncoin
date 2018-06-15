@@ -7,40 +7,175 @@
 /**
   * Get ads from url
 */
-function getAdsFromUrl( url ) {
+function getHtmlContentFromUrl( url ) {
   
-  var ads;
-    
+  var htmlContent = {};
+  
   // Cache is only necessary when debugging with large datasets
-  if (params.useCache) {
+  if ( getParam('useCache') ) {
     var cachedUrlContent = getCachedContent( url );
     if ( cachedUrlContent ) {
-      ads = JSON.parse( cachedUrlContent );   
+      htmlContent = JSON.parse( cachedUrlContent );
+      getSpreadsheetContext().toast('Récupération du cache');
     }
   }
-  if ( (params.useCache && !cachedUrlContent) || !params.useCache) {
+  if ( (  getParam('useCache') && !cachedUrlContent) || !getParam('useCache') ) {
     
     var html = getUrlContent( url );
-    ads = getListingAdsFromHtml( html );
+
+    htmlContent = {
+      main: getMainHtml( html ),
+      json: getJSONDataHtml( html ),
+      tags: getTagDataHtml( html )
+    };
+
   }
-  if ( params.useCache && !cachedUrlContent ) {
-    setCache( url, JSON.stringify( ads ) );
+  if ( getParam('useCache') && !cachedUrlContent ) {
+    setCache( url, JSON.stringify( htmlContent ));
+    getSpreadsheetContext().toast('Mise en cache');
   }
   
-  return ads;
-  
+  return htmlContent;
 }
+
+
+/**
+  * Get Main Html
+*/
+function getMainHtml( html ) {
+  var mainHtml = extractHtml(html, getParam('selectors').mainStartTag, getParam('selectors').mainEndTag, getParam('selectors').mainStartTag.length );
+  
+  return mainHtml;
+}
+
+
+/**
+  * Get Tag Data Html
+*/
+function getTagDataHtml( html ) {
+  var startTag = 'var utag_data = '
+  var endTag = '</script>';
+  
+  var tagDataHtml = extractHtml(html, startTag, endTag, 0, endTag.length).trim();
+  
+  return tagDataHtml;
+}
+
+/**
+  * Get JSON Data Html
+*/
+function getJSONDataHtml( html ) {
+  var startTag = 'window.FLUX_STATE = '
+  var endTag = '</script>';
+  
+  var JSONDataHtml = extractHtml(html, startTag, endTag, startTag.length, 0).trim();
+  
+  return JSONDataHtml;
+}
+
+
+/**
+  * Get Main JSDOM
+*/
+function getMainJSDOM( html ) {
+  var $main = $( getParam('selectors').adItem, getParam('selectors').adContext, html );
+  //var $main = $('li[itemtype="http://schema.org/Offer"]', getParam('selectors').adContext, html); // reference
+  //var $main = $('.mainList ul > li', getParam('selectors').adContext, html); // same
+  //var $main = $('.mainList li[itemtype="http://schema.org/Offer"]', getParam('selectors').adContext, html); // same
+  //var $main = $('.mainList', getParam('selectors').adContext, html).find('li'); // slower
+  //var $main = $('#listingAds .mainList ul > li', html); // 
+  
+  return $main;
+}
+
+
+/**
+  * Get tags from html
+*/
+function getTagDataFromHtml( html ) {  
+  var tagData = {};
+  
+  try {
+    var separator = ' : ';
+    var wantedTags = ['prixmin', 'prixmax', 'anneemin', 'anneemax', 'subcat', 'cat', 'region', 'departement', 'kmmin', 'kmmax', 'cp', 'city'];
+    
+    for (var i = 0; i < wantedTags.length; i++ ) {
+      var tagLabel = wantedTags[i];
+      var tagValue = extractHtml(html, tagLabel, ',', tagLabel.length + separator.length);
+      
+      if (tagValue) {
+        tagData[tagLabel] = tagValue;
+      }
+    }
+  } catch (e) {
+    console.error("Parsing error:", e); 
+  }
+    
+  return tagData;
+}
+
+
+function getIdFromUrl(url) {
+ 
+  var regex = /\/(\d+)[\.\/\?]/i;
+  var matches = url.match(regex);
+  var id = matches ? matches[1] : matches;
+  
+  return id;
+}
+
+function getRelativeUrl(url) {
+  
+  var regex = /(.+leboncoin\.fr)(.+)/i;
+  var matches = url.match(regex);
+  var relativeUrl = matches ? matches[2] : url;
+
+  return relativeUrl;
+}
+  
+
+function getListingAdsFromJSON( ads, userLabel ) {  
+  
+  return ads.map( function( ad ) {
+    
+    
+    
+    return {
+      id: ad.list_id,
+      title: ad.subject,
+      textPrice: ad.price && ad.price.length ? formatPrice( ad.price[0] ) + ' €' : '',
+      price: ad.price && ad.price.length ? ad.price[0] : undefined,
+      userLabel: userLabel,
+      textPlace: ad.location.city_label,
+      textDateTime: dayjs( ad.index_date ).format('dddd DD MMMM, HH:hh'),
+      isPro: ad.owner.type == "pro" ? true : false,
+      url: ad.url,
+      img: {
+      src: ad.images && ad.images.urls && ad.images.urls.length ? ad.images.urls[0] : undefined
+      },
+      //timestamp: getDateWithIdMilliseconds(new Date(ad.index_date), ad.list_id).getTime(),
+      timestamp: getDateObjectFromString( ad.index_date ).getTime(),
+      shortUrl: ad.url,
+      isDuplicateOf: []
+    }
+  });
+
+}
+
 
 /**
   * Get listing ads data
   * @returns {Object} Returns data of the listing ads
 */
-function getListingAdsFromHtml( html ) {  
+function getListingAdsFromHtml( mainHtml, tagsHtml, userLabel ) {  
   
   var ads = [];
   var protocol = 'https:';
-  var mainHtml = extractHtml(html, params.selectors.mainStartTag, params.selectors.mainEndTag, params.selectors.mainStartTag.length );
-  var $selector = $(params.selectors.adItem, params.selectors.adContext, mainHtml);
+
+  var $selector = getMainJSDOM( mainHtml );
+  
+  //var tags = getTagDataFromHtml( tagsHtml );
+  //var searchCategorySlug = JSON.parse( tags.subcat );
   
   // liste des annonces
   $selector.each(function(i, element) {
@@ -48,35 +183,41 @@ function getListingAdsFromHtml( html ) {
     var $this = $(this);
     
     var $a = $this.find('a');
-    
     var $item_supp = $this.find('.item_supp');
     
     var $title = $this.find('[itemprop="name"]') || $this.find('.item_title');
-    var $price = $this.find('.item_price');
+    var $price = $this.find('[itemprop="price"]') || $this.find('.item_price');
+    var $category = $this.find('[itemprop="category"]') || $item_supp.eq( 0 ); 
     var $place = $this.find('[itemprop="availableAtOrFrom"]') || $item_supp.eq( 1 ); 
-    var $img = $this.find('.item_image').find('.lazyload');    
+    var $img =  $this.find('.item_image').find('.lazyload') || $this.find('[itemprop="image"]');
     var $date = $this.find('[itemprop="availabilityStarts"]') || $item_supp.eq( 2 );
     var isPro = $this.find('.ispro').length ? true : false;
-        
+    
+    //var categorySlug = (searchCategorySlug == "toutes_categories") ? slug( $category.attr('content') ) : searchCategorySlug;
+                
     var ad = {
-      id: Number($a.data( 'info' ).ad_listid),
+      //id: Number($a.data( 'info' ).ad_listid),
+      id: Number( getIdFromUrl($a.attr('href')) ),
       title: cleanText( $title.text() ),
-      price: Number( $price.attr('content') ),
-      textPrice: cleanText( $price.text() ),
+      textPrice: Number( parseFloat( $price.text().replace(/\s/g, '') ) ).toLocaleString() + ' €',
+      price: Number( parseFloat( $price.text().replace(/\s/g, '') ) ),
+      //categorySlug: categorySlug,
+      userLabel: userLabel,
       textPlace: cleanText( $place.text() ),
       textDateTime: cleanText( $date.text() ),
       textDate: String( $date.attr('content') ),
       isPro: isPro,
-      url: protocol + $a.attr('href'),
+      url: 'https://www.leboncoin.fr' + getRelativeUrl( $a.attr('href') ),
       img: {
-        src: addProtocol( $img.data('imgsrc') )
+        src: addProtocol( $img.data('imgsrc') ) || $img.attr('content')
       }
-      
     };
-                     
+                 
     // A real Date Object with milliseconds based on Ad Id to prevent conflicts
-    ad.timestamp = getAdDateTime( ad.textDate, ad.textDateTime, ad.id ).getTime();
+    ad.timestamp = getAdDateTime( ad.textDateTime, ad.id ).getTime();
+  
     ad.shortUrl = 'https://leboncoin.fr/vi/' + ad.id;
+    ad.isDuplicateOf = []; // for later use
         
     ads.push(ad);
     
@@ -200,7 +341,7 @@ function getAdsBetweenPrice(ads, minPrice, maxPrice) {
 /**
   * Get Ad Date Time (with adId param to generate milliseconds)
 */
-var getAdDateTime = function(adTextDate, adTextDateTime, adId) {
+var getAdDateTime = function(adTextDateTime, adId) {
   
   // Date is now
   var d = new Date();
@@ -208,19 +349,18 @@ var getAdDateTime = function(adTextDate, adTextDateTime, adId) {
   d.setSeconds(0);
   d.setMilliseconds(0);
   
-  var dateSplit = adTextDate.split('-');
+  /*var dateSplit = adTextDate.split('-');
   var year = Number(dateSplit[0]);
   var month = Number(dateSplit[1]) - 1; // because months = 0-11
-  var day = Number(dateSplit[2]);
+  var day = Number(dateSplit[2]);*/
   
   var dateTimeSeparator = adTextDateTime.indexOf(',');
-  //var dateString = adTextDateTime.substring(0, dateTimeSeparator).trim().toLowerCase();
+  var dateString = adTextDateTime.substring(0, dateTimeSeparator).trim().toLowerCase();
   var timeString = adTextDateTime.substring(dateTimeSeparator + 1).trim();
   var timeSeparator = timeString.indexOf(":");
-  //var dateSeparator = dateString.indexOf(" ");
+  var dateSeparator = dateString.indexOf(" ");
   
-  /**
-    * DEPRECATED since leboncoin use microdata for date
+
   // Month, Day
   var month;
   var day;
@@ -240,7 +380,7 @@ var getAdDateTime = function(adTextDate, adTextDateTime, adId) {
           var dayString = dateString.substring(0, dateSeparator);
           month = getMonthNumber( monthString );
           day = Number( dayString );
-  }*/
+  }
   
   // Hours, minutes
   var hours = Number(timeString.substring(0, timeSeparator));
@@ -249,7 +389,7 @@ var getAdDateTime = function(adTextDate, adTextDateTime, adId) {
   // Milliseconds based on Ad Id (magic trick)
   var milliseconds = getMillisecondsByMagic( adId );
   
-  d.setYear( year );
+  //d.setYear( year ); // TODO: find a way to prevent year changes (december->january)
   d.setMonth( month );
   d.setDate( day );
   d.setHours( hours );
@@ -264,6 +404,16 @@ var getAdDateTime = function(adTextDate, adTextDateTime, adId) {
   
   //log(date);
   return date;
+}
+
+function getDateWithIdMilliseconds(date, adId) {
+  
+  var d = new Date(date);
+  var milliseconds = getMillisecondsByMagic( adId );
+  d.setMilliseconds( milliseconds )
+  
+  return d;
+  
 }
 
 

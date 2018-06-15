@@ -40,7 +40,7 @@ function getSmsMessages(data, result, maxSmsSendByResult) {
   var id = result[0];
   var ads = data.entities.ads[id].toSend;
   
-  maxSmsSendByResult = maxSmsSendByResult || params.maxSmsSendByResult;
+  maxSmsSendByResult = maxSmsSendByResult || getParam('maxSmsSendByResult');
   
   if (ads.length > maxSmsSendByResult) {
     var message = getSmsAdsTemplate(data.entities, result);

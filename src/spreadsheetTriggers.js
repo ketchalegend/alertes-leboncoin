@@ -3,7 +3,7 @@
 */
 function checkMainTrigger(callbackString) {
   
-  var triggers = ScriptApp.getProjectTriggers();
+ var triggers = ScriptApp.getProjectTriggers();
     
   if (!triggers.length) {
     showMainTriggerWizard(callbackString);

@@ -28,7 +28,8 @@ function getUrlContent(url, remainingAttempts) {
     }
     
   } else {
-    content = response.getContentText("iso-8859-15");
+    //content = response.getContentText("iso-8859-15");
+    content = response.getContentText("UTF-8");
   }
   
   return content;
@@ -40,7 +41,7 @@ function getUrlContent(url, remainingAttempts) {
 */
 function getUrlResponse(url) {
   
-  var response = UrlFetchApp.fetch(url, {muteHttpExceptions: params.muteHttpExceptions, followRedirects: true});
+  var response = UrlFetchApp.fetch(url, {muteHttpExceptions: getParam('muteHttpExceptions'), followRedirects: true});
   
   return response;  
 }
@@ -66,6 +67,36 @@ function forEachCellInRange(columnName, startIndex, callback) {
   
 }
 
+
+/**
+  * Get array index
+*/
+function getArrayIndex(index, startIndex) {
+  var startIndex = startIndex - 1 || 0;
+  return index - startIndex;
+}
+
+
+/**
+  * For each value
+*/
+function forEachValue(values, startIndex, callback) {
+   
+  var startIndex = startIndex - 1 || 0;
+  
+  for (var i = startIndex, length = values.length; i < length; i++) {
+
+    var index = i + 1;
+    var value = values[i][0];
+    
+    if (value.length && callback && typeof(callback) === "function") {
+      callback(index);
+    }
+  }
+  
+}
+
+
 /**
   * Get row by index
 */
@@ -87,7 +118,7 @@ function getCellByIndex( index, rangeName, sheetName ) {
   * Get range by name
 */
 function getRangeByName( rangeName ) {
-      
+
   return getSpreadsheetContext().getRangeByName( rangeName );
 }
 
@@ -124,7 +155,7 @@ function getSheetByName(name) {
   * Get data sheet context
 */
 function getDataSheetContext() {
-  var sheet = getSpreadsheetContext().getSheetByName( params.names.sheet.main );
+  var sheet = getSpreadsheetContext().getSheetByName( getParam('names').sheet.main );
   
   return sheet;
 }
@@ -133,7 +164,7 @@ function getDataSheetContext() {
   * Get variables sheet context
 */
 function getVariablesSheetContext() {
-  var sheet = getSpreadsheetContext().getSheetByName( params.names.sheet.variables );
+  var sheet = getSpreadsheetContext().getSheetByName( getParam('names').sheet.variables );
   
   return sheet;
 }
@@ -172,7 +203,7 @@ function getValuesByRangeName(rangeName, asString) {
 */
 function getCachedContent(url) {
   
-  var cache = CacheService.getPublicCache();
+  var cache = CacheService.getDocumentCache();
   var cached = cache.get( getUrlHashcode(url) );
   
   if (cached != null) {
@@ -187,8 +218,15 @@ function getCachedContent(url) {
   * Set cache
 */
 function setCache(url, content) {
-  var cache = CacheService.getPublicCache();
-  cache.put( getUrlHashcode(url), content, params.cacheTime);
+  //var cache = CacheService.getPublicCache();
+  try {
+  var cache = CacheService.getDocumentCache();
+  cache.put( getUrlHashcode(url), content, getParam('cacheTime') );
+  } catch(e) {
+    Logger.log(e);
+    getSpreadsheetContext().toast( e , 'Alertes LeBonCoin');
+  }
+  
 }
 
 
@@ -205,7 +243,7 @@ function getUrlHashcode( url ) {
 */
 String.prototype.hashCode = function() {
   for(var ret = 0, i = 0, len = this.length; i < len; i++) {
-    ret = (31 * ret + this.charCodeAt(i)) << 0;
+    ret = (26 * ret + this.charCodeAt(i)) << 0;
   }
   return ret;
 };

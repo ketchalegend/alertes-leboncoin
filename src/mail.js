@@ -35,7 +35,7 @@ function getMailTitle( entities, result ) {
     suffixTitle = ' (groupés)'
   }
   
-  var pluralS = ads.length > 1 ? 's' : '';
+  var pluralS = length > 1 ? 's' : '';
   
   return prefixTitle + length + "\xa0nouveau" + (length > 1 ? "x" : "") + " résultat" + pluralS + (onlyProAds ? " (pro)" : "") + suffixTitle;   
 }
@@ -123,11 +123,12 @@ function getMailListingTemplate( entities, result ) {
 /*
   * Get mail ads template
 */
-function getMailAdsTemplate( ads, singleParams ) {
+function getMailAdsTemplate( ads, singleParams, haveDuplicates ) {
   
   var template = HtmlService.createTemplateFromFile('mail__ads.tpl');
   template.ads = ads;
   template.singleParams = singleParams;
+  template.haveDuplicates = haveDuplicates;
   return template.evaluate().getContent();
 }
 

@@ -51,7 +51,7 @@ function showMainTriggerWizard(callbackString) {
   
   var ui = SpreadsheetApp.getUi();
   
-  var html = getMainTriggerWizardTemplate(callbackString).setWidth(360).setHeight(120);
+  var html = getMainTriggerWizardTemplate(callbackString).setWidth(360);
   var response = ui.showModelessDialog(html, "Voulez-vous planifier l'envoi des alertes ?");
 }
 
@@ -72,8 +72,8 @@ function showDialog(title, content) {
   * Highlight row
 */
 function highlightRow(row, backgroundColor, borderColor) {
-  var backgroundColor = backgroundColor || params.colors.background.working; 
-  var borderColor = borderColor || params.colors.border.working; 
+  var backgroundColor = backgroundColor || getParam('colors').background.working; 
+  var borderColor = borderColor || getParam('colors').border.working; 
   row.setBackground( backgroundColor );
   row.setBorder(true, true, true, true, false, false, borderColor, null);
   SpreadsheetApp.flush(); // see https://developers.google.com/apps-script/reference/spreadsheet/spreadsheet-app#flush
@@ -102,7 +102,7 @@ function setActiveSelectionOnEmail() {
   * Get recipient email range
 */
 function getRecipientEmailCell() {
-  var cell = getCellByIndex(2, params.names.range.userVarValues, params.names.sheet.variables);
+  var cell = getCellByIndex(2, getParam('names').range.userVarValues, getParam('names').sheet.variables);
   //var range = getVariablesSheetContext().getRange( 2, getColumnByName( params.names.range.userVarValues ) );
   return cell;
 }

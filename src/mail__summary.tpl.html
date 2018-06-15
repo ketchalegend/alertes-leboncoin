@@ -9,7 +9,7 @@
   ?>
 
     <? if (ads.length) { ?>
-      <li style="<?!= inlineStyles.summaryItem; ?>"><a lang="underlineOnHover" style="<?!= inlineStyles.summaryItemLink; ?>" href="#<?= params.names.mail.anchorPrefix+i ?>"><?= label ?></a> (<?= ads.length ?>) —</li>
+      <li style="<?!= inlineStyles.summaryItem; ?>"><a lang="underlineOnHover" style="<?!= inlineStyles.summaryItemLink; ?>" href="#<?= getParam('names').mail.anchorPrefix+i ?>"><?= label ?></a> (<?= ads.length ?>) —</li>
     <? } ?>
     
   <? } ?>    

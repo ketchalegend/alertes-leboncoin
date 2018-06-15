@@ -46,5 +46,7 @@ var inlineStyles = {
   footer: "border-top:1px solid #f7f7f7; text-align:center; margin-top:10px; padding-top:20px; line-height: 18px; clear:both; overflow:hidden;",
   footerLeft: "float: left;",
   footerMiddle: "margin-left: 10px; margin-right: 10px;",
-  footerRight: "float: right;"
+  footerRight: "float: right;",
+  
+  secondaryFooter: "color: transparent;"
 }

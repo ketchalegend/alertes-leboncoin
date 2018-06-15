@@ -1,0 +1,18 @@
+{
+  "timeZone": "Europe/Paris",
+  "dependencies": {
+    "libraries": [{
+      "userSymbol": "cheeriogasify",
+      "libraryId": "1XFto3-D4AWTLPD7nh1MOheCLCTfu-WqwdAznn0jWlLoaglBXW4O5nDuT",
+      "version": "4"
+    }]
+  },
+  "webapp": {
+    "access": "ANYONE",
+    "executeAs": "USER_ACCESSING"
+  },
+  "exceptionLogging": "STACKDRIVER",
+  "executionApi": {
+    "access": "ANYONE"
+  }
+}

@@ -52,15 +52,19 @@
   
   <div lang="footer" style="<?!= inlineStyles.footer ?>">
     <small lang="footer__item" style="<?!= inlineStyles.footerLeft ?>">
-      made with &#9829; by <a href="http://www.maximelebreton.com">mlb</a>, inspired by <a href="http://justdocsit.blogspot.fr/2012/07/creer-une-alerte-sur-le-bon-coin.html">Just docs it</a>
+      &#9986; avec &#9829; par <a href="https://maximelebreton.com">mlb</a><br/><small>(idée originale <em>Just docs it</em>)</small>
     </small>
-<? if ( params.showMailEditLink == true ) { ?>
+<? if ( getParam('showMailEditLink') == true ) { ?>
     <small lang="footer__item" style="<?!= inlineStyles.footerMiddle ?>"><a href="<?= data.sheetUrl ?>">Éditer&nbsp;mes&nbsp;alertes</a></small>
 <? } ?>
     <small lang="footer__item" style="<?!= inlineStyles.footerRight ?>">
       <a href="http://maximelebreton.github.io/alertes-leboncoin">alertes-leboncoin</a> version&nbsp;<?= version ?></small>
     </small>
   </div>  
+  
+  <div
+  
+  <div style="<?!= inlineStyles.secondaryFooter ?>"><small>Temps d'exécution : <?= data.runtimeInSeconds ?> secondes</small></div>
 
 </body>
 </html>

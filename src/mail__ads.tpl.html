@@ -1,7 +1,7 @@
 <?
 
-var showMap = singleParams.hasOwnProperty("showMap") ? singleParams.showMap : params.showMap;
-var mapZoom = singleParams.hasOwnProperty("mapZoom") ? singleParams.mapZoom : params.mapZoom;
+var showMap = singleParams.hasOwnProperty("showMap") ? singleParams.showMap : getParam('showMap');
+var mapZoom = singleParams.hasOwnProperty("mapZoom") ? singleParams.mapZoom : getParam('mapZoom');
 
 var isMapAdLayoutImage = showMap ? inlineStyles.adLayoutImageWithMap : "";
       
@@ -14,8 +14,19 @@ for (var i = 0; i < ads.length; i++) {
 <?
 
   var ad = ads[i];
+  
+  if (ad.haveDuplicateInResult && haveDuplicates == true) {
 
 ?>
+
+  <li style="<?!= inlineStyles.listItem ?>"><p>L'annonce "<?= ad.title ?>" a été masquée car elle apparait déjà dans "<?= ad.userLabel ?>"</p></li>
+
+<?
+
+  } else {
+
+?>
+
     <li style="<?!= inlineStyles.listItem ?>">
       <div style="<?!= inlineStyles.listItemContainer ?>">
         
@@ -41,7 +52,7 @@ for (var i = 0; i < ads.length; i++) {
         <div lang="adLayoutContent" style="<?!= inlineStyles.adLayoutContent ?>">
           <div style="<?!= inlineStyles.adContentTitle ?>">
             <a lang="underlineOnHover" style="<?!= inlineStyles.adContentTitleLink ?>" href="<?= ad.url ?>">
-              <?= ad.title ?>
+              <?= ad.title ?><? if (ad.categorySlug) {  ?> // <?= ad.categorySlug ?><? } ?> 
             </a>
             <? if (ad.isPro) {  ?>
               <span style="<?!= inlineStyles.label + inlineStyles.labelPrimary ?>">pro</span>
@@ -54,13 +65,19 @@ for (var i = 0; i < ads.length; i++) {
             <?= ad.textDateTime ?>
           </div>
           <div style="<?!= inlineStyles.adContentPrice ?>">
-            <?= ad.textPrice ?>
+            <? if (ad.price) {  ?><?= ad.textPrice ?><? } ?>
           </div>
         </div>
         
         
       </div>
     </li>
+
+<?
+
+  }
+
+?>
 <?
 
 }

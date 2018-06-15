@@ -71,6 +71,17 @@ function filterResults(a, b) {
 
 
 /**
+  * Remove duplicate results
+*/
+Array.prototype.uniq = function uniq() {
+  return this.reduce(function(accum, cur) { 
+    if (accum.indexOf(cur) === -1) accum.push(cur); 
+    return accum; 
+  }, [] );
+}
+
+
+/**
   * Add protocol (https)
 */
 function addProtocol(url) {
@@ -139,7 +150,7 @@ function deepExtend(out) {
  * @return {String}       The field value
  */
 var getQueryString = function ( field, url ) {
-    var href = url ? url : window.location.href;
+    var href = url ? url : "";
     var reg = new RegExp( '[?&]' + field + '=([^&#]*)', 'i' );
     var string = reg.exec(href);
     return string ? string[1] : null;
@@ -205,6 +216,27 @@ function dynamicSort(property) {
     }
 }
 
+/**
+  * Slug
+*/
+var slug = function(str) {
+  str = str.replace(/^\s+|\s+$/g, ''); // trim
+  str = str.toLowerCase();
+
+  // remove accents, swap ñ for n, etc
+  var from = "ãàáäâẽèéëêìíïîõòóöôùúüûñç·/_,:;";
+  var to   = "aaaaaeeeeeiiiiooooouuuunc------";
+  for (var i=0, l=from.length ; i<l ; i++) {
+    str = str.replace(new RegExp(from.charAt(i), 'g'), to.charAt(i));
+  }
+
+  str = str.replace(/[^a-z0-9 -]/g, '') // remove invalid chars
+    .replace(/\s+/g, '_') // collapse whitespace and replace by -
+    .replace(/-+/g, '_'); // collapse dashes
+
+  return str;
+};
+
 
 /**
   * Convert type
@@ -216,3 +248,60 @@ function convertType(value){
         return value;
     }
 };
+
+
+/**
+  * Get duplicates
+*/
+function getDuplicates(arr) {
+  var len=arr.length,
+      out=[],
+      counts={};
+
+  for (var i=0;i<len;i++) {
+    var item = arr[i];
+    counts[item] = counts[item] >= 1 ? counts[item] + 1 : 1;
+    if (counts[item] === 2) {
+      out.push(item);
+    }
+  }
+
+  return out;
+}
+
+
+/**
+  *
+*/
+function runtimeCountStop(start) {
+
+  var stop = new Date();
+  var runtime = Number(stop) - Number(start);
+  
+  return runtime;
+
+}
+
+function getDateObjectFromString(string) {
+  
+  var compatibleString = string.replace(' ', 'T');
+  var date = new Date(compatibleString);
+  
+  return date;
+  
+}
+
+function formatPrice(price_value){
+    var formatted_price = '';
+    var price = ''+price_value;
+    var price_length = price.length;
+    var start;
+    while(price_length > 0){
+        start = price_length - 3 > 0 ? price_length - 3 : 0;
+        formatted_price = ' ' + price.substring(start, start+3)+formatted_price;
+        price = price.substring(0, start);
+        price_length = price.length;
+    }
+    formatted_price = formatted_price.replace(/^\s+/, '');
+    return formatted_price;
+}
