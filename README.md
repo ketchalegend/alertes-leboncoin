@@ -1,8 +1,5 @@
->   Juin 2018 : ***leboncoin.fr** ayant récemment entièrement réécrit le code de son site, **Alertes LeBonCoin** se retrouve face à des contraintes techniques insolubles pour le moment (comme l'affichage des images), mais j'espère trouver une solution d'ici peu. Affaire à suivre.*
 
-----------------
-
-Alertes leboncoin - 5.2.7 [![GitHub watchers](https://img.shields.io/github/stars/maximelebreton/alertes-leboncoin.svg?style=social&label=Star)](https://github.com/maximelebreton/alertes-leboncoin)
+Alertes leboncoin - 5.4.4 [![GitHub watchers](https://img.shields.io/github/stars/maximelebreton/alertes-leboncoin.svg?style=social&label=Star)](https://github.com/maximelebreton/alertes-leboncoin)
 =============================
 Recevez par email vos recherches leboncoin.fr (via Google Sheets / App Script)
 
