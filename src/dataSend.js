@@ -13,6 +13,7 @@ function splitResultBySendType(selectedResult, entities) {
   var results = {
     main: [],
     custom: [],
+    group: {},
     sms: [],
     sendLater: []
   }
@@ -32,8 +33,14 @@ function splitResultBySendType(selectedResult, entities) {
       }      
     }
     
-    if (singleParams.separateSend == true || (singleParams.email && (singleParams.email !== getParam('email')))  ) {
-      results.custom.push( id );
+    var splitGroupFromMainSend = entities.labels[id].isGroup == true && getParam('splitSendByCategory') == true ? true : false;
+    if (splitGroupFromMainSend || singleParams.separateSend == true || (singleParams.email && (singleParams.email !== getParam('email')))  ) {
+      if (entities.labels[id].isGroup == true) {
+        var name = entities.labels[id].groupName;        
+        (results.group[ name ] = results.group[ name ] ? results.group[ name ] : []).push( id ); // yep!
+      } else {
+        results.custom.push( id );
+      }
     } else {
       results.main.push( id );
     }
@@ -43,7 +50,7 @@ function splitResultBySendType(selectedResult, entities) {
     }
     
   });
-
+  
   return results;
 }
 
@@ -58,8 +65,10 @@ function handleSendData(data, callback) {
   // main result
   var readyMainResults = filterResults(results.main, results.sendLater);
   var mainAds = getAllAdsFromResult( data, readyMainResults );
-
-  if ( getParam('splitSendByCategory') == true ) {
+  var mainAdsData = getEnhancedData( data );
+  sendMainResults( mainAdsData, readyMainResults, callback );
+  
+  /*if ( getParam('splitSendByCategory') == true ) {
     var mainAdsData = getEnhancedData( data );
     //var mainAdsData = data;
     mainAdsData = getCategorySortedData( mainAdsData, mainAds ); // reconstructed data
@@ -68,7 +77,14 @@ function handleSendData(data, callback) {
     var mainAdsData = getEnhancedData( data );
     //var mainAdsData = data;
     sendMainResults( mainAdsData, readyMainResults, callback );
-  }
+  }*/
+  
+   
+  var readySeparateGroupResults = {};
+  Object.keys(results.group).map(function(key, index) {
+    readySeparateGroupResults[key] = filterResults(results.group[key], results.sendLater)
+  });
+  sendSeparateGroupResults( data, readySeparateGroupResults, callback );
   
   // custom result
   var readyCustomResults = filterResults(results.custom, results.sendLater);
@@ -88,6 +104,21 @@ function sendMainResults(data, mainResults, callback) {
   if (mainResults.length) {
     handleMailSend(data, mainResults, getParam('email'), callback);
   }
+}
+
+
+
+
+/**
+  * Send separate group results
+*/
+function sendSeparateGroupResults(data, groupResults, callback) {
+  Object.keys(groupResults).map( function( key ) {  
+    var groupResult = groupResults[key];
+    if (groupResult.length) {      
+      mailSendGroupedResults(data, groupResult, getParam('email'), callback);
+    }
+  })
 }
 
 

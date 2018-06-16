@@ -74,6 +74,7 @@ function getEnhancedData( data ) {
   var duplicates = getDuplicates( adsIds );
   
   var enhancedData = getDataWithDuplicates( data, duplicates );
+  enhancedData = getDataWithGroups( enhancedData );
   
   return enhancedData;
 }
@@ -104,6 +105,44 @@ function getDataWithDuplicates( data, duplicates ) {
       })
     })
   })
+
+  return data;
+}
+
+
+/**
+  * Get data with duplicates
+*/
+function getDataWithGroups( data ) {
+  
+  var adProperty = 'userLabel';
+  var alreadySeenLabelGroups = [];
+  var regex = /(?:^\[(.*)])?\s?(.*)/;
+  
+  data.result.map( function( id ) {
+    var label = data.entities.labels[id];
+    
+    var matches = label.label.match(regex);
+    
+    var labelGroup = matches[1];
+    var labelSingle = matches[2];
+    
+    var slug = labelGroup ? labelGroup : labelSingle;      
+    var indexOfSlug = alreadySeenLabelGroups.indexOf( slug );
+    
+    if (labelGroup) {
+      data.entities.labels[id].isGroup = true;
+      data.entities.labels[id].groupName = labelGroup;
+    }
+    
+    if ( indexOfSlug > -1 ) { // if match in array
+      
+    } else {
+      alreadySeenLabelGroups.push( slug );
+    }
+    
+  })
+  
 
   return data;
 }

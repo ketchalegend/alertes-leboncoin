@@ -5,7 +5,7 @@
 var cheerio = cheeriogasify.require('cheerio');
 var $ = cheerio;
 
-var version = "5.4.4";
+var version = "5.4.5";
 
 var defaults = {
   debug: false,
