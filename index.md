@@ -1,4 +1,4 @@
-Alertes leboncoin - 5.4.4 [![GitHub watchers](https://img.shields.io/github/stars/maximelebreton/alertes-leboncoin.svg?style=social&label=Star)](https://github.com/maximelebreton/alertes-leboncoin)
+Alertes leboncoin - 5.4.6 [![GitHub watchers](https://img.shields.io/github/stars/maximelebreton/alertes-leboncoin.svg?style=social&label=Star)](https://github.com/maximelebreton/alertes-leboncoin)
 =============================
 Recevez par email vos recherches leboncoin.fr (via Google Sheets / App Script) &nbsp; 
 [![Faire un don](https://www.paypalobjects.com/fr_FR/FR/i/btn/btn_donate_SM.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7Y34RFD6WYVRA)
