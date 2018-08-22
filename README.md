@@ -1,4 +1,7 @@
 
+
+> Suite à la mise en place d'un système de protection (datadome) par **leboncoin**, il n'est **plus possible d'utiliser Alertes leboncoin** depuis le 19 Août 2018. J'étudie actuellement les potentielles solutions.
+
 Alertes leboncoin - 5.4.6 [![GitHub watchers](https://img.shields.io/github/stars/maximelebreton/alertes-leboncoin.svg?style=social&label=Star)](https://github.com/maximelebreton/alertes-leboncoin)
 =============================
 Recevez par email vos recherches leboncoin.fr (via Google Sheets / App Script)
