@@ -1,5 +1,11 @@
 # Change Log
 
+### 5.5.1
+- Vérification de la validité des liens, suite au changement de structure des urls par leboncoin (qui n'a pas jugé utile de mettre en place des redirections...)
+
+### 5.5.0 (baroud d'honneur)
+- Contournement de la protection mise en place par leboncoin
+
 ### 5.2.7
 - Refactoring et amélioration du correctif #22
 - ajout du paramètre individuel `pause`
