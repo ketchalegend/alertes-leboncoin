@@ -1,6 +1,6 @@
 <div style="color: #856404;	background-color: #fff3cd; border-color: #ffeeba; position: relative; padding: .75rem 1.25rem; margin-bottom: 1rem; border: 1px solid transparent; border-radius: .25rem">Suite à la mise en place d'un système de protection (datadome) par leboncoin,  bien que nous arrivons à passer pour l'instant au travers, les jours d'<b>Alertes leboncoin</b> sont comptés. Je réfléchis actuellement à la suite. Toutes vos suggestions sont les bienvenues.</div>
 
-Alertes leboncoin - 5.4.6 [![GitHub watchers](https://img.shields.io/github/stars/maximelebreton/alertes-leboncoin.svg?style=social&label=Star)](https://github.com/maximelebreton/alertes-leboncoin)
+Alertes leboncoin - 5.5.1 [![GitHub watchers](https://img.shields.io/github/stars/maximelebreton/alertes-leboncoin.svg?style=social&label=Star)](https://github.com/maximelebreton/alertes-leboncoin)
 =============================
 Recevez par email vos recherches leboncoin.fr (via Google Sheets / App Script) &nbsp; 
 [![Faire un don](https://www.paypalobjects.com/fr_FR/FR/i/btn/btn_donate_SM.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7Y34RFD6WYVRA)
@@ -98,6 +98,7 @@ Paramètre (individuel) | Valeur | Description | Type
 `freeUser` | `"0123456789"` (exemple) | *ID Free Mobile* | `String`
 `freePass` | `"xxxxxx"` (exemple) | *Clé d'identification (à générer dans [votre espace Free Mobile](http://www.universfreebox.com/article/26337/Nouveau-Free-Mobile-lance-un-systeme-de-notification-SMS-pour-vos-appareils-connectes))*  | `String`
 `pause` | `true` ou `false` | *Mets en pause l'annonce* | `Boolean`
+`isValidUrl` | `true` | *Force la validité de l'url* | `Boolean`
 
 Limitations
 ---------------
