@@ -1,10 +1,10 @@
 # Change Log
 
 ### 5.5.1
-- Vérification de la validité des liens, suite au changement de structure des urls par leboncoin (qui n'a pas jugé utile de mettre en place des redirections...)
+- Vérification de la validité des liens, suite au changement de structure des urls par leboncoin (qui n'a pas jugé utile de mettre en place des redirections...) [#35](https://github.com/maximelebreton/alertes-leboncoin/issues/35)
 
 ### 5.5.0 (baroud d'honneur)
-- Contournement de la protection mise en place par leboncoin
+- Contournement de la protection mise en place par leboncoin [#39](https://github.com/maximelebreton/alertes-leboncoin/issues/39)
 
 ### 5.2.7
 - Refactoring et amélioration du correctif #22
