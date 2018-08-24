@@ -1,8 +1,8 @@
 
 
-> Suite à la mise en place d'un système de protection (datadome) par **leboncoin**, il n'est **plus possible d'utiliser Alertes leboncoin** depuis le 19 Août 2018. J'étudie actuellement les potentielles solutions.
+> Suite à la mise en place d'un système de protection (datadome) par leboncoin,  bien que nous arrivons à passer pour l'instant au travers, les jours d'**Alertes leboncoin** sont comptés. Je réfléchis actuellement à la suite. Toutes vos suggestions sont les bienvenues.
 
-Alertes leboncoin - 5.4.6 [![GitHub watchers](https://img.shields.io/github/stars/maximelebreton/alertes-leboncoin.svg?style=social&label=Star)](https://github.com/maximelebreton/alertes-leboncoin)
+Alertes leboncoin - 5.5.1 [![GitHub watchers](https://img.shields.io/github/stars/maximelebreton/alertes-leboncoin.svg?style=social&label=Star)](https://github.com/maximelebreton/alertes-leboncoin)
 =============================
 Recevez par email vos recherches leboncoin.fr (via Google Sheets / App Script)
 
@@ -101,6 +101,7 @@ Paramètre (individuel) | Valeur | Description | Type
 `freeUser` | `"0123456789"` (exemple) | *ID Free Mobile* | `String`
 `freePass` | `"xxxxxx"` (exemple) | *Clé d'identification (à générer dans [votre espace Free Mobile](http://www.universfreebox.com/article/26337/Nouveau-Free-Mobile-lance-un-systeme-de-notification-SMS-pour-vos-appareils-connectes))*  | `String`
 `pause` | `true` ou `false` | *Mets en pause l'annonce* | `Boolean`
+`isValidUrl` | `true` | *Force la validité de l'url* | `Boolean`
 
 
 Limitations
