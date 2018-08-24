@@ -1,6 +1,6 @@
 <div style="color: #856404;	background-color: #fff3cd; border-color: #ffeeba; position: relative; padding: .75rem 1.25rem; margin-bottom: 1rem; border: 1px solid transparent; border-radius: .25rem">Suite à la mise en place d'un système de protection (datadome) par leboncoin,  bien que nous arrivons à passer pour l'instant au travers, les jours d'<b>Alertes leboncoin</b> sont comptés. Je réfléchis actuellement à la suite. Toutes vos suggestions sont les bienvenues.</div>
 
-Alertes leboncoin - 5.5.1 [![GitHub watchers](https://img.shields.io/github/stars/maximelebreton/alertes-leboncoin.svg?style=social&label=Star)](https://github.com/maximelebreton/alertes-leboncoin)
+Alertes leboncoin - 5.5.2 [![GitHub watchers](https://img.shields.io/github/stars/maximelebreton/alertes-leboncoin.svg?style=social&label=Star)](https://github.com/maximelebreton/alertes-leboncoin)
 =============================
 Recevez par email vos recherches leboncoin.fr (via Google Sheets / App Script) &nbsp; 
 [![Faire un don](https://www.paypalobjects.com/fr_FR/FR/i/btn/btn_donate_SM.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7Y34RFD6WYVRA)
@@ -52,6 +52,7 @@ Paramètre | Valeur | Description
 `showMap` | `=true` ou `=false` | *affiche une mini carte* 
 `mapZoom` | nombre de `=0` à `=17` | *règle le niveau de zoom de la carte*
 `groupedResults` | `=true` ou `=false` | *permet de grouper les résultats dans un seul mail*
+`strictUrl` | `=true` ou `=false` | *ignore les urls non valides*
   
 
 ### Méthode avancée
