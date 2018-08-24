@@ -1,5 +1,8 @@
 # Change Log
 
+### 5.5.2
+- Ajout du paramètre global `strictUrl`, qui permets d'ignorer totalement les urls invalides (au lieu d'afficher un avertissement).
+
 ### 5.5.1
 - Vérification de la validité des liens, suite au changement de structure des urls par leboncoin (qui n'a pas jugé utile de mettre en place des redirections...) [#35](https://github.com/maximelebreton/alertes-leboncoin/issues/35)
 
