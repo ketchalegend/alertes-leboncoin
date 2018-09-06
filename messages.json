@@ -1,6 +1,6 @@
 {
-  "active": false,
-  "title": "Changement de structure des urls",
-  "message": "leboncoin a récemment changé la structure de ses urls, donc si vous rencontrez des erreurs ou des résultats étranges, pensez à modifier vos recherches en utilisant la nouvelle structure (https://www.leboncoin.fr/recherche/?text=etc...)",
-  "date": "2018-06-21 12:12:12"
+  "active": true,
+  "title": "Alertes leboncoin bloqué... par leboncoin.",
+  "message": "Suite à la mise en place d'un système de protection (datadome) par leboncoin, il n'est plus possible d'utiliser Alertes leboncoin depuis le 31 Août 2018. J'étudie actuellement les potentielles solutions. Toutes vos aides et suggestions sont les bienvenues.",
+  "date": "2018-09-06 09:09:09"
 }
